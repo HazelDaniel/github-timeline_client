@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Outlet, useLocation } from "react-router-dom";
+import { GlobalStyle } from "./styles/functions";
+import { CustomMouse } from "./components/custom-mouse";
+import { Nav } from "./components/nav";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const location = useLocation();
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <GlobalStyle $page={location.pathname} />
+      <CustomMouse />
+      <Nav />
+      <header>
+        <div className="logo-div">
+          <img
+            src="icons/logo.svg"
+            alt="the site's logo"
+            className="logo-image"
+          />
+        </div>
+      </header>
+      <Outlet />
+
+      <footer>
+        <div className="footer-top">
+          <img
+            src="icons/logo.svg"
+            alt="the logo image in svg format"
+            className="footer-image"
+          />
+          <h4>VIewing your github repository through a lens ...</h4>
+        </div>
+        <div className="footer-bottom">
+          <p>
+            made with love by
+            <a href="https://www.github.com/HazelDaniel">Hazel Daniel</a>
+          </p>
+          <p>copyright &copy; 2024. All rights reserved</p>
+        </div>
+      </footer>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

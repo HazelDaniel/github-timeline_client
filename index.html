@@ -1,11 +1,129 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>Github Timeline</title>
+    <link rel="stylesheet" href="styles/styles.css" />
+    <link rel="icon" href="icons/logo.svg" type="image/svg" />
   </head>
+  <svg style="display: none">
+    <symbol id="label-style">
+      <svg viewBox="0 0 546 112" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g clip-path="url(#clip0_124_345)" filter="url(#filter0_d_124_345)">
+          <g filter="url(#filter1_d_124_345)">
+            <path
+              d="M1.5 1H486.5L517.5 28L538.5 46.5V104H1.5V1Z"
+              fill="url(#paint0_linear_124_345)"
+              shape-rendering="crispEdges"
+            />
+          </g>
+          <path
+            d="M502.5 1.5L538.5 34V0L502.5 1.5Z"
+            stroke="#45C3AD"
+            stroke-width="4"
+          />
+          <path
+            d="M488 1H1V103.5H538.5V46L488 1Z"
+            stroke="#45C3AD"
+            stroke-width="4"
+          />
+        </g>
+        <defs>
+          <filter
+            id="filter0_d_124_345"
+            x="0"
+            y="0"
+            width="545.5"
+            height="112"
+            filterUnits="userSpaceOnUse"
+            color-interpolation-filters="sRGB"
+          >
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feColorMatrix
+              in="SourceAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+              result="hardAlpha"
+            />
+            <feOffset dx="3" dy="4" />
+            <feGaussianBlur stdDeviation="2" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix
+              type="matrix"
+              values="0 0 0 0 0.270588 0 0 0 0 0.764706 0 0 0 0 0.678431 0 0 0 0.34 0"
+            />
+            <feBlend
+              mode="normal"
+              in2="BackgroundImageFix"
+              result="effect1_dropShadow_124_345"
+            />
+            <feBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="effect1_dropShadow_124_345"
+              result="shape"
+            />
+          </filter>
+          <filter
+            id="filter1_d_124_345"
+            x="-2.5"
+            y="1"
+            width="545"
+            height="111"
+            filterUnits="userSpaceOnUse"
+            color-interpolation-filters="sRGB"
+          >
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feColorMatrix
+              in="SourceAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+              result="hardAlpha"
+            />
+            <feOffset dy="4" />
+            <feGaussianBlur stdDeviation="2" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix
+              type="matrix"
+              values="0 0 0 0 0.270588 0 0 0 0 0.764706 0 0 0 0 0.678431 0 0 0 1 0"
+            />
+            <feBlend
+              mode="normal"
+              in2="BackgroundImageFix"
+              result="effect1_dropShadow_124_345"
+            />
+            <feBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="effect1_dropShadow_124_345"
+              result="shape"
+            />
+          </filter>
+          <linearGradient
+            id="paint0_linear_124_345"
+            x1="270"
+            y1="1"
+            x2="270"
+            y2="104"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#45C3AD" stop-opacity="0.29" />
+            <stop offset="1" stop-color="#45C3AD" stop-opacity="0" />
+          </linearGradient>
+          <clipPath id="clip0_124_345">
+            <rect
+              width="537.5"
+              height="104"
+              fill="white"
+              transform="translate(1)"
+            />
+          </clipPath>
+        </defs>
+      </svg>
+    </symbol>
+  </svg>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
