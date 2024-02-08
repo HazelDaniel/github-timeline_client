@@ -314,6 +314,7 @@ html {
   width: 100vw;
   cursor: none;
   overflow-x: hidden;
+  scroll-behavior: smooth;
   li {
     list-style-type: none;
   }

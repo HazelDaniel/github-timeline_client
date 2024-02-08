@@ -1,6 +1,16 @@
+import { CommitSignpost } from "../components/commit-signpost";
+import { RepoBoard } from "../components/repo-board";
+import { RepoList } from "../components/repo-list";
 import { AppPageStyled } from "./app.styles";
 
+import { repoBoardData } from "../data";
+import { Link, useLocation } from "react-router-dom";
+
 export const AppPage = () => {
+  const location = useLocation();
+  const pathName = location.pathname;
+  const fullRoute = pathName.trim() + location.search.trim();
+  console.log(fullRoute);
   return (
     <AppPageStyled className="repo-page-body">
       <aside className="repositories-tab closed">
@@ -13,42 +23,11 @@ export const AppPage = () => {
           </span>
         </p>
         <div className="repository-wrapper">
-          <ul className="repositories">
-            <div className="repo-highlight"></div>
-            <li data-pos="0">
-              <span className="repo-line"></span>
-              <p className="repo-name">UNIQUE REPO</p>
-              <span className="repo-time">10:00 am</span>
-              <span className="repo-side-caret"></span>
-            </li>
-            <li data-pos="1">
-              <span className="repo-line"></span>
-              <p className="repo-name">UNIQUE REPO</p>
-              <span className="repo-time">10:00 am</span>
-              <span className="repo-side-caret"></span>
-            </li>
-            <li data-pos="2">
-              <span className="repo-line"></span>
-              <p className="repo-name">UNIQUE REPO</p>
-              <span className="repo-time">10:00 am</span>
-              <span className="repo-side-caret"></span>
-            </li>
-            <li data-pos="3">
-              <span className="repo-line"></span>
-              <p className="repo-name">UNIQUE REPO</p>
-              <span className="repo-time">10:00 am</span>
-              <span className="repo-side-caret"></span>
-            </li>
-            <li data-pos="4">
-              <span className="repo-line"></span>
-              <p className="repo-name">UNIQUE REPO</p>
-              <span className="repo-time">10:00 am</span>
-              <span className="repo-side-caret"></span>
-            </li>
-          </ul>
+          <RepoList />
+
           <div className="repo-toggler">
             <span>
-              <span>&rightarrow;</span>
+              <span>{"\u2192"}</span>
             </span>
           </div>
         </div>
@@ -56,12 +35,12 @@ export const AppPage = () => {
         <div className="repo-nav-cta">
           <div className="left">
             <button>
-              previous <span>&leftarrow;</span>
+              previous <span>{"\u2190"}</span>
             </button>
           </div>
           <div className="right">
             <button>
-              <span>&rightarrow;</span>next
+              <span>{"\u2192"}</span>next
             </button>
           </div>
         </div>
@@ -70,57 +49,8 @@ export const AppPage = () => {
         <div className="top">
           <div className="z-bg"></div>
 
-          <div className="repo-board">
-            <div className="code-link-board">
-              <img
-                src="icons/dashed-rainbow.svg"
-                alt="a dashed rectangle with varying background colors"
-                loading="lazy"
-              />
-              <span>
-                <svg>
-                  <use xlinkHref="#code"></use>
-                </svg>
-              </span>
-              <ul>
-                <li>
-                  <a href="#" className="active">
-                    HTTPS
-                  </a>
-                </li>
-                <li>
-                  <a href="#">SSH</a>
-                </li>
-              </ul>
-              <div className="code-link-div">
-                <p>
-                  git@github.com/UserName/RepoName.git
-                  <span>
-                    <svg>
-                      <use xlinkHref="#copy"></use>
-                    </svg>
-                  </span>
-                </p>
-                <h3>Use Git or checkout with SVN using the web URL.</h3>
-              </div>
-            </div>
-            <div className="code-info-board">
-              <ul>
-                <li>
-                  <p>NAME</p>
-                  <h3>
-                    <span>&rightarrow;</span> Unique Repo
-                  </h3>
-                </li>
-                <li>
-                  <p>Languages</p>
-                  <h3>
-                    <span>&rightarrow;</span>Python, Javascript, C
-                  </h3>
-                </li>
-              </ul>
-            </div>
-          </div>
+          <RepoBoard {...repoBoardData} />
+
           <div className="repo-author-div">
             <div className="repo-author-image-div">
               <img
@@ -231,52 +161,30 @@ export const AppPage = () => {
           <div className="stat-nav-div">
             <ul className="stat-nav">
               <li style={{ "--pos": 3 }}>
-                latest Commit <span></span>
+                <a href={fullRoute + "#latest-commit"}>latest commit</a>
+                <span></span>
               </li>
               <li style={{ "--pos": 2 }}>
-                latest Commit <span></span>
+                <a href={fullRoute + "#top-contributors"}>top contributors</a>
+                <span></span>
               </li>
               <li style={{ "--pos": 1 }}>
-                latest Commit <span></span>
-              </li>
-              <li style={{ "--pos": 0 }}>
-                latest Commit <span></span>
+                <a href={fullRoute + "#license"}>license</a> <span></span>
               </li>
             </ul>
           </div>
           <div className="stat-section">
-            <p className="stat-section-title">LATEST COMMIT</p>
-            <div className="stat-left">
-              <ul>
-                <li>
-                  <button>created at</button>
-                </li>
-                <li>
-                  <button>updated at</button>
-                </li>
-              </ul>
-            </div>
-            <div className="stat-separator first">
-              <span>
-                <span></span>
-              </span>
-            </div>
-            <div className="stat-right">
-              <div className="stat-popup">
-                <div className="left">
-                  <p>01</p>
-                </div>
-                <div className="right">
-                  <p>thur</p>
-                  <h2>october 2024</h2>
-                  <h4>10:00</h4>
-                </div>
-              </div>
-            </div>
+            <p className="stat-section-title" id="latest-commit">
+              LATEST COMMIT
+            </p>
+
+            <CommitSignpost />
           </div>
 
           <div className="stat-section">
-            <p className="stat-section-title middle">TOP CONTRIBUTORS</p>
+            <p className="stat-section-title middle" id="top-contributors">
+              TOP CONTRIBUTORS
+            </p>
             <div className="stat-left"></div>
             <div className="stat-separator second">
               <span>
@@ -313,7 +221,9 @@ export const AppPage = () => {
           </div>
 
           <div className="stat-section">
-            <p className="stat-section-title middle">LICENSE</p>
+            <p className="stat-section-title middle" id="license">
+              LICENSE
+            </p>
             <div className="stat-left"></div>
             <div className="stat-separator derail third">
               <span>

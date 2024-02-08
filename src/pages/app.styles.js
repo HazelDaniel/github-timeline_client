@@ -1,5 +1,6 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import {
+  floating,
   makeAbsoluteBottomDiv,
   makeAbsoluteBottomLeftDiv,
   makeAbsoluteBottomRightDiv,
@@ -15,8 +16,18 @@ import {
   makeRowFlexCenter,
   makeRowFlexEnd,
   makeRowFlexStart,
-  makeUnSelectableTextDiv,
 } from "../styles/functions";
+
+const bottomText = css`
+  max-width: 20rem;
+  margin-left: 10%;
+  font-size: 1.5rem;
+  margin-bottom: 5rem;
+  text-align: center;
+  justify-self: flex-end;
+  align-self: center;
+  font-family: manjari_bold;
+`;
 
 export const AppPageStyled = styled.main`
   ${makeFullWidthBlock};
@@ -132,85 +143,6 @@ export const AppPageStyled = styled.main`
           }
         }
       }
-      .repositories {
-        ${makeFullWidthBlock};
-        width: 95%;
-        height: 100%;
-        overflow: auto;
-        position: relative;
-        .repo-highlight {
-          ${makeAbsoluteTopLeftDiv};
-          ${makeFullWidthBlock};
-          background-color: #dfffbe;
-          height: 4rem;
-          top: 8rem;
-          transition: all 0.2s ease-in-out;
-          transition-delay: 0.1s;
-          &.defunct {
-            opacity: 0;
-          }
-        }
-        li {
-          ${makeFullWidthBlock};
-          height: 4rem;
-          ${makeRowFlexStart};
-          position: relative;
-          gap: 30%;
-          padding-left: 5rem;
-          font-family: manjari_bold;
-          box-shadow: 0.1rem 0.1rem 0.3rem #85b51d33;
-          cursor: pointer;
-          &:hover {
-            p,
-            .repo-time {
-              color: var(--bg-color);
-            }
-            .repo-line {
-              background: linear-gradient(
-                to bottom,
-                var(--bg-color) 5%,
-                transparent
-              );
-            }
-          }
-          p {
-            color: var(--dull-color);
-            & + .repo-time {
-              color: var(--dull-color);
-              opacity: 0.5;
-            }
-          }
-          &::after {
-            ${makeAbsoluteBottomDiv};
-            ${makeFullWidthBlock};
-            height: 0.2rem;
-            background-color: var(--dull-color);
-            opacity: 0.23;
-            left: 0;
-          }
-          .repo-line,
-          .repo-side-caret {
-            ${makeAbsoluteTopRightDiv};
-            ${makeFullHeightBlock};
-            z-index: 2;
-          }
-          .repo-line {
-            right: unset;
-            left: 2rem;
-            width: 1rem;
-            background: linear-gradient(
-              to bottom,
-              var(--accent-color) 2%,
-              transparent
-            );
-          }
-          .repo-side-caret {
-            width: 3rem;
-            clip-path: polygon(50% 50%, 100% 100%, 100% 0);
-            background-color: var(--bg-color);
-          }
-        }
-      }
     }
     .repo-nav-cta {
       justify-self: flex-end;
@@ -305,17 +237,17 @@ export const AppPageStyled = styled.main`
       position: relative;
       .floater {
         ${makeAbsoluteBottomRightDiv};
-        @extend .floating;
+        ${floating};
         top: unset;
         bottom: 18%;
         right: 5%;
         height: 8rem;
         width: 8rem;
-        z-index: -1;
+        z-index: 0;
         span {
           ${makeFullSizeBlock};
           transform: translate(-30%, 10%);
-          @extend .floating;
+          ${floating};
         }
       }
 
@@ -329,165 +261,7 @@ export const AppPageStyled = styled.main`
         background-repeat: no-repeat;
         background-size: cover;
       }
-      .repo-board {
-        height: max-content;
-        min-height: 35rem;
-        width: 90%;
-        @media screen and (max-width: 480px) {
-          width: 95%;
-        }
-        margin: 0 auto;
-        align-self: flex-start;
-        ${makeRowFlexStart};
-        align-items: center;
-        padding: 1rem 2rem 2rem 2rem;
-        margin-bottom: 8rem;
-        background: linear-gradient(-220deg, #22262c 20%, #22262c1c);
 
-        .code-link-board {
-          height: 25rem;
-          width: 60%;
-          margin: 5% 5% 0 0;
-          padding: 3rem;
-          position: relative;
-          img {
-            ${makeAbsoluteTopLeftDiv};
-            ${makeFullSizeBlock};
-            object-fit: contain;
-            transform: scaleY(1.3) translateY(-5%);
-            // z-index: -1;
-          }
-          & > span {
-            ${makeAbsoluteTopLeftDiv};
-            top: -20%;
-            height: 4rem;
-            overflow: hidden;
-            ${makeRowFlexStart};
-            width: 3rem;
-            svg {
-              display: block;
-              ${makeFullHeightBlock};
-              transform: scale(0.8);
-              margin-right: auto;
-            }
-          }
-          & > ul {
-            ${makeFullWidthBlock};
-            height: 4rem;
-            ${makeRowFlexStart};
-            margin-bottom: 2rem;
-            li {
-              width: 5rem;
-              cursor: pointer;
-              a {
-                color: var(--dull-color);
-                text-decoration: none;
-                font-family: manjari_bold;
-                position: relative;
-                &.active {
-                  &::after {
-                    ${makeAbsoluteBottomDiv};
-                    left: 0;
-                    ${makeFullWidthBlock};
-                    height: 0.3rem;
-                    bottom: -0.5rem;
-                    border-radius: 1rem;
-                    background-color: var(--accent-color);
-                    z-index: 2;
-                  }
-                }
-              }
-              &:first-of-type {
-                margin-right: 3rem;
-              }
-            }
-          }
-          .code-link-div {
-            font-family: montserrat_regular;
-            p {
-              width: 90%;
-              padding: 0 1rem;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              display: none;
-
-              height: 3.5rem;
-              ${makeColFlexCenter};
-              align-items: center;
-              border-radius: 0.3rem;
-              border: 0.2rem solid var(--repo-link-border-color);
-              border-right: none;
-              margin-bottom: 1rem;
-              color: var(--bright-color);
-              ${makeUnSelectableTextDiv};
-              & + h3 {
-                font-size: 1rem;
-                color: var(--dull-color);
-                opacity: 0.5;
-              }
-              span {
-                ${makeAbsoluteTopRightDiv};
-                ${makeFullHeightBlock};
-                ${makeColFlexCenter};
-                align-items: center;
-                width: 4rem;
-                background-color: var(--dull-color);
-                opacity: 0.8;
-                border-top-right-radius: 0.5rem;
-                border-bottom-right-radius: 0.5rem;
-                right: -0.3rem;
-                transform: scaleY(1.09);
-                svg {
-                  display: block;
-                  ${makeFullWidthBlock};
-                  transform: scale(0.6);
-                }
-              }
-            }
-          }
-        }
-        .code-info-board {
-          height: 30rem;
-          flex: 1;
-          ${makeColFlexCenter};
-          align-items: center;
-          ul {
-            ${makeFullSizeBlock};
-            ${makeColFlexStart};
-            align-items: flex-start;
-            li {
-              p {
-                color: var(--accent-color);
-                text-transform: uppercase;
-                font-family: manjari_bold;
-                margin-bottom: 2rem;
-                font-size: 1.3rem;
-              }
-              h3 {
-                font-family: manjari_regular;
-                color: var(--dull-color);
-                ${makeRowFlexCenter};
-                align-items: center;
-                span {
-                  margin: auto 0;
-                  margin-right: 2rem;
-                  font-size: 2rem;
-                  ${makeColFlexCenter};
-                  ${makeFullHeightBlock};
-                  display: inline-flex;
-                  align-items: center;
-                  float: left;
-                  transform: translateY(-25%);
-                }
-              }
-              &:first-of-type {
-                margin-bottom: 20%;
-              }
-            }
-          }
-        }
-      }
       .repo-author-div {
         ${makeFullWidthBlock};
         ${makeRowFlexStart};
@@ -502,31 +276,32 @@ export const AppPageStyled = styled.main`
           align-items: center;
           position: relative;
           overflow: visible;
-          $block_size: 10rem;
           margin-right: 10%;
           &::after {
-            height: $block_size;
-            width: $block_size;
+            height: 10rem;
+            width: 10rem;
             ${makeAbsoluteBottomRightDiv};
             bottom: -2rem;
             right: -2rem;
-            z-index: -1;
+            z-index: 0;
             background-image: linear-gradient(220deg, #5893b5, transparent);
             transform: rotateZ(1deg);
           }
           &::before {
-            height: $block_size;
-            width: $block_size;
+            height: 10rem;
+            width: 10rem;
             ${makeAbsoluteBottomRightDiv};
             bottom: -1.8rem;
             right: -1.8rem;
             background-color: var(--bg-color);
             transform: rotateZ(1deg);
+            z-index: 1;
           }
           img {
             display: block;
             ${makeFullSizeBlock};
             object-fit: cover;
+            z-index: 2;
           }
           h4 {
             ${makeAbsoluteBottomLeftDiv};
@@ -640,17 +415,17 @@ export const AppPageStyled = styled.main`
       min-height: 80vh;
       .floater {
         ${makeAbsoluteBottomLeftDiv};
-        @extend .floating;
+        ${floating};
         top: unset;
         bottom: 40%;
         right: 5%;
         height: 8rem;
         width: 8rem;
-        z-index: -1;
+        z-index: 0;
         span {
           ${makeFullSizeBlock};
           transform: translate(-30%, 10%);
-          @extend .floating;
+          ${floating};
         }
       }
       .stat-nav-div {
@@ -687,6 +462,10 @@ export const AppPageStyled = styled.main`
             perspective: -100rem;
             background-color: transparent;
             transition-delay: 0.1s;
+            a {
+              ${makeFullSizeBlock};
+              all: inherit;
+            }
             cursor: pointer;
             &:hover {
               opacity: 1;
@@ -731,23 +510,14 @@ export const AppPageStyled = styled.main`
           height: max-content;
           min-height: 25rem;
           ${makeColFlexStart};
-          .bottom-text {
-            max-width: 20rem;
-            margin-left: 10%;
-            font-size: 1.5rem;
-            margin-bottom: 5rem;
-            text-align: center;
-            justify-self: flex-end;
-            align-self: center;
-            font-family: manjari_bold;
-          }
+
           .license-title-text {
             margin-top: 20rem;
-            @extend .bottom-text;
+            ${bottomText};
             color: var(--bright-color);
             opacity: 0.6;
             & + .license-text {
-              @extend .bottom-text;
+              ${bottomText};
               text-transform: uppercase;
               color: #deffbd;
             }
@@ -871,15 +641,6 @@ export const AppPageStyled = styled.main`
           // left: 29rem;
           ${makeColFlexCenter};
           align-items: center;
-          .span-circle {
-            ${makeAbsoluteTopDiv};
-            top: 4rem;
-            height: 2.5rem;
-            width: 2.5rem;
-            border-radius: 50%;
-            border: 0.1rem solid var(--dull-color);
-            background-color: var(--dark-bg-color);
-          }
           & > span {
             height: 100%;
             ${makeRowFlexCenter};
@@ -891,7 +652,13 @@ export const AppPageStyled = styled.main`
             );
             margin-left: auto;
             span {
-              @extend .span-circle;
+              ${makeAbsoluteTopDiv};
+              top: 4rem;
+              height: 2.5rem;
+              width: 2.5rem;
+              border-radius: 50%;
+              border: 0.1rem solid var(--dull-color);
+              background-color: var(--dark-bg-color);
               cursor: pointer;
             }
           }
