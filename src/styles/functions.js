@@ -226,6 +226,34 @@ export const slideInHard = css`
   }
 `;
 
+const raiseUpFrame = keyframes`
+  from {
+    opacity: 1;
+  }
+  25% {
+    transform: rotateZ(30deg) translate(-2rem, 5rem);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    transform: unset;
+    opacity: 1;
+  }
+`;
+
+export const raiseUp = css`
+  transform: unset;
+
+  &.raise_up {
+    animation-name: ${raiseUpFrame};
+    animation-duration: 0.8s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-out;
+  }
+`;
+
 // GLOBALS
 export const GlobalStyle = createGlobalStyle`
 @font-face {
@@ -349,8 +377,10 @@ body,#root {
 
 #custom-mouse {
   position: absolute;
-  width: 50px;
-  height: 50px;
+  width: 5rem;
+  height: 5rem;
+  max-width: 50px;
+  max-height: 50px;
   // border: 0.05rem solid var(--accent-color);
   border-radius: 50%;
   pointer-events: none;

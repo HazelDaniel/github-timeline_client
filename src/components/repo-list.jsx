@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 import { RepoListStyled } from "./repo-list.styles";
 
+import { repoLinkData } from "../data";
+import { RepoLink } from "./repo-link";
+
 const handleListHover = ({ repoHighlight, repoList }) => {
   repoList.addEventListener("mouseover", (e) => {
     if (!e.target.dataset.pos) return;
@@ -29,36 +32,9 @@ export const RepoList = () => {
   return (
     <RepoListStyled className="repositories" ref={repoList}>
       <div className="repo-highlight" ref={repoHighlight}></div>
-      <li data-pos="0">
-        <span className="repo-line"></span>
-        <p className="repo-name">UNIQUE REPO</p>
-        <span className="repo-time">10:00 am</span>
-        <span className="repo-side-caret"></span>
-      </li>
-      <li data-pos="1">
-        <span className="repo-line"></span>
-        <p className="repo-name">UNIQUE REPO</p>
-        <span className="repo-time">10:00 am</span>
-        <span className="repo-side-caret"></span>
-      </li>
-      <li data-pos="2">
-        <span className="repo-line"></span>
-        <p className="repo-name">UNIQUE REPO</p>
-        <span className="repo-time">10:00 am</span>
-        <span className="repo-side-caret"></span>
-      </li>
-      <li data-pos="3">
-        <span className="repo-line"></span>
-        <p className="repo-name">UNIQUE REPO</p>
-        <span className="repo-time">10:00 am</span>
-        <span className="repo-side-caret"></span>
-      </li>
-      <li data-pos="4">
-        <span className="repo-line"></span>
-        <p className="repo-name">UNIQUE REPO</p>
-        <span className="repo-time">10:00 am</span>
-        <span className="repo-side-caret"></span>
-      </li>
+      {repoLinkData.map((el, i) => {
+        return <RepoLink key={i} position={i} data={el} />;
+      })}
     </RepoListStyled>
   );
 };

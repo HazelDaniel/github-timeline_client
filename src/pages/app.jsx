@@ -1,50 +1,20 @@
 import { CommitSignpost } from "../components/commit-signpost";
 import { RepoBoard } from "../components/repo-board";
-import { RepoList } from "../components/repo-list";
 import { AppPageStyled } from "./app.styles";
 
 import { repoBoardData } from "../data";
 import { Link, useLocation } from "react-router-dom";
+import { RepoTab } from "../components/repo-tab";
 
 export const AppPage = () => {
   const location = useLocation();
   const pathName = location.pathname;
   const fullRoute = pathName.trim() + location.search.trim();
-  console.log(fullRoute);
+
   return (
     <AppPageStyled className="repo-page-body">
-      <aside className="repositories-tab closed">
-        <p className="repositories-tab-title">
-          REPOSITORIES
-          <span>
-            <svg>
-              <use xlinkHref="#repository"></use>
-            </svg>
-          </span>
-        </p>
-        <div className="repository-wrapper">
-          <RepoList />
+      <RepoTab />
 
-          <div className="repo-toggler">
-            <span>
-              <span>{"\u2192"}</span>
-            </span>
-          </div>
-        </div>
-
-        <div className="repo-nav-cta">
-          <div className="left">
-            <button>
-              previous <span>{"\u2190"}</span>
-            </button>
-          </div>
-          <div className="right">
-            <button>
-              <span>{"\u2192"}</span>next
-            </button>
-          </div>
-        </div>
-      </aside>
       <section className="repo-section">
         <div className="top">
           <div className="z-bg"></div>
@@ -101,7 +71,7 @@ export const AppPage = () => {
                 </span>
               </div>
               <div>
-                <a href="#"> view commit graph </a>
+                <Link to="/graph"> view commit graph </Link>
                 <span>
                   <svg
                     viewBox="0 0 29 29"

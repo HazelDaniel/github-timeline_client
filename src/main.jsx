@@ -5,6 +5,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import { AppPage } from "./pages/app";
 import { Index } from "./pages";
+import { Graph } from "./pages/graph";
 // import F04 from "./components/F04/F04.component";
 
 // ROUTING
@@ -19,7 +20,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "graph",
-        element: <App />,
+        element: <Graph />,
       },
       {
         index: true,

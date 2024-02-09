@@ -48,9 +48,12 @@ export const RepoListStyled = styled.ul`
     }
     p {
       color: var(--dull-color);
+      font-size: 1.5rem;
       & + .repo-time {
         color: var(--dull-color);
         opacity: 0.5;
+        margin-left: auto;
+        margin-right: 10%;
       }
     }
     &::after {
