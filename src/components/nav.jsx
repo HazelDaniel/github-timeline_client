@@ -1,7 +1,8 @@
 import { NavStyled } from "./nav.styles";
 import { Link } from "react-router-dom";
+import { memo } from "react";
 
-export const Nav = () => {
+export const Nav = memo(function Nav() {
   return (
     <NavStyled>
       <div className="control-stick"></div>
@@ -83,4 +84,4 @@ export const Nav = () => {
       </div>
     </NavStyled>
   );
-};
+});

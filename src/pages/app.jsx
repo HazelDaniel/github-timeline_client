@@ -3,14 +3,11 @@ import { RepoBoard } from "../components/repo-board";
 import { AppPageStyled } from "./app.styles";
 
 import { repoBoardData } from "../data";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { RepoTab } from "../components/repo-tab";
+import { StatNav } from "../components/stat-nav";
 
 export const AppPage = () => {
-  const location = useLocation();
-  const pathName = location.pathname;
-  const fullRoute = pathName.trim() + location.search.trim();
-
   return (
     <AppPageStyled className="repo-page-body">
       <RepoTab />
@@ -129,19 +126,7 @@ export const AppPage = () => {
 
         <div className="bottom">
           <div className="stat-nav-div">
-            <ul className="stat-nav">
-              <li style={{ "--pos": 3 }}>
-                <a href={fullRoute + "#latest-commit"}>latest commit</a>
-                <span></span>
-              </li>
-              <li style={{ "--pos": 2 }}>
-                <a href={fullRoute + "#top-contributors"}>top contributors</a>
-                <span></span>
-              </li>
-              <li style={{ "--pos": 1 }}>
-                <a href={fullRoute + "#license"}>license</a> <span></span>
-              </li>
-            </ul>
+            <StatNav />
           </div>
           <div className="stat-section">
             <p className="stat-section-title" id="latest-commit">

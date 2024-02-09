@@ -85,3 +85,75 @@ export const getChartConfig = ({ horizontal, chartType, doc }) => {
     },
   };
 };
+
+
+
+//=======DATABASES==========
+
+let db;
+const initDB = () => {
+  const dbName = "githubUserData";
+  const dbVersion = 1;
+
+  const request = indexedDB.open(dbName, dbVersion);
+
+  request.onerror = function (event) {
+    console.error("Error opening IndexedDB database:", event.target.errorCode);
+  };
+
+  request.onsuccess = function (event) {
+    db = event.target.result;
+    console.log("IndexedDB database opened successfully");
+  };
+
+  request.onupgradeneeded = function (event) {
+    db = event.target.result;
+
+    if (!db.objectStoreNames.contains("users")) {
+      const objectStore = db.createObjectStore("users", { keyPath: "id" });
+      objectStore.createIndex("username", "username", { unique: true });
+    }
+  };
+};
+
+export const storeGitHubUsername = (username) => {
+  const transaction = db.transaction(['users'], 'readwrite');
+  const objectStore = transaction.objectStore('users');
+  const userData = { id: 1, username: username };
+  const request = objectStore.add(userData);
+
+  request.onsuccess = function(event) {
+      console.log('GitHub username stored successfully');
+  };
+
+  request.onerror = function(event) {
+      console.error('Error storing GitHub username:', event.target.errorCode);
+  };
+}
+
+export const getGitHubUsername = () => {
+  return new Promise((resolve, reject) => {
+      const transaction = db.transaction(['users'], 'readonly');
+      const objectStore = transaction.objectStore('users');
+      const index = objectStore.index('username');
+      const request = index.get('username');
+
+      request.onsuccess = function(event) {
+          const userData = event.target.result;
+          if (userData) {
+              resolve(userData.username);
+          } else {
+              reject('User not found');
+          }
+      };
+
+      request.onerror = function(event) {
+          reject(event.target.errorCode);
+      };
+  });
+}
+
+
+
+//======DATABASE ACTIONS=======
+initDB();
