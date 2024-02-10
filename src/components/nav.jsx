@@ -12,7 +12,7 @@ export const Nav = memo(function Nav() {
         </span>
         <div className="nav-label-div">
           <div className="nav-label">
-            <Link to="/#">SIGN UP</Link>
+            <Link to="/signup">SIGN UP</Link>
             <svg>
               <use xlinkHref="#label-style"></use>
             </svg>
@@ -38,7 +38,7 @@ export const Nav = memo(function Nav() {
         </span>
         <div className="nav-label-div">
           <div className="nav-label">
-            <Link to="/login">LOGIN</Link>
+            <Link to="/signin">LOGIN</Link>
             <svg>
               <use xlinkHref="#label-style"></use>
             </svg>

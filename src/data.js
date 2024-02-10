@@ -1,3 +1,5 @@
+export const REPO_LIST_PAGINATE_SIZE = 10;
+
 export const repoBoardData = {
   SSHLink: "git@github.com/UserName/RepoName.git",
   HTTPSLink: "https://github.com/UserName/RepoName",
@@ -86,74 +88,26 @@ export const getChartConfig = ({ horizontal, chartType, doc }) => {
   };
 };
 
-
-
-//=======DATABASES==========
-
-let db;
-const initDB = () => {
-  const dbName = "githubUserData";
-  const dbVersion = 1;
-
-  const request = indexedDB.open(dbName, dbVersion);
-
-  request.onerror = function (event) {
-    console.error("Error opening IndexedDB database:", event.target.errorCode);
-  };
-
-  request.onsuccess = function (event) {
-    db = event.target.result;
-    console.log("IndexedDB database opened successfully");
-  };
-
-  request.onupgradeneeded = function (event) {
-    db = event.target.result;
-
-    if (!db.objectStoreNames.contains("users")) {
-      const objectStore = db.createObjectStore("users", { keyPath: "id" });
-      objectStore.createIndex("username", "username", { unique: true });
-    }
-  };
-};
-
 export const storeGitHubUsername = (username) => {
-  const transaction = db.transaction(['users'], 'readwrite');
-  const objectStore = transaction.objectStore('users');
-  const userData = { id: 1, username: username };
-  const request = objectStore.add(userData);
-
-  request.onsuccess = function(event) {
-      console.log('GitHub username stored successfully');
-  };
-
-  request.onerror = function(event) {
-      console.error('Error storing GitHub username:', event.target.errorCode);
-  };
-}
+  return new Promise((resolve, reject) => {
+    try {
+      localStorage.setItem("gtl_username", JSON.stringify(username));
+      resolve(username);
+    } catch (err) {
+      reject(new Error("error adding username"));
+    }
+  });
+};
 
 export const getGitHubUsername = () => {
   return new Promise((resolve, reject) => {
-      const transaction = db.transaction(['users'], 'readonly');
-      const objectStore = transaction.objectStore('users');
-      const index = objectStore.index('username');
-      const request = index.get('username');
-
-      request.onsuccess = function(event) {
-          const userData = event.target.result;
-          if (userData) {
-              resolve(userData.username);
-          } else {
-              reject('User not found');
-          }
-      };
-
-      request.onerror = function(event) {
-          reject(event.target.errorCode);
-      };
+    const username = JSON.parse(localStorage.getItem("gtl_username"));
+    if (!username) {
+      reject(new Error("no username found"));
+    } else {
+      resolve(username);
+    }
   });
-}
+};
 
-
-
-//======DATABASE ACTIONS=======
-initDB();
+export const userInfo = {};

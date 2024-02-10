@@ -4,6 +4,7 @@ import { RepoTabStyled } from "./repo-tab.styles";
 
 export const RepoTab = () => {
   const [closed, toggleClosed] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <RepoTabStyled className={`repositories-tab${closed ? " closed" : ""}`}>

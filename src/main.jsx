@@ -23,6 +23,14 @@ export const router = createBrowserRouter([
         element: <Graph />,
       },
       {
+        path: "signin",
+        element: <Index />,
+      },
+      {
+        path: "signup",
+        element: <Index />,
+      },
+      {
         index: true,
         element: <Index />,
       },

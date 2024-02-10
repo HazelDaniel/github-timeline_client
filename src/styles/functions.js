@@ -311,6 +311,7 @@ export const GlobalStyle = createGlobalStyle`
   --dull-color: #d8d8d8;
   --repo-link-border-color: #8385895d;
   --dark-bg-color: #121219;
+  --ash-color_trans: rgba(21, 21, 21, 20%);
   --author: "HazelDaniel";
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
