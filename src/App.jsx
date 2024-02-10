@@ -6,8 +6,6 @@ import { Footer } from "./components/footer";
 import { Header } from "./components/header";
 import { FormModal } from "./components/form-modal";
 
-import { getGitHubUsername, userInfo } from "./data";
-
 // REQUESTS
 import {
   ApolloClient,
@@ -16,6 +14,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+// import { persistCache } from "apollo3-cache-persist";
 import { useEffect, useMemo, useReducer, useState } from "react";
 import {
   __updateUser,
@@ -39,10 +38,19 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const cache = new InMemoryCache();
+
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache,
   link: authLink.concat(httpLink),
 });
+
+// async function initializeApollo() {
+//   await persistCache({
+//     cache,
+//     storage: window.localStorage,
+//   });
+// }
 
 function App() {
   const location = useLocation();
@@ -58,19 +66,6 @@ function App() {
     }),
     [userState]
   );
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const username = await getGitHubUsername();
-        userInfo.username = username;
-        userStateDispatch(__updateUser(userInfo));
-      } catch (err) {
-        console.error(err);
-        return err;
-      }
-    })();
-  }, []);
 
   return (
     <ApolloProvider client={client}>

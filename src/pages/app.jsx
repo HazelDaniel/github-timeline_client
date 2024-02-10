@@ -2,8 +2,8 @@ import { CommitSignpost } from "../components/commit-signpost";
 import { RepoBoard } from "../components/repo-board";
 import { AppPageStyled } from "./app.styles";
 
-import { repoBoardData } from "../data";
-import { Link } from "react-router-dom";
+import { getGitHubUsername, repoBoardData, userInfo } from "../data";
+import { json, Link } from "react-router-dom";
 import { RepoTab } from "../components/repo-tab";
 import { StatNav } from "../components/stat-nav";
 
@@ -199,4 +199,10 @@ export const AppPage = () => {
       </section>
     </AppPageStyled>
   );
+};
+
+export const appLoader = async () => {
+  const username = await getGitHubUsername();
+  userInfo.username = username;
+  return json(userInfo);
 };

@@ -1,5 +1,5 @@
 import { userInfo } from "../data";
-import { shallowEqual } from "../utils/comparison";
+import { deepEqual, shallowEqual } from "../utils/comparison";
 // import { shallowEqual } from "../utils/comparison";
 
 const userActionTypes = {

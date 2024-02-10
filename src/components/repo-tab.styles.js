@@ -147,6 +147,10 @@ export const RepoTabStyled = styled.aside`
         background-color: unset;
         outline: unset;
         border: unset;
+        &.blurred {
+          filter: blur(2rem);
+          background-color: purple;
+        }
         &::before {
           ${makeAbsoluteBottomDiv};
           width: 80%;

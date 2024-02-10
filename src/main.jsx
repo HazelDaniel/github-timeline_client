@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import App from "./App";
-import { AppPage } from "./pages/app";
+import { AppPage, appLoader } from "./pages/app";
 import { Index } from "./pages";
 import { Graph } from "./pages/graph";
 // import F04 from "./components/F04/F04.component";
@@ -17,6 +17,7 @@ export const router = createBrowserRouter([
       {
         path: "app",
         element: <AppPage />,
+        loader: appLoader,
       },
       {
         path: "graph",
