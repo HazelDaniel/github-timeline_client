@@ -31,7 +31,7 @@ export const RepoListStyled = styled.ul`
     height: 4rem;
     ${makeRowFlexStart};
     position: relative;
-    gap: 30%;
+    gap: auto;
     padding-left: 5rem;
     font-family: manjari_bold;
     box-shadow: 0.1rem 0.1rem 0.3rem #85b51d33;
@@ -49,11 +49,16 @@ export const RepoListStyled = styled.ul`
     p {
       color: var(--dull-color);
       font-size: 1.5rem;
+      width: 75%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
       & + .repo-time {
         color: var(--dull-color);
         opacity: 0.5;
         margin-left: auto;
         margin-right: 10%;
+        width: 20%;
       }
     }
     &::after {

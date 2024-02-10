@@ -17,7 +17,11 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { useEffect, useMemo, useReducer, useState } from "react";
-import { __updateUser, initialUserState, userReducer } from "./reducers/user.reducer";
+import {
+  __updateUser,
+  initialUserState,
+  userReducer,
+} from "./reducers/user.reducer";
 import { UserProvider } from "./contexts/user.context";
 
 const httpLink = createHttpLink({
@@ -42,38 +46,44 @@ const client = new ApolloClient({
 
 function App() {
   const location = useLocation();
-  const [userState, userStateDispatch] = useReducer(userReducer, initialUserState);
+  const [userState, userStateDispatch] = useReducer(
+    userReducer,
+    initialUserState
+  );
 
-  const userValue = useMemo(()=>({
-    userState,
-    userStateDispatch
-  }), [userState]);
+  const userValue = useMemo(
+    () => ({
+      userState,
+      userStateDispatch,
+    }),
+    [userState]
+  );
 
-  (async () => {
-    try {
-      const username = await getGitHubUsername();
-      userInfo.username = username;
-      console.log(" and the username in app page is: ", userInfo.username.username);
-      userStateDispatch(__updateUser(userInfo));
-    } catch (err) {
-      console.error(err);
-      return err;
-    }
-  })();
-
+  useEffect(() => {
+    (async () => {
+      try {
+        const username = await getGitHubUsername();
+        userInfo.username = username;
+        userStateDispatch(__updateUser(userInfo));
+      } catch (err) {
+        console.error(err);
+        return err;
+      }
+    })();
+  }, []);
 
   return (
     <ApolloProvider client={client}>
       <UserProvider value={userValue}>
-      <GlobalStyle $page={location.pathname} />
-      {location.pathname === "/signup" || location.pathname === "/signin" ? (
-        <FormModal />
-      ) : null}
-      <CustomMouse />
-      <Nav />
-      <Header />
+        <GlobalStyle $page={location.pathname} />
+        {location.pathname === "/signup" || location.pathname === "/signin" ? (
+          <FormModal />
+        ) : null}
+        <CustomMouse />
+        <Nav />
+        <Header />
 
-      <Outlet />
+        <Outlet />
       </UserProvider>
 
       <Footer />

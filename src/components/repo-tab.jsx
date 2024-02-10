@@ -16,34 +16,8 @@ export const RepoTab = () => {
           </svg>
         </span>
       </p>
-      <div className="repository-wrapper">
-        <RepoList />
 
-        <div
-          className="repo-toggler"
-          onClick={() => {
-            if (closed) toggleClosed(false);
-            else toggleClosed(true);
-          }}
-        >
-          <span>
-            <span>{"\u2192"}</span>
-          </span>
-        </div>
-      </div>
-
-      <div className="repo-nav-cta">
-        <div className="left">
-          <button>
-            previous <span>{"\u2190"}</span>
-          </button>
-        </div>
-        <div className="right">
-          <button>
-            <span>{"\u2192"}</span>next
-          </button>
-        </div>
-      </div>
+      <RepoList closed={closed} toggleClosed={toggleClosed} />
     </RepoTabStyled>
   );
 };

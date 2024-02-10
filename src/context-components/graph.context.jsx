@@ -5,7 +5,6 @@ import { GraphTypeProvider } from "../contexts/graph.context";
 import { graphTypeReducer, initialGraphState } from "../reducers/graph.reducer";
 
 export const GraphCtx = () => {
-
   const [graphTypeState, graphTypeDispatch] = useReducer(
     graphTypeReducer,
     initialGraphState
@@ -28,7 +27,7 @@ export const GraphCtx = () => {
         <p className="graph-area-title">
           Weekly Contribution Graph
           <span>
-            [12-09-04 {"\u0020\u0020"} to {"\u0020\u0020"} 03-02-04]
+            [12-09-04 {"\u00A0"} to {"\u00A0"} 03-02-04]
           </span>
         </p>
         <GraphCanvas />
@@ -38,6 +37,5 @@ export const GraphCtx = () => {
         </span>
       </div>
     </GraphTypeProvider>
-
   );
-}
+};

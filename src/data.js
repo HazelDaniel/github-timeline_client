@@ -12,16 +12,16 @@ export const commitSignpostData = {
 };
 
 export const repoLinkData = [
-  { name: "repo 1", dateUpdated: new Date("2024-02-10T00:30:00Z") },
-  { name: "repo 2", dateUpdated: new Date("2024-01-10T09:30:00Z") },
-  { name: "repo 3", dateUpdated: new Date("2024-01-11T00:30:00Z") },
-  { name: "repo 4", dateUpdated: new Date("2024-02-21T20:30:00Z") },
-  { name: "repo 5", dateUpdated: new Date("2023-03-13T00:40:00Z") },
-  { name: "repo 6", dateUpdated: new Date("2023-08-15T00:35:00Z") },
-  { name: "repo 7", dateUpdated: new Date("2023-11-10T18:30:00Z") },
-  { name: "repo 8", dateUpdated: new Date("2023-12-10T10:30:00Z") },
-  { name: "repo 9", dateUpdated: new Date("2023-06-01T00:30:00Z") },
-  { name: "repo 10", dateUpdated: new Date("2022-01-01T00:00:00Z") },
+  { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
+  { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
+  { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
+  { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
+  { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
+  { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
+  { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
+  { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
+  { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
+  { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
 ];
 
 export const getChartConfig = ({ horizontal, chartType, doc }) => {
@@ -102,10 +102,10 @@ export const storeGitHubUsername = (username) => {
 export const getGitHubUsername = () => {
   return new Promise((resolve, reject) => {
     const username = JSON.parse(localStorage.getItem("gtl_username"));
-    if (!username) {
+    if (!username?.username) {
       reject(new Error("no username found"));
     } else {
-      resolve(username);
+      resolve(username.username);
     }
   });
 };
