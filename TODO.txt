@@ -1,2 +1,3 @@
 write a detailed readme file
 test the app when there is no auth user
+custom mouse is still calculating on app page . fix iT
