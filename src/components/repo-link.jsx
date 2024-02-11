@@ -1,4 +1,8 @@
 export const RepoLink = ({ position, data }) => {
+  if (!data.dateUpdated.getHours) {
+    data.dateUpdated = new Date(data.dateUpdated);
+  }
+
   return (
     <li data-pos={`${position}`}>
       <span className="repo-line"></span>

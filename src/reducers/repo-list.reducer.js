@@ -14,8 +14,13 @@ export const initialRepoListState = {
   repoLinkData,
 };
 
+export const getInitialRepoListState = () => {
+  const storedListState = JSON.parse(localStorage.getItem("glt_repoListState"));
 
-export const repoListReducer = (state = initialRepoListState, action) => {
+  return storedListState ? storedListState : initialRepoListState;
+}
+
+export const repoListReducer = (state = getInitialRepoListState(), action) => {
   const newState = { ...state, ...(action.payload && action.payload) };
 
   switch (action.type) {
@@ -25,6 +30,7 @@ export const repoListReducer = (state = initialRepoListState, action) => {
       return { ...state, currentPageIndex: state.currentPageIndex - 1 };
     default:
       if (isEqual(state, newState)) {
+        console.log("same state");
         return state;
       }
       return { ...newState };
