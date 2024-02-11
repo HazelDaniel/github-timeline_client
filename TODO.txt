@@ -1,3 +1,4 @@
 write a detailed readme file
-test the app when there is no auth user
+clear the localstorage for site-specific items and test the app when there is no auth user
 custom mouse is still calculating on app page . fix iT
+add a custom 404
