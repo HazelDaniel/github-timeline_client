@@ -1,15 +1,40 @@
 export const REPO_LIST_PAGINATE_SIZE = 10;
 
-export const repoBoardData = {
+export const repoLinkTypeData = {
   SSHLink: "git@github.com/UserName/RepoName.git",
   HTTPSLink: "https://github.com/UserName/RepoName",
   defaultLink: "https",
 };
 
+export const repoNameAndLanguageData = {
+  name: "UNIQUE REPO",
+  languages: ["python", "javascript", "C"],
+};
+
+export const repoOwnerSectionData = {
+  ownerName: "",
+  avatarUrl: "",
+  bio: "",
+};
+
+export const repoStatData = {
+  commits: 0,
+  forks: 0,
+  contributorCount: 0,
+}
+
 export const commitSignpostData = {
   createdAt: new Date("2020-02-01T22:30:00Z"),
   updatedAt: new Date("2024-02-10T00:30:00Z"),
 };
+
+export const repoBottomData = {
+  ...commitSignpostData,
+  license: null,//licenseInfo
+  contributors: [
+    {avatarUrl: "", bio: ""}
+  ]
+}
 
 export const repoLinkData = [
   { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },

@@ -65,6 +65,69 @@ const GET_REPOSITORIES = gql`
   }
 `;
 
+const GET_FULL_REPOSITORIES = gql`
+  query GetFullRepositories(
+    $username: String!
+    $first: Int!
+    $after: String
+    $before: String
+  ) {
+    user(login: $username) {
+      repositories(first: $first, after: $after, before: $before) {
+        nodes {
+          name
+          createdAt
+          updatedAt
+          sshUrl
+          url
+          languages(first: 5) {
+            nodes {
+              name
+            }
+          }
+          owner {
+            avatarUrl
+            ... on User {
+              name
+              bio
+            }
+          }
+          defaultBranchRef {
+            target {
+              ... on Commit {
+                history {
+                  totalCount
+                }
+              }
+            }
+          }
+          forks {
+            totalCount
+          }
+          licenseInfo {
+            name
+          }
+          collaborators(first: 2) {
+            nodes {
+              avatarUrl
+              ... on User {
+                name
+                bio
+              }
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          startCursor
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
 export const RepoList = ({ closed, toggleClosed }) => {
   const repoList = useRef(null);
   const repoHighlight = useRef(null);

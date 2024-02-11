@@ -2,7 +2,7 @@ import { CommitSignpost } from "../components/commit-signpost";
 import { RepoBoard } from "../components/repo-board";
 import { AppPageStyled } from "./app.styles";
 
-import { getGitHubUsername, repoBoardData, userInfo } from "../data";
+import { getGitHubUsername, repoLinkTypeData, userInfo } from "../data";
 import { json, Link } from "react-router-dom";
 import { RepoTab } from "../components/repo-tab";
 import { StatNav } from "../components/stat-nav";
@@ -16,7 +16,7 @@ export const AppPage = () => {
         <div className="top">
           <div className="z-bg"></div>
 
-          <RepoBoard {...repoBoardData} />
+          <RepoBoard {...repoLinkTypeData} />
 
           <div className="repo-author-div">
             <div className="repo-author-image-div">
