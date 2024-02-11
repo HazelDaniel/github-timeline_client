@@ -72,12 +72,24 @@ export const RepoList = ({ closed, toggleClosed }) => {
 
   const { loading, error, fetchMore } = useQuery(GET_REPOSITORIES, {
     variables: {
-      username: userData?.username,
+      username: userData.username,
       first: REPO_LIST_PAGINATE_SIZE,
+      key: listState.currentPageIndex,
     },
-    skip: !userData.username,
+    skip: listState.pageInfo,
     onCompleted: (data) => {
-      console.log("done fetching data");
+      //this should run only once. fix it
+      console.log("this ran once");
+      if (listState.pageInfo) return;
+      const pageHash = JSON.parse(localStorage.getItem("glt_pageHash"));
+      const listHash = JSON.parse(localStorage.getItem("glt_listHash"));
+      pageHash[listState.currentPageIndex] =
+        data.user.repositories.pageInfo.endCursor;
+      listHash[listState.currentPageIndex] = data;
+      console.log("page hash on complete was ", pageHash);
+      console.log("list hash on complete was ", listHash);
+      localStorage.setItem("glt_pageHash", JSON.stringify(pageHash));
+      localStorage.setItem("glt_listHash", JSON.stringify(listHash));
       listStateDispatch(
         __updatePageInfo({ pageInfo: data.user.repositories.pageInfo })
       );
@@ -88,87 +100,149 @@ export const RepoList = ({ closed, toggleClosed }) => {
   });
 
   const handleNextPage = useCallback(() => {
-    if (listState.pageInfo && listState.pageInfo.hasNextPage) {
-      fetchMore({
-        variables: {
-          after: listState.pageInfo.endCursor,
-        },
-        fetchPolicy: "cache-and-network",
-        updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult) return prev;
-          const {
-            repositories: { nodes, pageInfo: newPageInfo },
-          } = fetchMoreResult.user;
-          return {
-            user: {
-              ...prev.user,
-              repositories: {
-                ...prev.user.repositories,
-                nodes: [...prev.user.repositories.nodes, ...nodes],
-                pageInfo: newPageInfo,
-              },
-            },
-          };
-        },
-      })
-        .then((newData) => {
-          listStateDispatch(
-            __updatePageInfo({
-              pageInfo: newData.data.user.repositories.pageInfo,
-            })
-          );
-          listStateDispatch(__incrementPageIndex());
-          listStateDispatch(
-            __updateLinkData({ repoLinkData: transformRepoList(newData.data) })
-          );
+    if (!(listState.pageInfo && listState.pageInfo.hasNextPage)) return;
+    const nextPageIndex = listState.currentPageIndex + 1;
+    // console.log("next page index is ", nextPageIndex);
+    const pageHash = JSON.parse(localStorage.getItem("glt_pageHash"));
+    const listHash = JSON.parse(localStorage.getItem("glt_listHash"));
+    if (pageHash[nextPageIndex]) {
+      console.log("page hash is ", pageHash);
+      console.log("list hash is ", listHash);
+      console.log("page already exists");
+      const newData = listHash[nextPageIndex];
+      listStateDispatch(
+        __updatePageInfo({
+          pageInfo: newData.user.repositories.pageInfo,
         })
-        .catch((err) => {
-          console.error(`failed to fetch next query. reason : ${err.message}`);
-        });
+      );
+      listStateDispatch(__incrementPageIndex());
+      listStateDispatch(
+        __updateLinkData({ repoLinkData: transformRepoList(newData) })
+      );
+      console.log("updated");
+      return;
     }
-  }, [fetchMore, listState.pageInfo]);
+
+    fetchMore({
+      variables: {
+        after: listState.pageInfo.endCursor,
+      },
+      fetchPolicy: "cache-and-network",
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        const {
+          repositories: { nodes, pageInfo: newPageInfo },
+        } = fetchMoreResult.user;
+
+        const pageHash = JSON.parse(localStorage.getItem("glt_pageHash"));
+        const listHash = JSON.parse(localStorage.getItem("glt_listHash"));
+        pageHash[listState.currentPageIndex] =
+          fetchMoreResult.user.repositories.pageInfo.endCursor;
+        listHash[listState.currentPageIndex] = fetchMoreResult;
+        console.log("page hash on complete was ", pageHash);
+        console.log("list hash on complete was ", listHash);
+        localStorage.setItem("glt_pageHash", JSON.stringify(pageHash));
+        localStorage.setItem("glt_listHash", JSON.stringify(listHash));
+
+        return {
+          user: {
+            ...prev.user,
+            repositories: {
+              ...prev.user.repositories,
+              nodes: [...prev.user.repositories.nodes, ...nodes],
+              pageInfo: newPageInfo,
+            },
+          },
+        };
+      },
+    })
+      .then((newData) => {
+        listStateDispatch(
+          __updatePageInfo({
+            pageInfo: newData.data.user.repositories.pageInfo,
+          })
+        );
+        listStateDispatch(__incrementPageIndex());
+        listStateDispatch(
+          __updateLinkData({ repoLinkData: transformRepoList(newData.data) })
+        );
+      })
+      .catch((err) => {
+        console.error(`failed to fetch next query. reason : ${err.message}`);
+      });
+  }, [listState.pageInfo]);
 
   const handlePrevPage = useCallback(() => {
-    if (listState.pageInfo && listState.pageInfo.hasPreviousPage) {
-      fetchMore({
-        variables: {
-          before: pageInfo.startCursor,
-        },
-        fetchPolicy: "cache-and-network",
-        updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult) return prev;
-          const {
-            repositories: { nodes, pageInfo: newPageInfo },
-          } = fetchMoreResult.user;
-          return {
-            user: {
-              ...prev.user,
-              repositories: {
-                ...prev.user.repositories,
-                nodes: [...nodes, ...prev.user.repositories.nodes],
-                pageInfo: newPageInfo,
-              },
-            },
-          };
-        },
-      })
-        .then((newData) => {
-          listStateDispatch(
-            __updatePageInfo({
-              pageInfo: newData.data.user.repositories.pageInfo,
-            })
-          );
-          listStateDispatch(__decrementPageIndex());
-          listStateDispatch(
-            __updateLinkData({ repoLinkData: transformRepoList(newData.data) })
-          );
+    if (!(listState.pageInfo && listState.pageInfo.hasPreviousPage)) return;
+    const nextPageIndex = listState.currentPageIndex - 1;
+    const pageHash = JSON.parse(localStorage.getItem("glt_pageHash"));
+    const listHash = JSON.parse(localStorage.getItem("glt_listHash"));
+    if (pageHash[nextPageIndex]) {
+      console.log("page already exists");
+      console.log("page hash is ", pageHash);
+      console.log("list hash is ", listHash);
+      const newData = listHash[nextPageIndex];
+      listStateDispatch(
+        __updatePageInfo({
+          pageInfo: newData.user.repositories.pageInfo,
         })
-        .catch((err) => {
-          console.error(
-            `failed to fetch previous query. reason : ${err.message}`
-          );
-        });
+      );
+      listStateDispatch(__decrementPageIndex());
+      listStateDispatch(
+        __updateLinkData({ repoLinkData: transformRepoList(newData) })
+      );
+      return;
     }
+
+    fetchMore({
+      variables: {
+        before: listState.pageInfo.startCursor,
+      },
+      fetchPolicy: "cache-and-network",
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        const {
+          repositories: { nodes, pageInfo: newPageInfo },
+        } = fetchMoreResult.user;
+
+        const pageHash = JSON.parse(localStorage.getItem("glt_pageHash"));
+        const listHash = JSON.parse(localStorage.getItem("glt_listHash"));
+        pageHash[listState.currentPageIndex] =
+          fetchMoreResult.user.repositories.pageInfo.endCursor;
+        listHash[listState.currentPageIndex] = fetchMoreResult;
+        console.log("page hash on complete was ", pageHash);
+        console.log("list hash on complete was ", listHash);
+        localStorage.setItem("glt_pageHash", JSON.stringify(pageHash));
+        localStorage.setItem("glt_listHash", JSON.stringify(listHash));
+
+        return {
+          user: {
+            ...prev.user,
+            repositories: {
+              ...prev.user.repositories,
+              nodes: [...nodes, ...prev.user.repositories.nodes],
+              pageInfo: newPageInfo,
+            },
+          },
+        };
+      },
+    })
+      .then((newData) => {
+        listStateDispatch(
+          __updatePageInfo({
+            pageInfo: newData.data.user.repositories.pageInfo,
+          })
+        );
+        listStateDispatch(__decrementPageIndex());
+        listStateDispatch(
+          __updateLinkData({ repoLinkData: transformRepoList(newData.data) })
+        );
+      })
+      .catch((err) => {
+        console.error(
+          `failed to fetch previous query. reason : ${err.message}`
+        );
+      });
   }, [fetchMore, listState.pageInfo]);
 
   useEffect(() => {
@@ -179,19 +253,26 @@ export const RepoList = ({ closed, toggleClosed }) => {
       });
   }, [repoList, repoHighlight]);
 
-  console.log("list rendering");
-  console.log("current page index ", listState.currentPageIndex);
-  Object.keys(allKeys).forEach((key) => {
-    let data = cache.extract()[key];
-    let keyUser = `user({"login":"${userData.username}"})`;
-    let keyRepo = `repositories({"first":${REPO_LIST_PAGINATE_SIZE}})`;
-    data = data[keyUser][keyRepo];
-    data = data.nodes;
-    console.log(data);
-  });
+  useEffect(() => {
+    const pageHash = {};
+    const listHash = {};
+    localStorage.setItem("glt_pageHash", JSON.stringify(pageHash));
+    localStorage.setItem("glt_listHash", JSON.stringify(listHash));
+  }, []);
 
-  if (loading) console.log("loading ...");
-  else console.log("not loading");
+  console.log("list rendering");
+  // console.log("current page index ", listState.currentPageIndex);
+  // Object.keys(allKeys).forEach((key) => {
+  //   let data = cache.extract()[key];
+  //   let keyUser = `user({"login":"${userData.username}"})`;
+  //   let keyRepo = `repositories({"first":${REPO_LIST_PAGINATE_SIZE}})`;
+  //   // data = data[keyUser][keyRepo];
+  //   // data = data.nodes;
+  //   console.log(data);
+  // });
+
+  // if (loading) console.log("loading ...");
+  // else console.log("not loading");
   console.log("====liststate===");
   console.log(listState);
   console.log("====liststate===");
@@ -222,10 +303,15 @@ export const RepoList = ({ closed, toggleClosed }) => {
       <div className="repo-nav-cta">
         <div className="left">
           <button
-            onClick={handlePrevPage}
-            disabled={
-              !listState.pageInfo || !listState.pageInfo.hasNextPage || loading
-            }
+            onClick={() => {
+              if (
+                (listState.pageInfo && !listState.pageInfo.hasPreviousPage) ||
+                loading
+              )
+                return;
+              handlePrevPage();
+            }}
+            disabled={!listState?.pageInfo?.hasPreviousPage || loading}
             className={loading ? "blurred" : "not-blurred"}
           >
             previous <span>{"\u2190"}</span>
@@ -233,10 +319,18 @@ export const RepoList = ({ closed, toggleClosed }) => {
         </div>
         <div className="right">
           <button
-            onClick={handleNextPage}
-            disabled={
-              !listState.pageInfo || !listState.pageInfo.hasNextPage || loading
-            }
+            onClick={() => {
+              // console.log(listState.pageInfo);
+              // console.log( listState.pageInfo && !listState.pageInfo.hasNextPage);
+              if (
+                (listState.pageInfo && !listState.pageInfo.hasNextPage) ||
+                loading
+              ) {
+                return;
+              }
+              handleNextPage();
+            }}
+            disabled={!listState?.pageInfo?.hasNextPage || loading}
             className={loading ? "blurred" : "not-blurred"}
           >
             <span>{"\u2192"}</span>next

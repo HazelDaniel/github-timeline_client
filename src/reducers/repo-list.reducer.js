@@ -14,9 +14,9 @@ export const initialRepoListState = {
   repoLinkData,
 };
 
+
 export const repoListReducer = (state = initialRepoListState, action) => {
   const newState = { ...state, ...(action.payload && action.payload) };
-  console.log("new state is", newState, "old state was ", state);
 
   switch (action.type) {
     case repoListActionTypes.incrementPageIndex:
@@ -27,7 +27,6 @@ export const repoListReducer = (state = initialRepoListState, action) => {
       if (isEqual(state, newState)) {
         return state;
       }
-      console.log("not same state");
       return { ...newState };
   }
 };
