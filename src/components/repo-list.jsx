@@ -3,12 +3,14 @@ import { RepoListStyled } from "./repo-list.styles";
 
 import { RepoLink } from "./repo-link";
 
-import { gql, useApolloClient, useQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 
-//DATA
+//DATA AND DATA TRANSFORMATION
 import { REPO_LIST_PAGINATE_SIZE } from "../data";
 import { transformRepoList } from "../utils/transformers";
 import { useLoaderData } from "react-router-dom";
+
+//STATE
 import {
   __decrementPageIndex,
   __incrementPageIndex,
@@ -17,6 +19,14 @@ import {
   getInitialRepoListState,
   repoListReducer,
 } from "../reducers/repo-list.reducer";
+
+//STORAGE
+import {
+  getRepoListAndPageIndex,
+  initRepoListAndPageIndexPersist,
+  persistRepoListState,
+  setRepoListAndPageIndex,
+} from "../utils/storage";
 
 const handleListHover = ({ repoHighlight, repoList }) => {
   repoList.addEventListener("mouseover", (e) => {
@@ -66,10 +76,6 @@ export const RepoList = ({ closed, toggleClosed }) => {
     getInitialRepoListState()
   );
 
-  const client = useApolloClient();
-  const cache = client.cache;
-  const allKeys = cache.extract();
-
   const { loading, error, fetchMore } = useQuery(GET_REPOSITORIES, {
     variables: {
       username: userData.username,
@@ -80,13 +86,14 @@ export const RepoList = ({ closed, toggleClosed }) => {
     onCompleted: (data) => {
       //this should run only once. fix it
       if (listState.pageInfo) return;
-      const pageHash = JSON.parse(localStorage.getItem("glt_pageHash"));
-      const listHash = JSON.parse(localStorage.getItem("glt_listHash"));
+      const { pageHash, listHash } = getRepoListAndPageIndex();
+
       pageHash[listState.currentPageIndex] =
         data.user.repositories.pageInfo.endCursor;
       listHash[listState.currentPageIndex] = data;
-      localStorage.setItem("glt_pageHash", JSON.stringify(pageHash));
-      localStorage.setItem("glt_listHash", JSON.stringify(listHash));
+
+      setRepoListAndPageIndex({ pageHash, listHash });
+
       listStateDispatch(
         __updatePageInfo({ pageInfo: data.user.repositories.pageInfo })
       );
@@ -99,8 +106,8 @@ export const RepoList = ({ closed, toggleClosed }) => {
   const handleNextPage = useCallback(() => {
     if (!(listState.pageInfo && listState.pageInfo.hasNextPage)) return;
     const nextPageIndex = listState.currentPageIndex + 1;
-    const pageHash = JSON.parse(localStorage.getItem("glt_pageHash"));
-    const listHash = JSON.parse(localStorage.getItem("glt_listHash"));
+    const { pageHash, listHash } = getRepoListAndPageIndex();
+
     if (pageHash[nextPageIndex]) {
       const newData = listHash[nextPageIndex];
       listStateDispatch(
@@ -120,35 +127,16 @@ export const RepoList = ({ closed, toggleClosed }) => {
         after: listState.pageInfo.endCursor,
       },
       fetchPolicy: "cache-and-network",
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prev;
-        const {
-          repositories: { nodes, pageInfo: newPageInfo },
-        } = fetchMoreResult.user;
-
-        return {
-          user: {
-            ...prev.user,
-            repositories: {
-              ...prev.user.repositories,
-              nodes: [...prev.user.repositories.nodes, ...nodes],
-              pageInfo: newPageInfo,
-            },
-          },
-        };
-      },
     })
       .then((res) => {
         const { data: newData } = res;
-
-        const pageHash = JSON.parse(localStorage.getItem("glt_pageHash"));
-        const listHash = JSON.parse(localStorage.getItem("glt_listHash"));
+        const { pageHash, listHash } = getRepoListAndPageIndex();
 
         pageHash[listState.currentPageIndex + 1] =
           newData.user.repositories.pageInfo.endCursor;
         listHash[listState.currentPageIndex + 1] = newData;
-        localStorage.setItem("glt_pageHash", JSON.stringify(pageHash));
-        localStorage.setItem("glt_listHash", JSON.stringify(listHash));
+
+        setRepoListAndPageIndex({ listHash, pageHash });
 
         listStateDispatch(
           __updatePageInfo({
@@ -168,8 +156,7 @@ export const RepoList = ({ closed, toggleClosed }) => {
   const handlePrevPage = useCallback(() => {
     if (!(listState.pageInfo && listState.pageInfo.hasPreviousPage)) return;
     const nextPageIndex = listState.currentPageIndex - 1;
-    const pageHash = JSON.parse(localStorage.getItem("glt_pageHash"));
-    const listHash = JSON.parse(localStorage.getItem("glt_listHash"));
+    const { pageHash, listHash } = getRepoListAndPageIndex();
     if (pageHash[nextPageIndex]) {
       const newData = listHash[nextPageIndex];
       listStateDispatch(
@@ -189,34 +176,16 @@ export const RepoList = ({ closed, toggleClosed }) => {
         before: listState.pageInfo.startCursor,
       },
       fetchPolicy: "cache-and-network",
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prev;
-        const {
-          repositories: { nodes, pageInfo: newPageInfo },
-        } = fetchMoreResult.user;
-
-        return {
-          user: {
-            ...prev.user,
-            repositories: {
-              ...prev.user.repositories,
-              nodes: [...nodes, ...prev.user.repositories.nodes],
-              pageInfo: newPageInfo,
-            },
-          },
-        };
-      },
     })
       .then((res) => {
         const { data: newData } = res;
+        const { pageHash, listHash } = getRepoListAndPageIndex();
 
-        const pageHash = JSON.parse(localStorage.getItem("glt_pageHash"));
-        const listHash = JSON.parse(localStorage.getItem("glt_listHash"));
         pageHash[listState.currentPageIndex - 1] =
           newData.user.repositories.pageInfo.endCursor;
         listHash[listState.currentPageIndex - 1] = newData;
-        localStorage.setItem("glt_pageHash", JSON.stringify(pageHash));
-        localStorage.setItem("glt_listHash", JSON.stringify(listHash));
+
+        setRepoListAndPageIndex({ pageHash, listHash });
 
         listStateDispatch(
           __updatePageInfo({
@@ -243,21 +212,12 @@ export const RepoList = ({ closed, toggleClosed }) => {
 
   useEffect(() => {
     return () => {
-      localStorage.setItem("glt_repoListState", JSON.stringify(listState));
+      persistRepoListState(listState);
     };
   }, [listState]);
 
   useEffect(() => {
-    const pageHash = {};
-    const listHash = {};
-
-    if (
-      localStorage.getItem("glt_pageHash") &&
-      localStorage.getItem("glt_listHash")
-    )
-      return;
-    localStorage.setItem("glt_pageHash", JSON.stringify(pageHash));
-    localStorage.setItem("glt_listHash", JSON.stringify(listHash));
+    initRepoListAndPageIndexPersist();
   }, []);
 
   console.log("list rendering");
