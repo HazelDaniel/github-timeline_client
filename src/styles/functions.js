@@ -312,7 +312,7 @@ export const GlobalStyle = createGlobalStyle`
   --repo-link-border-color: #8385895d;
   --dark-bg-color: #121219;
   --ash-color_trans: rgba(21, 21, 21, 20%);
-  --author: "HazelDaniel";
+  --author: "H.a.z.e.l.D.a.n.i.e.l";
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 

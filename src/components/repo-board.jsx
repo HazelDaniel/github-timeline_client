@@ -1,6 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
 import { RepoBoardStyled } from "./repo-board.styles";
-import { useRef } from "react";
+import { useContext, useRef } from "react";
+import {
+  repoBoardContext,
+  repoOwnerAndStatContext,
+} from "../contexts/repo-data.context";
 
 const handleLinkCopy = ({ source: { current: element } }) => {
   const text = element.textContent;
@@ -13,11 +17,14 @@ const handleLinkCopy = ({ source: { current: element } }) => {
   document.body.removeChild(tempInput);
 };
 
-export const RepoBoard = ({ SSHLink, HTTPSLink, defaultLink }) => {
+export const RepoBoard = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const linkType = params.get("link-type");
   const linkCopyElement = useRef(null);
+  const { repoBoardState } = useContext(repoBoardContext);
+
+  console.log("repo board rendering");
 
   return (
     <RepoBoardStyled className="repo-board">
@@ -37,7 +44,8 @@ export const RepoBoard = ({ SSHLink, HTTPSLink, defaultLink }) => {
             <Link
               to="/app?link-type=https"
               className={
-                linkType === "https" || (!linkType && defaultLink === "https")
+                linkType === "https" ||
+                (!linkType && repoBoardState.defaultLink === "https")
                   ? "active"
                   : ""
               }
@@ -49,7 +57,8 @@ export const RepoBoard = ({ SSHLink, HTTPSLink, defaultLink }) => {
             <Link
               to="/app?link-type=ssh"
               className={
-                linkType === "ssh" || (!linkType && defaultLink === "ssh")
+                linkType === "ssh" ||
+                (!linkType && repoBoardState.defaultLink === "ssh")
                   ? "active"
                   : ""
               }
@@ -60,9 +69,10 @@ export const RepoBoard = ({ SSHLink, HTTPSLink, defaultLink }) => {
         </ul>
         <div className="code-link-div">
           <p ref={linkCopyElement}>
-            {linkType === "ssh" || (!linkType && defaultLink === "ssh")
-              ? SSHLink
-              : HTTPSLink}
+            {linkType === "ssh" ||
+            (!linkType && repoBoardState.defaultLink === "ssh")
+              ? repoBoardState.SSHLink
+              : repoBoardState.HTTPSLink}
             <span
               onClick={() => {
                 handleLinkCopy({ source: linkCopyElement });
@@ -81,13 +91,14 @@ export const RepoBoard = ({ SSHLink, HTTPSLink, defaultLink }) => {
           <li>
             <p>NAME</p>
             <h3>
-              <span>{"\u2192"}</span> Unique Repo
+              <span>{"\u2192"}</span> {repoBoardState.name}
             </h3>
           </li>
           <li>
             <p>Languages</p>
             <h3>
-              <span>{"\u2192"}</span>Python, Javascript, C
+              <span>{"\u2192"}</span>
+              {repoBoardState.languages.join(", ") || "----"}
             </h3>
           </li>
         </ul>

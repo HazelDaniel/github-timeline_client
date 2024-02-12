@@ -1,4 +1,8 @@
 write a detailed readme file
 clear the localstorage for site-specific items and test the app when there is no auth user
+try testing the app on multiple tabs by setting different states to persist
+if the result is not great, just switch to sessionstorage and test
 custom mouse is still calculating on app page . fix iT
 add a custom 404
+create the alert modals
+login as another user and test all the features

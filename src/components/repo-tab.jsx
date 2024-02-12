@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { RepoList } from "./repo-list";
 import { RepoTabStyled } from "./repo-tab.styles";
+import { RepoListWrapper } from "./repo-list-wrapper";
 
 export const RepoTab = () => {
   const [closed, toggleClosed] = useState(true);
@@ -17,7 +18,7 @@ export const RepoTab = () => {
         </span>
       </p>
 
-      <RepoList closed={closed} toggleClosed={toggleClosed} />
+      <RepoListWrapper closed={closed} toggleClosed={toggleClosed} />
     </RepoTabStyled>
   );
 };

@@ -20,9 +20,12 @@ export const transformRepoBoard = (data) => {
     sshUrl: SSHLink,
     languages: { nodes: languages },
   } = data;
-  languages = languages.map((el) => {
-    return el.name;
-  });
+
+  if (languages) {
+    languages = languages.map((el) => {
+      return el.name;
+    });
+  } else languages = [];
 
   return { name, languages, HTTPSLink, SSHLink };
 };
@@ -48,12 +51,15 @@ export const transformOwnerAndStat = (data) => {
 };
 
 export const transformRepoBottom = (data) => {
-  const {
+  let {
     createdAt: dateCreated,
     updatedAt: dateUpdated,
-    license,
+    licenseInfo: license,
     collaborators: { nodes: contributors },
   } = data;
+
+  if (license) license = license.name;
+  else license = "NO LICENSE";
 
   return {
     dateCreated: new Date(dateCreated),

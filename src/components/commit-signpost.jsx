@@ -1,26 +1,26 @@
-import { useRef, useState } from "react";
-import { commitSignpostData } from "../data";
+import { useContext, useRef, useState } from "react";
+import { days, months } from "../data";
+import { repoBottomContext } from "../contexts/repo-data.context";
 
-const days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
 
 export const CommitSignpost = () => {
+  const { repoBottomState } = useContext(repoBottomContext);
+  const dateData = {
+    dateCreated: repoBottomState.dateCreated,
+    dateUpdated: repoBottomState.dateUpdated,
+  };
   const [tabState, setTabState] = useState({ current: "created" });
-  const [dataState, setDataState] = useState(commitSignpostData.dateCreated);
+  const [_, setDataState] = useState(dateData.dateCreated);
   const popUp = useRef(null);
+
+  console.log("renderinng commit signpost");
+  let dateOption =
+    tabState.current === "created"
+      ? dateData.dateCreated
+      : dateData.dateUpdated;
+  if (!dateOption.getDate) {
+    dateOption = new Date(dateOption);
+  }
 
   return (
     <>
@@ -31,7 +31,7 @@ export const CommitSignpost = () => {
               className={tabState.current === "created" ? "active" : ""}
               onClick={() => {
                 popUp.current.classList.remove("raise_up");
-                setDataState(commitSignpostData.dateCreated);
+                setDataState(dateData.dateCreated);
                 setTabState({ current: "created" });
               }}
             >
@@ -43,7 +43,7 @@ export const CommitSignpost = () => {
               className={tabState.current === "updated" ? "active" : ""}
               onClick={() => {
                 popUp.current.classList.remove("raise_up");
-                setDataState(commitSignpostData.updatedAt);
+                setDataState(dateData.dateUpdated);
                 setTabState({ current: "updated" });
                 popUp.current.classList.add("raise_up");
               }}
@@ -61,16 +61,16 @@ export const CommitSignpost = () => {
       <div className="stat-right">
         <div className="stat-popup raise_up" ref={popUp}>
           <div className="left">
-            <p>{dataState.getDate().toString().padStart(2, "0")}</p>
+            <p>{dateOption.getDate().toString().padStart(2, "0")}</p>
           </div>
           <div className="right">
-            <p>{days[dataState.getDay()]}</p>
+            <p>{days[dateOption.getDay()]}</p>
             <h2>
-              {months[dataState.getMonth()]} {dataState.getFullYear()}
+              {months[dateOption.getMonth()]} {dateOption.getFullYear()}
             </h2>
             <h4>
-              {dataState.getHours().toString().padStart(2, "0")}:
-              {dataState.getMinutes().toString().padStart(2, "0")}
+              {dateOption.getHours().toString().padStart(2, "0")}:
+              {dateOption.getMinutes().toString().padStart(2, "0")}
             </h4>
           </div>
         </div>

@@ -143,12 +143,14 @@ export const AppPageStyled = styled.main`
           font-size: 1.5rem;
           font-family: montserrat_regular;
           color: var(--bright-color);
-          p {
-            margin-bottom: 3rem;
-          }
+          ${makeColFlexStart};
+          justify-content: space-between;
+          /* p {
+          } */
           h4 {
             font-family: manjari_bold;
             text-align: end;
+            align-self: flex-end;
           }
         }
       }

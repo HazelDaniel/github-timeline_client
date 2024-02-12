@@ -7,6 +7,12 @@ import {
   repoLinkData,
 } from "../data";
 import { isEqual } from "../utils/comparison";
+import { getRepoLinkLastPos, getRepoListState } from "../utils/storage";
+import {
+  transformOwnerAndStat,
+  transformRepoBoard,
+  transformRepoBottom,
+} from "../utils/transformers";
 
 const repoListActionTypes = {
   updateLinkData: "UPDATE_LINK_DATA",
@@ -16,9 +22,6 @@ const repoListActionTypes = {
 };
 
 const repoBoardActionTypes = {
-  // updateRepoLinkValue: "UPDATE_REPO_LINK_VALUE",
-  // updateRepoName: "UPDATE_REPO_NAME",
-  // updateRepoLanguage: "UPDATE_REPO_LANGUAGE",
   updateRepoBoardData: "UPDATE_REPO_BOARD_DATA",
 };
 
@@ -28,7 +31,7 @@ const repoOwnerAndStatActionTypes = {
 
 const repoBottomActionTypes = {
   updateRepoBottomData: "UPDATE_REPO_BOTTOM_DATA",
-}
+};
 
 export const initialRepoListState = {
   pageInfo: null,
@@ -48,32 +51,49 @@ export const initialRepoOwnerAndStatState = {
 
 export const initialRepoBottomState = {
   ...repoBottomData,
-}
+};
 
 export const getInitialRepoListState = () => {
-  const storedListState = JSON.parse(localStorage.getItem("glt_repoListState"));
+  const { storedListState } = getRepoListState();
 
   return storedListState ? storedListState : initialRepoListState;
 };
 
 export const getInitialRepoBoardState = () => {
-  // this will be based on getInitialRepoListState
-  const storedListState = JSON.parse(localStorage.getItem("glt_repoListState"));
+  const { storedListState } = getRepoListState();
+  const { lastPos } = getRepoLinkLastPos();
 
-  return initialRepoBoardState;
+  return Number.isFinite(lastPos) && storedListState
+    ? {
+        ...storedListState.repoLinkData[lastPos],
+        defaultLink: initialRepoBoardState.defaultLink,
+      }
+    : initialRepoBoardState;
 };
 
 export const getInitialRepoOwnerAndStatState = () => {
-  // this will be based on getInitialRepoListState
+  const { storedListState } = getRepoListState();
+  const { lastPos } = getRepoLinkLastPos();
 
-  return initialRepoBoardState;
+  // console.log(" stored list state is :  ", storedListState);
+  // console.log(" last position is ", lastPos);
+
+  if (Number.isFinite(lastPos) && storedListState) {
+    return storedListState.repoLinkData[lastPos];
+  } else {
+    console.log("no repo board entry in the localstorage ");
+    return initialRepoOwnerAndStatState;
+  }
 };
 
 export const getInitialRepoBottomState = () => {
-  // this will be based on getInitialRepoListState
+  const { storedListState } = getRepoListState();
+  const { lastPos } = getRepoLinkLastPos();
 
-  return initialRepoBottomState;
-}
+  return Number.isFinite(lastPos) && storedListState
+    ? storedListState.repoLinkData[lastPos]
+    : initialRepoBottomState;
+};
 
 export const repoListReducer = (state = getInitialRepoListState(), action) => {
   const newState = { ...state, ...(action.payload && action.payload) };
@@ -130,8 +150,6 @@ export const repoBottomStateReducer = (
   }
   return { ...newState };
 };
-
-
 
 // START: REPO LIST ACTION CREATORS
 export const __updateLinkData = (linkData) => {

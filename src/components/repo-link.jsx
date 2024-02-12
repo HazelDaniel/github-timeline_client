@@ -1,10 +1,37 @@
-export const RepoLink = ({ position, data }) => {
+import { memo, useCallback, useContext, useEffect } from "react";
+import {
+  repoBoardContext,
+  repoBottomContext,
+  repoOwnerAndStatContext,
+} from "../contexts/repo-data.context";
+import {
+  __updateRepoBoardData,
+  __updateRepoBottomData,
+  __updateRepoOwnerAndStatData,
+} from "../reducers/repo-data.reducer";
+import { setRepoLinkLastPos } from "../utils/storage";
+
+export const RepoLink = memo(function RepoLink({ position, data }) {
+  const { repoBoardDispatch } = useContext(repoBoardContext);
+  const { repoOwnerAndStatDispatch } = useContext(repoOwnerAndStatContext);
+  const { repoBottomDispatch } = useContext(repoBottomContext);
+
   if (!data.dateUpdated.getHours) {
     data.dateUpdated = new Date(data.dateUpdated);
   }
 
+  // console.log("link rendering");
+
   return (
-    <li data-pos={`${position}`}>
+    <li
+      data-pos={`${position}`}
+      onClick={() => {
+        repoBoardDispatch(__updateRepoBoardData(data));
+        repoOwnerAndStatDispatch(__updateRepoOwnerAndStatData(data));
+        repoBottomDispatch(__updateRepoBottomData(data));
+        setRepoLinkLastPos({ lastPos: position });
+      }}
+    >
       <span className="repo-line"></span>
       <p className="repo-name">{data.name}</p>
       <span className="repo-time">
@@ -15,4 +42,4 @@ export const RepoLink = ({ position, data }) => {
       <span className="repo-side-caret"></span>
     </li>
   );
-};
+});

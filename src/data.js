@@ -1,40 +1,40 @@
 export const REPO_LIST_PAGINATE_SIZE = 10;
 
 export const repoLinkTypeData = {
-  SSHLink: "git@github.com/UserName/RepoName.git",
-  HTTPSLink: "https://github.com/UserName/RepoName",
+  SSHLink: "----",
+  HTTPSLink: "----",
   defaultLink: "https",
 };
 
 export const repoNameAndLanguageData = {
-  name: "UNIQUE REPO",
-  languages: ["python", "javascript", "C"],
+  name: "----",
+  languages: [],
 };
 
 export const repoOwnerSectionData = {
-  ownerName: "",
-  ownerAvatarUrl: "",
-  ownerBio: "",
+  ownerName: "no name available",
+  ownerAvatarUrl: "images/placeholder.svg",
+  ownerBio: "No bio available",
 };
 
 export const repoStatData = {
   commits: 0,
   forks: 0,
   contributorCount: 0,
-}
+};
 
 export const commitSignpostData = {
-  dateCreated: new Date("2020-02-01T22:30:00Z"),
-  dateUpdated: new Date("2024-02-10T00:30:00Z"),
+  dateCreated: new Date("1970-01-01T22:00:00Z"),
+  dateUpdated: new Date("1970-01-01T22:00:00Z"),
 };
 
 export const repoBottomData = {
   ...commitSignpostData,
-  license: null,//licenseInfo
+  license: null, //licenseInfo
   contributors: [
-    {avatarUrl: "", bio: ""}
-  ]
-}
+    { avatarUrl: "images/placeholder.svg", bio: "no bio available" },
+  ],
+};
 
 export const repoLinkData = [
   { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
@@ -136,3 +136,19 @@ export const getGitHubUsername = () => {
 };
 
 export const userInfo = {};
+
+export const days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
+export const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];

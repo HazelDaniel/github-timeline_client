@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef } from "react";
+import { memo, useCallback, useEffect, useReducer, useRef } from "react";
 import { RepoListStyled } from "./repo-list.styles";
 
 import { RepoLink } from "./repo-link";
@@ -8,7 +8,6 @@ import { gql, useQuery } from "@apollo/client";
 //DATA AND DATA TRANSFORMATION
 import { REPO_LIST_PAGINATE_SIZE } from "../data";
 import { transformRepoList } from "../utils/transformers";
-import { useLoaderData } from "react-router-dom";
 
 //STATE
 import {
@@ -18,7 +17,7 @@ import {
   __updatePageInfo,
   getInitialRepoListState,
   repoListReducer,
-} from "../reducers/repo-list.reducer";
+} from "../reducers/repo-data.reducer";
 
 //STORAGE
 import {
@@ -27,6 +26,7 @@ import {
   persistRepoListState,
   setRepoListAndPageIndex,
 } from "../utils/storage";
+import { isEqual } from "../utils/comparison";
 
 const handleListHover = ({ repoHighlight, repoList }) => {
   repoList.addEventListener("mouseover", (e) => {
@@ -128,79 +128,50 @@ const GET_FULL_REPOSITORIES = gql`
   }
 `;
 
-export const RepoList = ({ closed, toggleClosed }) => {
-  const repoList = useRef(null);
-  const repoHighlight = useRef(null);
+export const RepoList = memo(
+  function RepoList({ closed, toggleClosed, userData }) {
+    const repoList = useRef(null);
+    const repoHighlight = useRef(null);
 
-  const userData = useLoaderData();
+    const [listState, listStateDispatch] = useReducer(
+      repoListReducer,
+      getInitialRepoListState()
+    );
 
-  const [listState, listStateDispatch] = useReducer(
-    repoListReducer,
-    getInitialRepoListState()
-  );
-
-  const { loading, error, fetchMore } = useQuery(GET_FULL_REPOSITORIES, {
-    variables: {
-      username: userData.username,
-      first: REPO_LIST_PAGINATE_SIZE,
-      key: listState.currentPageIndex,
-    },
-    skip: listState.pageInfo,
-    onCompleted: (data) => {
-      //this should run only once. fix it
-      if (listState.pageInfo) return;
-      const { pageHash, listHash } = getRepoListAndPageIndex();
-
-      pageHash[listState.currentPageIndex] =
-        data.user.repositories.pageInfo.endCursor;
-      listHash[listState.currentPageIndex] = data;
-
-      setRepoListAndPageIndex({ pageHash, listHash });
-
-      listStateDispatch(
-        __updatePageInfo({ pageInfo: data.user.repositories.pageInfo })
-      );
-      listStateDispatch(
-        __updateLinkData({ repoLinkData: transformRepoList(data) })
-      );
-    },
-  });
-
-  const handleNextPage = useCallback(() => {
-    if (!(listState.pageInfo && listState.pageInfo.hasNextPage)) return;
-    const nextPageIndex = listState.currentPageIndex + 1;
-    const { pageHash, listHash } = getRepoListAndPageIndex();
-
-    if (pageHash[nextPageIndex]) {
-      const newData = listHash[nextPageIndex];
-      listStateDispatch(
-        __updatePageInfo({
-          pageInfo: newData.user.repositories.pageInfo,
-        })
-      );
-      listStateDispatch(__incrementPageIndex());
-      listStateDispatch(
-        __updateLinkData({ repoLinkData: transformRepoList(newData) })
-      );
-      return;
-    }
-
-    fetchMore({
+    const { loading, error, fetchMore } = useQuery(GET_FULL_REPOSITORIES, {
       variables: {
-        after: listState.pageInfo.endCursor,
+        username: userData?.username,
+        first: REPO_LIST_PAGINATE_SIZE,
+        key: listState.currentPageIndex,
       },
-      fetchPolicy: "cache-and-network",
-    })
-      .then((res) => {
-        const { data: newData } = res;
+      skip: listState.pageInfo || !userData.username,
+      onCompleted: (data) => {
+        //this should run only once. fix it
+        if (listState.pageInfo) return;
         const { pageHash, listHash } = getRepoListAndPageIndex();
 
-        pageHash[listState.currentPageIndex + 1] =
-          newData.user.repositories.pageInfo.endCursor;
-        listHash[listState.currentPageIndex + 1] = newData;
+        pageHash[listState.currentPageIndex] =
+          data.user.repositories.pageInfo.endCursor;
+        listHash[listState.currentPageIndex] = data;
 
-        setRepoListAndPageIndex({ listHash, pageHash });
+        setRepoListAndPageIndex({ pageHash, listHash });
 
+        listStateDispatch(
+          __updatePageInfo({ pageInfo: data.user.repositories.pageInfo })
+        );
+        listStateDispatch(
+          __updateLinkData({ repoLinkData: transformRepoList(data) })
+        );
+      },
+    });
+
+    const handleNextPage = useCallback(() => {
+      if (!(listState.pageInfo && listState.pageInfo.hasNextPage)) return;
+      const nextPageIndex = listState.currentPageIndex + 1;
+      const { pageHash, listHash } = getRepoListAndPageIndex();
+
+      if (pageHash[nextPageIndex]) {
+        const newData = listHash[nextPageIndex];
         listStateDispatch(
           __updatePageInfo({
             pageInfo: newData.user.repositories.pageInfo,
@@ -210,140 +181,172 @@ export const RepoList = ({ closed, toggleClosed }) => {
         listStateDispatch(
           __updateLinkData({ repoLinkData: transformRepoList(newData) })
         );
+        return;
+      }
+
+      fetchMore({
+        variables: {
+          after: listState.pageInfo.endCursor,
+        },
+        fetchPolicy: "cache-and-network",
       })
-      .catch((err) => {
-        console.error(`failed to fetch next query. reason : ${err.message}`);
-      });
-  }, [fetchMore, listState.pageInfo, listState.currentPageIndex]);
+        .then((res) => {
+          const { data: newData } = res;
+          const { pageHash, listHash } = getRepoListAndPageIndex();
 
-  const handlePrevPage = useCallback(() => {
-    if (!(listState.pageInfo && listState.pageInfo.hasPreviousPage)) return;
-    const nextPageIndex = listState.currentPageIndex - 1;
-    const { pageHash, listHash } = getRepoListAndPageIndex();
-    if (pageHash[nextPageIndex]) {
-      const newData = listHash[nextPageIndex];
-      listStateDispatch(
-        __updatePageInfo({
-          pageInfo: newData.user.repositories.pageInfo,
+          pageHash[listState.currentPageIndex + 1] =
+            newData.user.repositories.pageInfo.endCursor;
+          listHash[listState.currentPageIndex + 1] = newData;
+
+          setRepoListAndPageIndex({ listHash, pageHash });
+
+          listStateDispatch(
+            __updatePageInfo({
+              pageInfo: newData.user.repositories.pageInfo,
+            })
+          );
+          listStateDispatch(__incrementPageIndex());
+          listStateDispatch(
+            __updateLinkData({ repoLinkData: transformRepoList(newData) })
+          );
         })
-      );
-      listStateDispatch(__decrementPageIndex());
-      listStateDispatch(
-        __updateLinkData({ repoLinkData: transformRepoList(newData) })
-      );
-      return;
-    }
+        .catch((err) => {
+          console.error(`failed to fetch next query. reason : ${err.message}`);
+        });
+    }, [fetchMore, listState.pageInfo, listState.currentPageIndex]);
 
-    fetchMore({
-      variables: {
-        before: listState.pageInfo.startCursor,
-      },
-      fetchPolicy: "cache-and-network",
-    })
-      .then((res) => {
-        const { data: newData } = res;
-        const { pageHash, listHash } = getRepoListAndPageIndex();
-
-        pageHash[listState.currentPageIndex - 1] =
-          newData.user.repositories.pageInfo.endCursor;
-        listHash[listState.currentPageIndex - 1] = newData;
-
-        setRepoListAndPageIndex({ pageHash, listHash });
-
+    const handlePrevPage = useCallback(() => {
+      if (!(listState.pageInfo && listState.pageInfo.hasPreviousPage)) return;
+      const nextPageIndex = listState.currentPageIndex - 1;
+      const { pageHash, listHash } = getRepoListAndPageIndex();
+      if (pageHash[nextPageIndex]) {
+        const newData = listHash[nextPageIndex];
         listStateDispatch(
           __updatePageInfo({
-            pageInfo: newData.data.user.repositories.pageInfo,
+            pageInfo: newData.user.repositories.pageInfo,
           })
         );
         listStateDispatch(__decrementPageIndex());
         listStateDispatch(
-          __updateLinkData({ repoLinkData: transformRepoList(newData.data) })
+          __updateLinkData({ repoLinkData: transformRepoList(newData) })
         );
+        return;
+      }
+
+      fetchMore({
+        variables: {
+          before: listState.pageInfo.startCursor,
+        },
+        fetchPolicy: "cache-and-network",
       })
-      .catch((err) => {
-        console.error(`failed to fetch next query. reason : ${err.message}`);
-      });
-  }, [fetchMore, listState.pageInfo, listState.currentPageIndex]);
+        .then((res) => {
+          const { data: newData } = res;
+          const { pageHash, listHash } = getRepoListAndPageIndex();
 
-  useEffect(() => {
-    if (repoList && repoHighlight)
-      handleListHover({
-        repoList: repoList.current,
-        repoHighlight: repoHighlight.current,
-      });
-  }, [repoList, repoHighlight]);
+          pageHash[listState.currentPageIndex - 1] =
+            newData.user.repositories.pageInfo.endCursor;
+          listHash[listState.currentPageIndex - 1] = newData;
 
-  useEffect(() => {
-    return () => {
-      persistRepoListState(listState);
-    };
-  }, [listState]);
+          setRepoListAndPageIndex({ pageHash, listHash });
 
-  useEffect(() => {
-    initRepoListAndPageIndexPersist();
-  }, []);
+          listStateDispatch(
+            __updatePageInfo({
+              pageInfo: newData.data.user.repositories.pageInfo,
+            })
+          );
+          listStateDispatch(__decrementPageIndex());
+          listStateDispatch(
+            __updateLinkData({ repoLinkData: transformRepoList(newData.data) })
+          );
+        })
+        .catch((err) => {
+          console.error(`failed to fetch next query. reason : ${err.message}`);
+        });
+    }, [fetchMore, listState.pageInfo, listState.currentPageIndex]);
 
-  console.log("list rendering");
-  // console.log(listState);
+    useEffect(() => {
+      if (repoList && repoHighlight)
+        handleListHover({
+          repoList: repoList.current,
+          repoHighlight: repoHighlight.current,
+        });
+    }, [repoList, repoHighlight]);
 
-  return (
-    <>
-      <div className="repository-wrapper">
-        <RepoListStyled className="repositories" ref={repoList}>
-          <div className="repo-highlight" ref={repoHighlight}></div>
-          {listState.repoLinkData.map((el, i) => {
-            return <RepoLink key={i} position={i} data={el} />;
-          })}
-        </RepoListStyled>
+    useEffect(() => {
+      return () => {
+        persistRepoListState(listState);
+      };
+    }, [listState]);
 
-        <div
-          className="repo-toggler"
-          onClick={() => {
-            if (closed) toggleClosed(false);
-            else toggleClosed(true);
-          }}
-        >
-          <span>
-            <span>{"\u2192"}</span>
-          </span>
-        </div>
-      </div>
+    useEffect(() => {
+      initRepoListAndPageIndexPersist();
+    }, []);
 
-      <div className="repo-nav-cta">
-        <div className="left">
-          <button
+    console.log("list rendering");
+    console.log(listState);
+
+    return (
+      <>
+        <div className="repository-wrapper">
+          <RepoListStyled className="repositories" ref={repoList}>
+            <div className="repo-highlight" ref={repoHighlight}></div>
+            {listState.repoLinkData.map((el, i) => {
+              return <RepoLink key={i} position={i} data={el} />;
+            })}
+          </RepoListStyled>
+
+          <div
+            className="repo-toggler"
             onClick={() => {
-              if (
-                (listState.pageInfo && !listState.pageInfo.hasPreviousPage) ||
-                loading
-              )
-                return;
-              handlePrevPage();
+              if (closed) toggleClosed(false);
+              else toggleClosed(true);
             }}
-            disabled={!listState?.pageInfo?.hasPreviousPage || loading}
-            className={loading ? "blurred" : "not-blurred"}
           >
-            previous <span>{"\u2190"}</span>
-          </button>
+            <span>
+              <span>{"\u2192"}</span>
+            </span>
+          </div>
         </div>
-        <div className="right">
-          <button
-            onClick={() => {
-              if (
-                (listState.pageInfo && !listState.pageInfo.hasNextPage) ||
-                loading
-              ) {
-                return;
-              }
-              handleNextPage();
-            }}
-            disabled={!listState?.pageInfo?.hasNextPage || loading}
-            className={loading ? "blurred" : "not-blurred"}
-          >
-            <span>{"\u2192"}</span>next
-          </button>
+
+        <div className="repo-nav-cta">
+          <div className="left">
+            <button
+              onClick={() => {
+                if (
+                  (listState.pageInfo && !listState.pageInfo.hasPreviousPage) ||
+                  loading
+                )
+                  return;
+                handlePrevPage();
+              }}
+              disabled={!listState?.pageInfo?.hasPreviousPage || loading}
+              className={loading ? "blurred" : "not-blurred"}
+            >
+              previous <span>{"\u2190"}</span>
+            </button>
+          </div>
+          <div className="right">
+            <button
+              onClick={() => {
+                if (
+                  (listState.pageInfo && !listState.pageInfo.hasNextPage) ||
+                  loading
+                ) {
+                  return;
+                }
+                handleNextPage();
+              }}
+              disabled={!listState?.pageInfo?.hasNextPage || loading}
+              className={loading ? "blurred" : "not-blurred"}
+            >
+              <span>{"\u2192"}</span>next
+            </button>
+          </div>
         </div>
-      </div>
-    </>
-  );
-};
+      </>
+    );
+  },
+  (prev, next) => {
+    return isEqual(prev, next);
+  }
+);
