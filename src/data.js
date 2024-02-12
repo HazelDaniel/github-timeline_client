@@ -13,8 +13,8 @@ export const repoNameAndLanguageData = {
 
 export const repoOwnerSectionData = {
   ownerName: "",
-  avatarUrl: "",
-  bio: "",
+  ownerAvatarUrl: "",
+  ownerBio: "",
 };
 
 export const repoStatData = {
@@ -24,8 +24,8 @@ export const repoStatData = {
 }
 
 export const commitSignpostData = {
-  createdAt: new Date("2020-02-01T22:30:00Z"),
-  updatedAt: new Date("2024-02-10T00:30:00Z"),
+  dateCreated: new Date("2020-02-01T22:30:00Z"),
+  dateUpdated: new Date("2024-02-10T00:30:00Z"),
 };
 
 export const repoBottomData = {

@@ -139,7 +139,7 @@ export const RepoList = ({ closed, toggleClosed }) => {
     getInitialRepoListState()
   );
 
-  const { loading, error, fetchMore } = useQuery(GET_REPOSITORIES, {
+  const { loading, error, fetchMore } = useQuery(GET_FULL_REPOSITORIES, {
     variables: {
       username: userData.username,
       first: REPO_LIST_PAGINATE_SIZE,
@@ -284,6 +284,7 @@ export const RepoList = ({ closed, toggleClosed }) => {
   }, []);
 
   console.log("list rendering");
+  // console.log(listState);
 
   return (
     <>

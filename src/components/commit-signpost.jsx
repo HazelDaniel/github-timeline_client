@@ -19,7 +19,7 @@ const months = [
 
 export const CommitSignpost = () => {
   const [tabState, setTabState] = useState({ current: "created" });
-  const [dataState, setDataState] = useState(commitSignpostData.createdAt);
+  const [dataState, setDataState] = useState(commitSignpostData.dateCreated);
   const popUp = useRef(null);
 
   return (
@@ -31,7 +31,7 @@ export const CommitSignpost = () => {
               className={tabState.current === "created" ? "active" : ""}
               onClick={() => {
                 popUp.current.classList.remove("raise_up");
-                setDataState(commitSignpostData.createdAt);
+                setDataState(commitSignpostData.dateCreated);
                 setTabState({ current: "created" });
               }}
             >
