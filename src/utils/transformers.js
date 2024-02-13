@@ -87,6 +87,23 @@
 //     }
 //   }
 
+export const days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
+export const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+import { ASC, DESC, GLOBAL_PLACEHOLDER_URL } from "../data";
 import { inObjectArray } from "./comparison";
 
 export const transformRepoGraph = (data) => {
@@ -100,13 +117,110 @@ export const transformRepoGraph = (data) => {
     let userTmp = {};
     let dayCommit = new Date(node.committedDate);
     userTmp.bio = node.author.user.bio;
-    userTmp.avatarUrl = node.author.avatarUrl;
+    userTmp.avatarUrl = node?.author?.avatarUrl || GLOBAL_PLACEHOLDER_URL;
+    userTmp.email = node.author.email;
+    userTmp.name = node.author.name;
     tmp.author = userTmp;
     tmp.dayCommit = dayCommit;
     return tmp;
   });
 
   return edges;
+};
+
+export const extractCommitsInInterval = (
+  startDateString,
+  endDateString,
+  edges
+) => {
+  const direction =
+    new Date(startDateString).getTime() < new Date(endDateString).getTime()
+      ? ASC
+      : DESC;
+  return edges.filter((node) => {
+    if (!node.dayCommit.getTime) {
+      node.dayCommit = new Date(node.dayCommit);
+    }
+    if (direction === ASC) {
+      if (
+        node.dayCommit.getTime() <= new Date(endDateString).getTime() &&
+        node.dayCommit.getTime() >= new Date(startDateString).getTime()
+      ) {
+        return node;
+      }
+    } else {
+      if (
+        node.dayCommit.getTime() >= new Date(endDateString).getTime() &&
+        node.dayCommit.getTime() <= new Date(startDateString).getTime()
+      ) {
+        return node;
+      }
+    }
+  });
+};
+
+export const getDaysForCommitsObjs = (edges = []) => {
+  return edges.map((el) => days[el.dayCommit.getDay()]);
+};
+
+export const extractCommitCountInIntervalDays = (
+  startDateString,
+  endDateString,
+  edges
+) => {
+  const commitCountList = [0, 0, 0, 0, 0, 0, 0];
+  const commitsInInterval = extractCommitsInInterval(
+    startDateString,
+    endDateString,
+    edges
+  );
+  const commitCountHash = commitsInInterval.reduce((acc, curr) => {
+    const key = curr.dayCommit.getDay();
+    if (acc[key]) {
+      acc[key]++;
+    } else {
+      acc[key] = 1;
+    }
+    return acc;
+  }, {});
+
+  // let tmp = {};
+  // console.log(commitCountHash);
+  // for (let i = 0; i < days.length; i++) {
+  //   if (commitCountHash[i]) {
+  //     tmp[days[i]] = commitCountHash[i];
+  //   } else {
+  //     tmp[days[i]] = 0;
+  //   }
+  // }
+  // console.log(getDaysForCommitsObjs(edges));
+  // console.log(tmp);
+
+  for (let key of Object.keys(commitCountHash)) {
+    commitCountList[key] = commitCountHash[key];
+  }
+
+  return commitCountList;
+};
+
+export const extractContribInInterval = (edges = []) => {
+  let resEdges = [];
+
+  edges.forEach((node) => {
+    if (
+      !inObjectArray(
+        node,
+        edges,
+        (node1, node2) =>
+          node1.author.email + node1.author.name ===
+          node2.author.email + node2.author.name
+      )
+    ) {
+      resEdges.push(node.author);
+    }
+  });
+
+  return resEdges;
 };
 
 export const transformRepoList = (data) => {

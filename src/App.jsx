@@ -6,6 +6,8 @@ import { Footer } from "./components/footer";
 import { Header } from "./components/header";
 import { FormModal } from "./components/form-modal";
 
+import { graphData } from "./data";
+
 // REQUESTS
 import {
   ApolloClient,
@@ -52,6 +54,7 @@ const client = new ApolloClient({
 //   });
 // }
 
+
 function App() {
   const location = useLocation();
   const [userState, userStateDispatch] = useReducer(
@@ -66,7 +69,6 @@ function App() {
     }),
     [userState]
   );
-
 
   return (
     <ApolloProvider client={client}>
