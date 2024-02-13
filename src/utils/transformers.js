@@ -1,3 +1,114 @@
+//   "data": {
+//     "repository": {
+//       "ref": {
+//         "target": {
+//           "history": {
+//             "pageInfo": {
+//               "hasNextPage": false,
+//               "endCursor": "6318dd85976d8c57dc0493eb2976f8f5624e89d7 7"
+//             },
+//             "edges": [
+//               {
+//                 "node": {
+//                   "author": {
+//                     "name": "HazelDaniel",
+//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
+//                   },
+//                   "committedDate": "2024-01-11T16:01:19Z"
+//                 }
+//               },
+//               {
+//                 "node": {
+//                   "author": {
+//                     "name": "HazelDaniel",
+//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
+//                   },
+//                   "committedDate": "2024-01-11T15:58:01Z"
+//                 }
+//               },
+//               {
+//                 "node": {
+//                   "author": {
+//                     "name": "HazelDaniel",
+//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
+//                   },
+//                   "committedDate": "2024-01-11T15:54:54Z"
+//                 }
+//               },
+//               {
+//                 "node": {
+//                   "author": {
+//                     "name": "HazelDaniel",
+//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
+//                   },
+//                   "committedDate": "2024-01-10T05:35:12Z"
+//                 }
+//               },
+//               {
+//                 "node": {
+//                   "author": {
+//                     "name": "HazelDaniel",
+//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
+//                   },
+//                   "committedDate": "2024-01-10T05:08:58Z"
+//                 }
+//               },
+//               {
+//                 "node": {
+//                   "author": {
+//                     "name": "HazelDaniel",
+//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
+//                   },
+//                   "committedDate": "2024-01-07T07:08:50Z"
+//                 }
+//               },
+//               {
+//                 "node": {
+//                   "author": {
+//                     "name": "HazelDaniel",
+//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
+//                   },
+//                   "committedDate": "2024-01-06T22:22:09Z"
+//                 }
+//               },
+//               {
+//                 "node": {
+//                   "author": {
+//                     "name": "HazelDaniel",
+//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
+//                   },
+//                   "committedDate": "2024-01-01T23:32:07Z"
+//                 }
+//               }
+//             ]
+//           }
+//         }
+//       }
+//     }
+//   }
+
+import { inObjectArray } from "./comparison";
+
+export const transformRepoGraph = (data) => {
+  if (!data) return null;
+
+  let edges = data?.repository?.ref?.target?.history?.edges;
+  if (!edges) edges = [];
+
+  edges = Array.from(edges).map((node) => {
+    let tmp = {};
+    let userTmp = {};
+    let dayCommit = new Date(node.committedDate);
+    userTmp.bio = node.author.user.bio;
+    userTmp.avatarUrl = node.author.avatarUrl;
+    tmp.author = userTmp;
+    tmp.dayCommit = dayCommit;
+    return tmp;
+  });
+
+  return edges;
+};
+
 export const transformRepoList = (data) => {
   if (!data) return null;
 

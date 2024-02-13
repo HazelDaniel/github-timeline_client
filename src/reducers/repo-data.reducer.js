@@ -81,7 +81,7 @@ export const getInitialRepoOwnerAndStatState = () => {
   if (Number.isFinite(lastPos) && storedListState) {
     return storedListState.repoLinkData[lastPos];
   } else {
-    console.log("no repo board entry in the localstorage ");
+    // console.log("no repo board entry in the localstorage ");
     return initialRepoOwnerAndStatState;
   }
 };

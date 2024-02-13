@@ -283,7 +283,7 @@ export const RepoList = memo(
     }, []);
 
     console.log("list rendering");
-    console.log(listState);
+    // console.log(listState);
 
     return (
       <>

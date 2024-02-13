@@ -1,16 +1,17 @@
 import { GraphStyled } from "./graph.styles";
 import { GraphCta } from "../components/graph-cta";
 import { GraphCtx } from "../context-components/graph.context";
+import { useLocation } from "react-router-dom";
 
 export const Graph = () => {
+  const location = useLocation();
+  console.log("state is ", location.state);
 
   return (
     <GraphStyled className="graph-section">
       <div className="graph-section-top">
-
-       <GraphCtx/> 
-      <GraphCta/>
-       
+        <GraphCtx />
+        <GraphCta />
       </div>
 
       <div className="graph-section-bottom">

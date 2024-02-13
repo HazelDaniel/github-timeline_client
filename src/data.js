@@ -30,7 +30,7 @@ export const commitSignpostData = {
 
 export const repoBottomData = {
   ...commitSignpostData,
-  license: null, //licenseInfo
+  license: "NO LICENSE", //licenseInfo
   contributors: [
     { avatarUrl: "images/placeholder.svg", bio: "no bio available" },
   ],
@@ -48,6 +48,15 @@ export const repoLinkData = [
   { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
   { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
 ];
+
+export const graphData = {
+  weekCommitCount: [5, 59, 80, 81, 56, 55, 30],
+  weekStartDate: new Date("2024-02-10T00:30:00Z"),
+  weekEndDate: new Date("2024-03-10T00:30:00Z"),
+  weekcontributors: [
+    { avatarUrl: "images/placeholder.svg", bio: "no bio available" },
+  ],
+};
 
 export const getChartConfig = ({ horizontal, chartType, doc }) => {
   const accentColor = getComputedStyle(doc.documentElement)
@@ -72,7 +81,7 @@ export const getChartConfig = ({ horizontal, chartType, doc }) => {
       datasets: [
         {
           label: "Contributions today",
-          data: [5, 59, 80, 81, 56, 55, 30],
+          data: graphData.weekCommitCount,
           borderColor: `${accentColor}` || "#45c3ad",
           tension: 0.1,
           fill: false,
@@ -96,7 +105,7 @@ export const getChartConfig = ({ horizontal, chartType, doc }) => {
       },
       scales: {
         x: {
-          type: "category", // Set the scale type to 'category' for the x-axis
+          type: "category",
           grid: {
             display: true,
             color: `${accentColorTrans}` || "#45c3ae98",

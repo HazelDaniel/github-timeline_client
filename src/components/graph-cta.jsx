@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { AppNavButton } from "./app-nav-button";
 
 export const GraphCta  = () => {
   const navigate = useNavigate();
@@ -19,16 +20,7 @@ export const GraphCta  = () => {
       </div>
       <div className="bottom">
         <div>
-          <Link
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate(-1, { replace: true });
-            }}
-          >
-            {" "}
-            back to repository{" "}
-          </Link>
+          <AppNavButton to={-1} data={{}} text={"back to repository"}/>
           <span>
             <svg
               viewBox="0 0 29 29"

@@ -82,6 +82,13 @@ export function deepEqual(obj1, obj2) {
   return true;
 }
 
+export const inObjectArray = (obj, arr) => {
+  for (const el of arr) {
+    if (isEqual(el, obj)) return true;
+  }
+  return false;
+}
+
 const MAX_SAFE_INTEGER = 9007199254740991;
 
 function getMapData({ __data__ }, key) {

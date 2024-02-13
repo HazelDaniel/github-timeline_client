@@ -6,3 +6,5 @@ custom mouse is still calculating on app page . fix iT
 add a custom 404
 create the alert modals
 login as another user and test all the features
+
+remove all the array.from calls where unnecesary
