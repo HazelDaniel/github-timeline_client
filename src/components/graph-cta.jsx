@@ -1,21 +1,80 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AppNavButton } from "./app-nav-button";
 import { graphNavContext } from "../contexts/graph.context";
+import {
+  generateGitDateRangeNext,
+  generateGitDateRangePrev,
+} from "../utils/generators";
+import {
+  getRepoListStateForGraph,
+  setLastGraphDateRange,
+} from "../utils/storage";
+import { __setDateInterval } from "../reducers/graph.reducer";
+import { userInfo } from "../data";
+import { extractGraphPayload } from "../utils/transformers";
 
 export const GraphCta = () => {
   const { graphNavState, graphNavDispatch } = useContext(graphNavContext);
+  const LowerBoundDate = new Date();
+  const today = new Date();
+  LowerBoundDate.setFullYear(LowerBoundDate.getFullYear() - 1);
+  const { data } = getRepoListStateForGraph();
+  const userName = userInfo.username;
+  const payLoad = extractGraphPayload(userName, data);
+
+  const dateSequencePrev = generateGitDateRangePrev(
+    graphNavState[0],
+    LowerBoundDate.toISOString()
+  );
+
+  const dateSequenceNext = generateGitDateRangeNext(
+    graphNavState[1],
+    today.toISOString()
+  );
+
+
   console.log(graphNavState);
 
   return (
     <div className="graph-cta-div">
       <div className="top">
         <div className="left">
-          <button>
+          <button
+            disabled={!payLoad.repoName}
+            onClick={() => {
+              let { done, value } = dateSequencePrev.next();
+              if (done || !value) {
+                // console.log(done, value);
+                return;
+              }
+              const { startDateString, endDateString } = value;
+              setLastGraphDateRange(startDateString, endDateString);
+              // console.log("<---", startDateString, "    ", endDateString);
+              graphNavDispatch(
+                __setDateInterval([startDateString, endDateString])
+              );
+            }}
+          >
             previous week<span>{"\u2190"}</span>
           </button>
         </div>
         <div className="right">
-          <button>
+          <button
+            disabled={!payLoad.repoName}
+            onClick={() => {
+              let { done, value } = dateSequenceNext.next();
+              if (done || !value) {
+                // console.log(done, value);
+                return;
+              }
+              const { startDateString, endDateString } = value;
+              setLastGraphDateRange(startDateString, endDateString);
+              // console.log("--->", startDateString, "    ", endDateString);
+              graphNavDispatch(
+                __setDateInterval([startDateString, endDateString])
+              );
+            }}
+          >
             <span>{"\u2192"}</span>next week
           </button>
         </div>

@@ -59,7 +59,7 @@ export const repoLinkData = [
 
 export const repoGraphDataCommits = [
   {
-    dayCommit: new Date("2024-03-01T00:30:00Z"),
+    dayCommit: new Date("2023-03-01T00:30:00Z"),
     author: {
       name: "name1",
       email: "name1@gmail.com",
@@ -86,7 +86,7 @@ export const repoGraphDataCommits = [
     },
   },
   {
-    dayCommit: new Date("2024-03-03T00:30:00Z"),
+    dayCommit: new Date("2023-03-03T00:30:00Z"),
     author: {
       name: "name4",
       email: "name4@gmail.com",
@@ -95,7 +95,7 @@ export const repoGraphDataCommits = [
     },
   },
   {
-    dayCommit: new Date("2024-03-11T00:30:00Z"),
+    dayCommit: new Date("2023-03-11T00:30:00Z"),
     author: {
       name: "name5",
       email: "name5@gmail.com",
@@ -113,7 +113,7 @@ export const repoGraphDataCommits = [
     },
   },
   {
-    dayCommit: new Date("2024-03-04T00:30:00Z"),
+    dayCommit: new Date("2024-02-04T00:30:00Z"),
     author: {
       name: "name7",
       email: "name7@gmail.com",
@@ -122,7 +122,7 @@ export const repoGraphDataCommits = [
     },
   },
   {
-    dayCommit: new Date("2024-03-19T00:30:00Z"),
+    dayCommit: new Date("2024-01-19T00:30:00Z"),
     author: {
       name: "name8",
       email: "name8@gmail.com",
@@ -131,7 +131,7 @@ export const repoGraphDataCommits = [
     },
   },
   {
-    dayCommit: new Date("2024-03-15T00:30:00Z"),
+    dayCommit: new Date("2024-01-15T00:30:00Z"),
     author: {
       name: "name9",
       email: "name9@gmail.com",
@@ -140,7 +140,7 @@ export const repoGraphDataCommits = [
     },
   },
   {
-    dayCommit: new Date("2024-03-21T00:30:00Z"),
+    dayCommit: new Date("2024-02-21T00:30:00Z"),
     author: {
       name: "name10",
       email: "name10@gmail.com",

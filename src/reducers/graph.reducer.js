@@ -20,7 +20,7 @@ export const getInitialGraphNavState = () => {
   const payLoad = extractGraphPayload(userName, data);
 
   return payLoad.dateRange;
-}
+};
 
 const changedGraphType = (state) => {
   switch (state.graphType) {
@@ -72,20 +72,14 @@ export const graphTypeReducer = (state = initialGraphTypeState, action) => {
   }
 };
 
-export const graphNavReducer = (
-  state = getInitialGraphNavState(),
-  action
-) => {
-  const newState = { ...state, ...(action.payload && action.payload) };
+export const graphNavReducer = (state = getInitialGraphNavState(), action) => {
+  const newState = [...(action.payload && action.payload)];
 
   if (isEqual(state, newState)) {
-    console.log("same state");
     return state;
   }
   return newState;
 };
-
-
 
 export const __changeGraphType = () => {
   return {

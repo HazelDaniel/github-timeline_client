@@ -1,6 +1,6 @@
 import { useContext, useMemo } from "react";
 import { getChartConfig, userInfo } from "../data";
-import { graphTypeContext } from "../contexts/graph.context";
+import { graphNavContext, graphTypeContext } from "../contexts/graph.context";
 import {
   Chart as ChartJS,
   LineController,
@@ -36,14 +36,16 @@ ChartJS.register(
 export const GraphCanvas = () => {
   const { graphTypeState } = useContext(graphTypeContext);
   const { graphDataState } = useContext(graphDataContext);
+  const { graphNavState } = useContext(graphNavContext);
 
   const { data } = getRepoListStateForGraph();
   const userName = userInfo.username;
   const payLoad = extractGraphPayload(userName, data);
+
   let weekContribCount = useMemo(() => [0, 0, 0, 0, 0, 0, 0], []);
   if (payLoad.repoName) {
     weekContribCount = extractCommitCountInIntervalDays(
-      ...payLoad.dateRange,
+      ...graphNavState,
       graphDataState.commits
     );
   }

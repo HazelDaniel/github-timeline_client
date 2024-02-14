@@ -97,4 +97,5 @@ export const cleanUp = () => {
   localStorage.removeItem("glt_pageHash");
   localStorage.removeItem("glt_listHash");
   localStorage.removeItem("glt_lastRepoLinkClickPos");
+  localStorage.removeItem("glt_lastGraphDateRange");
 };
