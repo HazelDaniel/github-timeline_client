@@ -57,7 +57,7 @@ export const repoLinkData = [
   { name: "----", dateUpdated: new Date("2024-02-10T00:30:00Z") },
 ];
 
-export const repoGraphData = [
+export const repoGraphDataCommits = [
   {
     dayCommit: new Date("2024-03-01T00:30:00Z"),
     author: {
@@ -150,15 +150,17 @@ export const repoGraphData = [
   },
 ];
 
+
 export const graphData = {
   weekCommitCount: extractCommitCountInIntervalDays(
     "2020-02-01T00:30:00Z",
     "2025-03-21T00:30:00Z",
-    repoGraphData
+    repoGraphDataCommits
   ),
 };
+// console.log("wcc ", graphData.weekCommitCount);
 
-export const getChartConfig = ({ horizontal, chartType, doc }) => {
+export const getChartConfig = ({ horizontal, chartType, doc, dataset }) => {
   const accentColor = getComputedStyle(doc.documentElement)
     .getPropertyValue("--accent-color")
     .trim();
@@ -170,18 +172,18 @@ export const getChartConfig = ({ horizontal, chartType, doc }) => {
     type: chartType,
     data: {
       labels: [
+        "Sunday",
         "Monday",
         "Tuesday",
         "Wednesday",
         "Thursday",
         "Friday",
         "Saturday",
-        "Sunday",
       ],
       datasets: [
         {
           label: "Contributions today",
-          data: graphData.weekCommitCount,
+          data: dataset,
           borderColor: `${accentColor}` || "#45c3ad",
           tension: 0.1,
           fill: false,

@@ -8,3 +8,8 @@ create the alert modals
 login as another user and test all the features
 
 remove all the array.from calls where unnecesary
+
+// advanced
+what if the user has 5000 repositories? localStorage explodes lol. fix this issue
+what if a repositories also has 20k commits, persisting all commits won't be ideal.
+you might check these cases adopt memory management

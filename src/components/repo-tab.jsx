@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { RepoList } from "./repo-list";
 import { RepoTabStyled } from "./repo-tab.styles";
 import { RepoListWrapper } from "./repo-list-wrapper";
 
 export const RepoTab = () => {
   const [closed, toggleClosed] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <RepoTabStyled className={`repositories-tab${closed ? " closed" : ""}`}>

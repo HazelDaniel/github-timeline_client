@@ -1,3 +1,6 @@
+import { ASC, DESC, GLOBAL_PLACEHOLDER_URL } from "../data";
+import { inObjectArray } from "./comparison";
+import { getLastGraphDateRange } from "./storage";
 //   "data": {
 //     "repository": {
 //       "ref": {
@@ -103,9 +106,23 @@ export const months = [
   "December",
 ];
 
-import { ASC, DESC, GLOBAL_PLACEHOLDER_URL } from "../data";
-import { inObjectArray } from "./comparison";
+const genDateRange = () => {
+  const today = new Date();
+  const todayString = today.toISOString();
+  const lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const lastWeekString = lastWeek.toISOString();
 
+  return [lastWeekString, todayString];
+};
+
+export const extractGraphPayload = (userName, data) => {
+  const payLoad = {};
+  payLoad.dateRange = getLastGraphDateRange().lastDateRange || genDateRange();
+  payLoad.userName = userName;
+  payLoad.repoName = data?.name || null;
+
+  return payLoad;
+};
 export const transformRepoGraph = (data) => {
   if (!data) return null;
 

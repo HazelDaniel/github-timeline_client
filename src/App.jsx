@@ -54,7 +54,6 @@ const client = new ApolloClient({
 //   });
 // }
 
-
 function App() {
   const location = useLocation();
   const [userState, userStateDispatch] = useReducer(

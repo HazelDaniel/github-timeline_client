@@ -1,5 +1,8 @@
 import { createContext } from "react";
-import { initialGraphState } from "../reducers/graph.reducer";
+import { getInitialGraphNavState, initialGraphTypeState } from "../reducers/graph.reducer";
 
-export const graphTypeContext = createContext(initialGraphState);
+export const graphTypeContext = createContext(initialGraphTypeState);
 export const GraphTypeProvider = graphTypeContext.Provider;
+
+export const graphNavContext = createContext(getInitialGraphNavState());
+export const GraphNavProvider = graphNavContext.Provider;

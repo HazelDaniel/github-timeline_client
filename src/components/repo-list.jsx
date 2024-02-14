@@ -41,29 +41,6 @@ const handleListHover = ({ repoHighlight, repoList }) => {
   });
 };
 
-const GET_REPOSITORIES = gql`
-  query GetRepositories(
-    $username: String!
-    $first: Int!
-    $after: String
-    $before: String
-  ) {
-    user(login: $username) {
-      repositories(first: $first, after: $after, before: $before) {
-        nodes {
-          name
-          updatedAt
-        }
-        pageInfo {
-          hasNextPage
-          hasPreviousPage
-          startCursor
-          endCursor
-        }
-      }
-    }
-  }
-`;
 
 const GET_FULL_REPOSITORIES = gql`
   query GetFullRepositories(
@@ -272,11 +249,11 @@ export const RepoList = memo(
         });
     }, [repoList, repoHighlight]);
 
-    useEffect(() => {
-      return () => {
-        persistRepoListState(listState);
-      };
-    }, [listState]);
+    // useEffect(() => {
+    //   return () => {
+    //     console.log("persisting state", listState);
+    //   };
+    // }, [listState]);
 
     useEffect(() => {
       initRepoListAndPageIndexPersist();
@@ -291,7 +268,7 @@ export const RepoList = memo(
           <RepoListStyled className="repositories" ref={repoList}>
             <div className="repo-highlight" ref={repoHighlight}></div>
             {listState.repoLinkData.map((el, i) => {
-              return <RepoLink key={i} position={i} data={el} />;
+              return <RepoLink key={i} position={i} data={el} listState={listState}/>;
             })}
           </RepoListStyled>
 

@@ -2,12 +2,22 @@ import { useMemo, useReducer } from "react";
 import { GraphCanvas } from "../components/graph";
 import { GraphToggler } from "../components/graph-toggler";
 import { GraphTypeProvider } from "../contexts/graph.context";
-import { graphTypeReducer, initialGraphState } from "../reducers/graph.reducer";
+import { graphTypeReducer, initialGraphTypeState } from "../reducers/graph.reducer";
+import { getRepoListStateForGraph } from "../utils/storage";
+import { userInfo } from "../data";
+import { extractGraphPayload } from "../utils/transformers";
+import { formatGraphDateString } from "../utils/conversion";
 
 export const GraphCtx = () => {
+  const { data } = getRepoListStateForGraph();
+  const userName = userInfo.username;
+  const {
+    dateRange: [startDateString, endDateString],
+  } = extractGraphPayload(userName, data);
+
   const [graphTypeState, graphTypeDispatch] = useReducer(
     graphTypeReducer,
-    initialGraphState
+    initialGraphTypeState
   );
 
   const graphTypeValue = useMemo(
@@ -27,7 +37,8 @@ export const GraphCtx = () => {
         <p className="graph-area-title">
           Weekly Contribution Graph
           <span>
-            [12-09-04 {"\u00A0"} to {"\u00A0"} 03-02-04]
+            [{formatGraphDateString(startDateString)} {"\u00A0"} to {"\u00A0"}{" "}
+            {formatGraphDateString(endDateString)}]
           </span>
         </p>
         <GraphCanvas />

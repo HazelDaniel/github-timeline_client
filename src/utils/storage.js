@@ -55,6 +55,42 @@ export const setRepoLinkLastPos = ({ lastPos }) => {
   localStorage.setItem("glt_lastRepoLinkClickPos", JSON.stringify(lastPos));
 };
 
+// GRAPH STORAGE
+export const getRepoListStateForGraph = () => {
+  let { lastPos } = getRepoLinkLastPos();
+  let { storedListState } = getRepoListState();
+  let res = storedListState?.repoLinkData[lastPos] || null;
+  if (res) res = { name: res.name, description: res.description };
+
+  return { data: res };
+};
+
+export const getGraphState = () => {
+  const storedGraphState = JSON.parse(localStorage.getItem("glt_graphState"));
+
+  return { storedGraphState };
+};
+
+export const persistGraphState = (state) => {
+  localStorage.setItem("glt_graphState", JSON.stringify(state));
+};
+
+export const getLastGraphDateRange = () => {
+  const lastDateRange = localStorage.getItem("glt_lastGraphDateRange");
+  if (lastDateRange) {
+    return { lastDateRange: [...JSON.parse(lastDateRange).split("|")] };
+  } else {
+    return { lastDateRange: null };
+  }
+};
+
+export const setLastGraphDateRange = (startDateString, endDateString) => {
+  localStorage.setItem(
+    "glt_lastGraphDateRange",
+    JSON.stringify(startDateString + "|" + endDateString)
+  );
+};
+
 // CLEANUP (INVALIDATION ON REFRESH)
 export const cleanUp = () => {
   localStorage.removeItem("glt_repoListState");

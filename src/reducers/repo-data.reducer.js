@@ -7,12 +7,7 @@ import {
   repoLinkData,
 } from "../data";
 import { isEqual } from "../utils/comparison";
-import { getRepoLinkLastPos, getRepoListState } from "../utils/storage";
-import {
-  transformOwnerAndStat,
-  transformRepoBoard,
-  transformRepoBottom,
-} from "../utils/transformers";
+import { getRepoLinkLastPos, getRepoListState, persistRepoListState } from "../utils/storage";
 
 const repoListActionTypes = {
   updateLinkData: "UPDATE_LINK_DATA",
@@ -96,18 +91,23 @@ export const getInitialRepoBottomState = () => {
 };
 
 export const repoListReducer = (state = getInitialRepoListState(), action) => {
-  const newState = { ...state, ...(action.payload && action.payload) };
+  let newState = { ...state, ...(action.payload && action.payload) };
 
   switch (action.type) {
     case repoListActionTypes.incrementPageIndex:
-      return { ...state, currentPageIndex: state.currentPageIndex + 1 };
+      newState = { ...state, currentPageIndex: state.currentPageIndex + 1 }
+      persistRepoListState(newState);
+      return newState;
     case repoListActionTypes.decrementPageIndex:
-      return { ...state, currentPageIndex: state.currentPageIndex - 1 };
+      newState = { ...state, currentPageIndex: state.currentPageIndex - 1 }
+      persistRepoListState(newState);
+      return newState;
     default:
       if (isEqual(state, newState)) {
         console.log("same state");
         return state;
       }
+      persistRepoListState(newState);
       return { ...newState };
   }
 };

@@ -5,8 +5,8 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import { AppPage, appLoader } from "./pages/app";
 import { Index } from "./pages";
-import { Graph } from "./pages/graph";
 import { Main } from "./components/main";
+import { GraphWrapper } from "./components/graph-wrapper";
 // import F04 from "./components/F04/F04.component";
 
 // ROUTING
@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "graph",
-        element: <Graph />,
+        element: <GraphWrapper />,
       },
       {
         path: "signin",
@@ -44,9 +44,8 @@ export const router = createBrowserRouter([
   },
 ]);
 
-
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
-  <Main/>
+  <Main />
   // </React.StrictMode>
 );

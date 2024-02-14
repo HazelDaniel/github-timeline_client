@@ -11,7 +11,7 @@ import {
 } from "../reducers/repo-data.reducer";
 import { setRepoLinkLastPos } from "../utils/storage";
 
-export const RepoLink = memo(function RepoLink({ position, data }) {
+export const RepoLink = memo(function RepoLink({ position, data, listState }) {
   const { repoBoardDispatch } = useContext(repoBoardContext);
   const { repoOwnerAndStatDispatch } = useContext(repoOwnerAndStatContext);
   const { repoBottomDispatch } = useContext(repoBottomContext);

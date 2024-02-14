@@ -1,14 +1,26 @@
-import { deepEqual, shallowEqual } from "../utils/comparison";
+import { userInfo } from "../data";
+import { isEqual, shallowEqual } from "../utils/comparison";
+import { getRepoListStateForGraph } from "../utils/storage";
+import { extractGraphPayload } from "../utils/transformers";
 
 const GraphActionTypes = {
   setGraphType: "SET_GRAPH_TYPE",
   setBarType: "SET_BAR_TYPE",
   setLineType: "SET_LINE_TYPE",
+  setDateInterval: "SET_DATE_INTERVAL",
 };
 
-export const initialGraphState = {
+export const initialGraphTypeState = {
   graphType: "lines",
 };
+
+export const getInitialGraphNavState = () => {
+  const { data } = getRepoListStateForGraph();
+  const userName = userInfo.username;
+  const payLoad = extractGraphPayload(userName, data);
+
+  return payLoad.dateRange;
+}
 
 const changedGraphType = (state) => {
   switch (state.graphType) {
@@ -44,7 +56,7 @@ const setLineType = (state) => {
   };
 };
 
-export const graphTypeReducer = (state = initialGraphState, action) => {
+export const graphTypeReducer = (state = initialGraphTypeState, action) => {
   switch (action.type) {
     case GraphActionTypes.setGraphType:
       return changeGraphType(state);
@@ -59,6 +71,21 @@ export const graphTypeReducer = (state = initialGraphState, action) => {
       return state;
   }
 };
+
+export const graphNavReducer = (
+  state = getInitialGraphNavState(),
+  action
+) => {
+  const newState = { ...state, ...(action.payload && action.payload) };
+
+  if (isEqual(state, newState)) {
+    console.log("same state");
+    return state;
+  }
+  return newState;
+};
+
+
 
 export const __changeGraphType = () => {
   return {
@@ -75,5 +102,12 @@ export const __setBarType = () => {
 export const __setLineType = () => {
   return {
     type: GraphActionTypes.setLineType,
+  };
+};
+
+export const __setDateInterval = (dateInterval) => {
+  return {
+    type: GraphActionTypes.setDateInterval,
+    payload: dateInterval,
   };
 };

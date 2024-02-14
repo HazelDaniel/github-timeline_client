@@ -1,8 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import { AppNavButton } from "./app-nav-button";
+import { graphNavContext } from "../contexts/graph.context";
 
-export const GraphCta  = () => {
-  const navigate = useNavigate();
+export const GraphCta = () => {
+  const { graphNavState, graphNavDispatch } = useContext(graphNavContext);
+  console.log(graphNavState);
 
   return (
     <div className="graph-cta-div">
@@ -20,7 +22,7 @@ export const GraphCta  = () => {
       </div>
       <div className="bottom">
         <div>
-          <AppNavButton to={-1} data={{}} text={"back to repository"}/>
+          <AppNavButton to={-1} data={{}} text={"back to repository"} />
           <span>
             <svg
               viewBox="0 0 29 29"
