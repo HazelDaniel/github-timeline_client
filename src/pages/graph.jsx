@@ -12,7 +12,7 @@ export const Graph = () => {
 
   const graphNavValue = useMemo(()=>(
     {graphNavState, graphNavDispatch}
-  ));
+  ), [graphNavState, graphNavDispatch]);
 
 
   return (

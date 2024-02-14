@@ -106,13 +106,32 @@ export const months = [
   "December",
 ];
 
-const genDateRange = () => {
+function isLeapYear(year) {
+  if (!(year % 4)) {
+    if (!(year % 100)) {
+      return !(year % 400);
+    }
+    return true;
+  }
+  return false;
+}
+
+export const genDateRange = (rangeType = "week") => {
   const today = new Date();
   const todayString = today.toISOString();
-  const lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-  const lastWeekString = lastWeek.toISOString();
+  let leap = 0;
+  let lastPeriod;
+  if (rangeType === "year") {
+    if (isLeapYear(today.getFullYear()) && today.getMonth() > 1) leap = 1;
+    lastPeriod = new Date(
+      today.getTime() - Math.round((365 + leap) * 24 * 60 * 60 * 1000)
+    );
+  } else {
+    lastPeriod = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+  }
+  let lastPeriodString = lastPeriod.toISOString();
 
-  return [lastWeekString, todayString];
+  return [lastPeriodString, todayString];
 };
 
 export const extractGraphPayload = (userName, data) => {
@@ -129,20 +148,23 @@ export const transformRepoGraph = (data) => {
   let edges = data?.repository?.ref?.target?.history?.edges;
   if (!edges) edges = [];
 
-  edges = Array.from(edges).map((node) => {
+  const description = data.repository.description;
+  const name = data.repository.name;
+  edges = Array.from(edges).map(({ node }) => {
     let tmp = {};
     let userTmp = {};
     let dayCommit = new Date(node.committedDate);
-    userTmp.bio = node.author.user.bio;
+    userTmp.bio = node?.author?.user?.bio || "no bio available";
     userTmp.avatarUrl = node?.author?.avatarUrl || GLOBAL_PLACEHOLDER_URL;
-    userTmp.email = node.author.email;
-    userTmp.name = node.author.name;
+    userTmp.email = node?.author?.email || "no email provided";
+    userTmp.name = node?.author?.name || "no name provided";
     tmp.author = userTmp;
     tmp.dayCommit = dayCommit;
+    tmp.oid = node.oid;
     return tmp;
   });
 
-  return edges;
+  return { commits: edges, description, name, done: edges.length < 100 };
 };
 
 export const extractCommitsInInterval = (

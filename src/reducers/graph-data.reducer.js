@@ -1,7 +1,12 @@
-import { repoGraphDataCommits } from "../data";
+import { repoGraphDataCommits, userInfo } from "../data";
 import { isEqual } from "../utils/comparison";
 
-import { getGraphState, persistGraphState } from "../utils/storage";
+import {
+  getGraphState,
+  getRepoListStateForGraph,
+  setGraphRepoHash,
+} from "../utils/storage";
+import { extractGraphPayload } from "../utils/transformers";
 
 const graphDataActionTypes = {
   updateGraphData: "UPDATE_GRAPH_DATA",
@@ -9,23 +14,32 @@ const graphDataActionTypes = {
 
 export const initialGraphDataState = {
   commits: repoGraphDataCommits,
+  name: "no repo name",
+  description: "the repo description",
+  done: true,
 };
 
 export const getInitialGraphDataState = () => {
-  const {storedGraphState} = getGraphState();
+  const { data } = getRepoListStateForGraph();
+  const userName = userInfo.username;
+  let payLoad = extractGraphPayload(userName, data);
+  const { storedGraphState } = getGraphState(payLoad.userName);
 
   return storedGraphState ? storedGraphState : initialGraphDataState;
 };
 
-export const graphDataReducer = (state = getInitialGraphDataState(), action) => {
+export const graphDataReducer = (
+  state = getInitialGraphDataState(),
+  action
+) => {
   let newState = { ...state, ...(action.payload && action.payload) };
 
-    if (isEqual(state, newState)) {
-      console.log("same state");
-      return state;
-    }
-    persistGraphState(newState);
-    return newState;
+  if (isEqual(state, newState)) {
+    console.log("same state");
+    return state;
+  }
+  // setGraphRepoHash(newState.name, newState);
+  return newState;
 };
 
 export const __updateGraphData = (graphData) => {

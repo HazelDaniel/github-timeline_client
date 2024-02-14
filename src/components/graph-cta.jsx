@@ -32,8 +32,7 @@ export const GraphCta = () => {
     today.toISOString()
   );
 
-
-  console.log(graphNavState);
+  // console.log(graphNavState);
 
   return (
     <div className="graph-cta-div">

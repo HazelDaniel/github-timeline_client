@@ -1,3 +1,5 @@
+import { inObjectArray } from "./comparison";
+
 //REPO LINK STORAGE
 export const initRepoListAndPageIndexPersist = () => {
   const pageHash = {};
@@ -65,14 +67,42 @@ export const getRepoListStateForGraph = () => {
   return { data: res };
 };
 
-export const getGraphState = () => {
-  const storedGraphState = JSON.parse(localStorage.getItem("glt_graphState"));
+export const setGraphRepoHash = (name, data) => {
+  let repoHash;
 
-  return { storedGraphState };
+  repoHash = JSON.parse(localStorage.getItem("glt_graphRepoHash"));
+  if (repoHash) {
+    if (repoHash[name]) {
+      let old = repoHash[name];
+      let { commits } = old;
+      let newCommits = [...data.commits];
+      for (const commit of commits) {
+        if (
+          !inObjectArray(
+            commit,
+            data.commits,
+            (obj1, obj2) => obj1.oid === obj2.oid
+          )
+        ) {
+          newCommits.push(commit);
+        }
+      }
+      repoHash[name].commits = newCommits;
+    }
+    repoHash[name] = data;
+  }
+
+  localStorage.setItem("glt_graphRepoHash", JSON.stringify(repoHash));
 };
 
-export const persistGraphState = (state) => {
-  localStorage.setItem("glt_graphState", JSON.stringify(state));
+export const getGraphState = (repoName) => {
+  let repoHash = JSON.parse(localStorage.getItem("glt_graphRepoHash"));
+  if (!repoHash) {
+    return {storedGraphState: null};
+  }
+  const storedGraphState = repoHash[repoName];
+
+  return { storedGraphState };
 };
 
 export const getLastGraphDateRange = () => {
@@ -98,4 +128,5 @@ export const cleanUp = () => {
   localStorage.removeItem("glt_listHash");
   localStorage.removeItem("glt_lastRepoLinkClickPos");
   localStorage.removeItem("glt_lastGraphDateRange");
+  localStorage.removeItem("glt_graphRepoHash");
 };
