@@ -115,7 +115,7 @@ export const getLastGraphDateRange = () => {
       direction = "backward";
       console.log("direction was backward");
     } else {
-      console.log("direction was forward")
+      console.log("direction was forward");
     }
     return {
       lastDateRange: [...JSON.parse(lastDateRange).split("|")],
@@ -133,6 +133,47 @@ export const setLastGraphDateRange = (startDateString, endDateString) => {
   );
 };
 
+//AUTH
+export const storeGitHubUsername = (username) => {
+  return new Promise((resolve, reject) => {
+    try {
+      localStorage.setItem("glt_username", JSON.stringify(username));
+      resolve(username);
+    } catch (err) {
+      reject(new Error("username could't be stored"));
+    }
+  });
+};
+
+export const getGitHubUsername = () => {
+  return new Promise((resolve, reject) => {
+    try {
+      const username = JSON.parse(localStorage.getItem("glt_username"));
+      resolve ({ username })
+    } catch (err) {
+      reject(new Error("no username"));
+    }
+  });
+};
+export const setRememberCredentials = () => {
+  localStorage.setItem("glt_rememberAuthCred", JSON.stringify(true));
+};
+
+export const getRememberCredentials = () => {
+  const cred = JSON.parse(localStorage.getitem("glt_rememberAuthCred"));
+  let res = { rememberCredentials: cred };
+  return res;
+};
+
+export const setAccessToken = (token) => {
+  localStorage.setItem("glt_accessToken", JSON.stringify(token));
+};
+
+export const getAccessToken = () => {
+  let token = JSON.parse(localStorage.getItem("glt_accessToken"));
+  return { token };
+};
+
 // CLEANUP (INVALIDATION ON REFRESH)
 export const cleanUp = () => {
   localStorage.removeItem("glt_repoListState");
@@ -141,4 +182,11 @@ export const cleanUp = () => {
   localStorage.removeItem("glt_lastRepoLinkClickPos");
   localStorage.removeItem("glt_lastGraphDateRange");
   localStorage.removeItem("glt_graphRepoHash");
+};
+
+//LOGOUT LOGIC
+export const cleanUpAuth = () => {
+  localStorage.removeItem("glt_username");
+  localStorage.removeItem("glt_accessToken");
+  localStorage.removeItem("glt_rememberAuthCred");
 };

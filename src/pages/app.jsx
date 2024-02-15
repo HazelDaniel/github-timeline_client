@@ -1,7 +1,8 @@
 import { RepoBoard } from "../components/repo-board";
 import { AppPageStyled } from "./app.styles";
 
-import { getGitHubUsername, repoLinkTypeData, userInfo } from "../data";
+import { repoLinkTypeData, userInfo } from "../data";
+import { getGitHubUsername } from "../utils/storage";
 import { json } from "react-router-dom";
 import { RepoTab } from "../components/repo-tab";
 import { RepoOwnerAndStat } from "../components/repo-owner-and-stat";
@@ -20,6 +21,7 @@ import {
   RepoOwnerAndStatProvider,
   RepoBottomProvider,
 } from "../contexts/repo-data.context";
+import { getAccessToken, setAccessToken } from "../utils/storage";
 
 export const AppPage = () => {
   const [repoBoardState, repoBoardDispatch] = useReducer(
@@ -92,9 +94,32 @@ export const AppPage = () => {
 };
 
 export const appLoader = async () => {
-  if (userInfo.username) return json(userInfo);
-  const username = await getGitHubUsername();
+  const queryString = window.location.search;
+  const urlParam = new URLSearchParams(queryString);
+  let codeParam = urlParam.get("code");
+  let res = {};
+  let { token } = getAccessToken();
+  if (!codeParam && !token) return res;
+  const { username } = await getGitHubUsername();
+
+  if (!token) {
+    let codeRes = await fetch(
+      "http://127.0.0.1:4000/get_token?code=" + codeParam
+    );
+    let data = await codeRes.json();
+    if (data.access_token) {
+      userInfo.token = data.access_token;
+      userInfo.username = username;
+      setAccessToken(data.access_token);
+      return json(userInfo);
+    } else {
+      console.error(
+        "something wrong with the connection or credentials expired, please try again!"
+      );
+      return json(userInfo);
+    }
+  }
   userInfo.username = username;
-  const res = json(userInfo);
-  return res;
+  userInfo.token = getAccessToken().token;
+  return json(userInfo);
 };

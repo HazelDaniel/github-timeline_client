@@ -1,12 +1,14 @@
 import {
   extractCommitCountInIntervalDays,
-  extractCommitsInInterval,
 } from "./utils/transformers";
 
 export const REPO_LIST_PAGINATE_SIZE = 10;
 export const GLOBAL_PLACEHOLDER_URL = "images/placeholder.svg";
 export const ASC = "asc";
 export const DESC = "desc";
+export const CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID;
+export const API_TOKEN = import.meta.env.VITE_GITHUB_API_TOKEN;
+export const GITHUB_AUTH_LINK = "https://github.com/login/oauth/authorize";
 
 export const repoLinkTypeData = {
   SSHLink: "----",
@@ -150,7 +152,6 @@ export const repoGraphDataCommits = [
   },
 ];
 
-
 export const graphData = {
   weekCommitCount: extractCommitCountInIntervalDays(
     "2020-02-01T00:30:00Z",
@@ -161,28 +162,6 @@ export const graphData = {
 // console.log("wcc ", graphData.weekCommitCount);
 
 
-
-export const storeGitHubUsername = (username) => {
-  return new Promise((resolve, reject) => {
-    try {
-      localStorage.setItem("gtl_username", JSON.stringify(username));
-      resolve(username);
-    } catch (err) {
-      reject(new Error("error adding username"));
-    }
-  });
-};
-
-export const getGitHubUsername = () => {
-  return new Promise((resolve, reject) => {
-    const username = JSON.parse(localStorage.getItem("gtl_username"));
-    if (!username?.username) {
-      reject(new Error("no username found"));
-    } else {
-      resolve(username.username);
-    }
-  });
-};
 
 export const userInfo = {};
 

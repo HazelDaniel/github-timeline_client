@@ -6,8 +6,6 @@ import { Footer } from "./components/footer";
 import { Header } from "./components/header";
 import { FormModal } from "./components/form-modal";
 
-import { graphData } from "./data";
-
 // REQUESTS
 import {
   ApolloClient,
@@ -17,20 +15,22 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 // import { persistCache } from "apollo3-cache-persist";
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { memo, useEffect, useMemo, useReducer, useState } from "react";
 import {
   __updateUser,
   initialUserState,
   userReducer,
 } from "./reducers/user.reducer";
 import { UserProvider } from "./contexts/user.context";
+import { isEqual } from "./utils/comparison";
+import { API_TOKEN } from "./data";
 
 const httpLink = createHttpLink({
   uri: "https://api.github.com/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = import.meta.env.VITE_GITHUB_API_TOKEN;
+  const token = API_TOKEN;
 
   return {
     headers: {
@@ -47,14 +47,7 @@ const client = new ApolloClient({
   link: authLink.concat(httpLink),
 });
 
-// async function initializeApollo() {
-//   await persistCache({
-//     cache,
-//     storage: window.localStorage,
-//   });
-// }
-
-function App() {
+const App = () => {
   const location = useLocation();
   const [userState, userStateDispatch] = useReducer(
     userReducer,
@@ -68,6 +61,8 @@ function App() {
     }),
     [userState]
   );
+
+  console.log("app rendering");
 
   return (
     <ApolloProvider client={client}>
@@ -86,6 +81,6 @@ function App() {
       <Footer />
     </ApolloProvider>
   );
-}
+};
 
 export default App;

@@ -187,20 +187,40 @@ export const extractCommitCountInIntervalDays = (
   return commitCountList;
 };
 
-export const extractContribInInterval = (edges = []) => {
+function compareNodesForInterval(node1, node2, startDate, endDate) {
+  const node2Date = new Date(node2.dayCommit);
+  if (
+    !(
+      node2Date.getTime() >= startDate.getTime() &&
+      node2Date.getTime() <= endDate.getTime()
+    )
+  ) {
+    return true;
+  }
+  return (
+    node2.author.email + node2.author.name ===
+    node1.author.email + node1.author.name
+  );
+}
+
+export const extractContribInInterval = (edges = [], range) => {
   let resEdges = [];
+  if (!range || !range[0] || !range[1]) return [];
+  const [startDateString, endDateString] = range;
+  const startDate = new Date(startDateString);
+  const endDate = new Date(endDateString);
 
   edges.forEach((node) => {
     if (
       !inObjectArray(
         node,
-        edges,
-        (node1, node2) =>
-          node1.author.email + node1.author.name ===
-          node2.author.email + node2.author.name
+        resEdges,
+        compareNodesForInterval,
+        startDate,
+        endDate
       )
     ) {
-      resEdges.push(node.author);
+      resEdges.push(node);
     }
   });
 

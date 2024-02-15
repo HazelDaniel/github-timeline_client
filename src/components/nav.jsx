@@ -12,7 +12,9 @@ export const Nav = memo(function Nav() {
         </span>
         <div className="nav-label-div">
           <div className="nav-label">
-            <Link to="/signup">SIGN UP</Link>
+            <Link to="/signup" onClick={(e)=>{
+              e.preventDefault();
+            }}>SIGN UP</Link>
             <svg>
               <use xlinkHref="#label-style"></use>
             </svg>

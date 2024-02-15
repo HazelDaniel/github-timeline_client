@@ -17,14 +17,13 @@ export const Graph = () => {
 
   return (
     <GraphStyled className="graph-section">
-      <div className="graph-section-top">
-        <GraphNavProvider value={graphNavValue}>
-          <GraphCtx />
-          <GraphCta />
-        </GraphNavProvider>
-      </div>
-
-      <GraphBottom />
+      <GraphNavProvider value={graphNavValue}>
+        <div className="graph-section-top">
+            <GraphCtx />
+            <GraphCta />
+        </div>
+        <GraphBottom />
+      </GraphNavProvider>
 
       <span className="floater">
         <span></span>

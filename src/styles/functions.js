@@ -421,6 +421,7 @@ header {
   .logo-div {
     ${makeFullSizeBlock};
     ${makeRowFlexStart};
+    cursor: pointer;
     align-items: center;
     background: linear-gradient(to bottom, #000008ea 80%, transparent 100%);
     img {

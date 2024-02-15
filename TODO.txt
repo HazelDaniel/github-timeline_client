@@ -23,3 +23,5 @@ make sure the repo (on the graph page) description is dynamic
 
 [not urgent] add a welcome modal when a user visits the app page for the first
 and is signed in
+
+deploy

@@ -2,33 +2,48 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FormCheckbox } from "./form-checkbox";
 import { FormModalStyled } from "./form-modal.styles";
 
-import { getGitHubUsername, storeGitHubUsername, userInfo } from "../data";
+import { userInfo } from "../data";
+import {
+  cleanUp,
+  cleanUpAuth,
+  getGitHubUsername,
+  storeGitHubUsername,
+} from "../utils/storage";
 import { useRef } from "react";
+import { loginWithGithub } from "../utils/auth";
 
-const handleSignin = (target, btn) => {
-  let rememberCredentials = null;
+const handleSignin = (target, btn, navigate) => {
   let username = null;
   btn.disabled = true;
   const formData = new FormData(target);
   username = formData.get("username");
-  rememberCredentials = formData.get("remember_credentials");
   userInfo.username = username;
 
-  if (rememberCredentials) {
-    (async () => {
-      try {
-        const newUsername = await storeGitHubUsername(userInfo);
-        console.log("New username stored:", newUsername);
-      } catch (err) {
-        console.error(err);
-        alert(err.message);
-      } finally {
-        btn.disabled = false;
+  (async () => {
+    try {
+      // if (rememberCredentials) {
+      // this will be used only for sign up
+      // }
+      const { username: oldUsername } = await getGitHubUsername();
+      if (oldUsername && oldUsername !== username) {
+        cleanUp();
+        cleanUpAuth();
+      } else if (oldUsername === username) {
+        navigate(-1, { replace: true });
       }
-    })();
-  }
-};
 
+      await storeGitHubUsername(username);
+      loginWithGithub();
+      // const newUser
+      // cconsole.log("New username stored:", newUsername);
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    } finally {
+      btn.disabled = false;
+    }
+  })();
+};
 
 const handleSignUp = (target, btn) => {
   let password;
@@ -75,9 +90,9 @@ export const FormModal = () => {
             onSubmit={(e) => {
               e.preventDefault();
               if (location.pathname === "/signin") {
-                return handleSignin(e.target, buttonRef?.current);
+                return handleSignin(e.target, buttonRef?.current, navigate);
               } else {
-                return handleSignUp(e.target, buttonRef?.current);
+                return handleSignUp(e.target, buttonRef?.current, navigate);
               }
             }}
           >

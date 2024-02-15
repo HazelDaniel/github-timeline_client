@@ -8,7 +8,7 @@ export const RepoBottom = memo(function RepoBottom() {
   const { repoBottomState } = useContext(repoBottomContext);
 
   console.log("repo bottom rendering");
-  // console.log(repoBottomState);
+  console.log(repoBottomState);
 
   return (
     <div className="bottom">

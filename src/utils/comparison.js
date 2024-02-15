@@ -82,10 +82,10 @@ export function deepEqual(obj1, obj2) {
   return true;
 }
 
-export const inObjectArray = (obj, arr, fn) => {
+export const inObjectArray = (obj, arr, fn, ...args) => {
   if (fn) {
     for (const el of arr) {
-      if (fn(el, obj)) return true;
+      if (fn(el, obj, ...args)) return true;
     }
     return false;
   }

@@ -1,11 +1,15 @@
 import { RouterProvider } from "react-router-dom";
 import { router } from "../main";
-import { cleanUp } from "../utils/storage";
-import { memo } from "react";
+import { cleanUp, cleanUpAuth } from "../utils/storage";
+import { memo, useEffect } from "react";
 
 export const Main = memo(function Main() {
   console.log("main cleaning up on render");
-  cleanUp();
+
+  useEffect(() => {
+    cleanUp();
+    // cleanUpAuth();
+  }, []);
 
   return (
     <>

@@ -7,7 +7,11 @@ import {
   repoLinkData,
 } from "../data";
 import { isEqual } from "../utils/comparison";
-import { getRepoLinkLastPos, getRepoListState, persistRepoListState } from "../utils/storage";
+import {
+  getRepoLinkLastPos,
+  getRepoListState,
+  persistRepoListState,
+} from "../utils/storage";
 
 const repoListActionTypes = {
   updateLinkData: "UPDATE_LINK_DATA",
@@ -76,7 +80,6 @@ export const getInitialRepoOwnerAndStatState = () => {
   if (Number.isFinite(lastPos) && storedListState) {
     return storedListState.repoLinkData[lastPos];
   } else {
-    // console.log("no repo board entry in the localstorage ");
     return initialRepoOwnerAndStatState;
   }
 };
@@ -85,7 +88,10 @@ export const getInitialRepoBottomState = () => {
   const { storedListState } = getRepoListState();
   const { lastPos } = getRepoLinkLastPos();
 
-  return Number.isFinite(lastPos) && storedListState
+  return Number.isFinite(lastPos) &&
+    storedListState &&
+    storedListState.repoLinkData &&
+    storedListState.repoLinkData[lastPos]
     ? storedListState.repoLinkData[lastPos]
     : initialRepoBottomState;
 };
@@ -95,11 +101,11 @@ export const repoListReducer = (state = getInitialRepoListState(), action) => {
 
   switch (action.type) {
     case repoListActionTypes.incrementPageIndex:
-      newState = { ...state, currentPageIndex: state.currentPageIndex + 1 }
+      newState = { ...state, currentPageIndex: state.currentPageIndex + 1 };
       persistRepoListState(newState);
       return newState;
     case repoListActionTypes.decrementPageIndex:
-      newState = { ...state, currentPageIndex: state.currentPageIndex - 1 }
+      newState = { ...state, currentPageIndex: state.currentPageIndex - 1 };
       persistRepoListState(newState);
       return newState;
     default:
@@ -107,6 +113,7 @@ export const repoListReducer = (state = getInitialRepoListState(), action) => {
         console.log("same state");
         return state;
       }
+      console.log("updating state");
       persistRepoListState(newState);
       return { ...newState };
   }

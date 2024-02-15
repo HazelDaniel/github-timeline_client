@@ -103,7 +103,7 @@ export const GraphCanvas = () => {
   const { data } = getRepoListStateForGraph();
   const userName = userInfo.username;
   const payLoad = extractGraphPayload(userName, data);
-  const labels = generateDays(graphNavState);
+  // const labels = generateDays(graphNavState);
 
   let weekContribCount = useMemo(() => [0, 0, 0, 0, 0, 0, 0], []);
   if (payLoad.repoName) {
