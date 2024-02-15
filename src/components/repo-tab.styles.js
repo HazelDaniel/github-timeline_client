@@ -98,6 +98,7 @@ export const RepoTabStyled = styled.aside`
       border-radius: 0.3rem;
       cursor: pointer;
       box-shadow: 0.1rem 0.2rem 0.3rem var(--bg-color);
+      transform: scale(1.8);
       @media screen and (min-width: 801px) {
         display: none;
       }

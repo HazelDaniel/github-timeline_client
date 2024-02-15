@@ -68,12 +68,15 @@ export const GraphWrapper = memo(
     const payLoad = useMemo(() => {
       return extractGraphPayload(userName, graphInfo);
     }, []);
-    const repoToFetch = getGraphState(payLoad.repoName);
+    const { storedGraphState: repoToFetch } = getGraphState(payLoad.repoName);
 
     const [graphDataState, graphDataDispatch] = useReducer(
       graphDataReducer,
       getInitialGraphDataState()
     );
+
+    console.log("repo to fetch : ", repoToFetch);
+    console.log(payLoad.repoName);
 
     const { loading, data, error, fetchMore } = useQuery(
       GET_REPO_COMMIT_HISTORY,
@@ -98,7 +101,8 @@ export const GraphWrapper = memo(
     );
 
     console.log("rendering wrapper ..");
-    console.log(payLoad.userName, payLoad.repoName, payLoad.dateRange);
+    // console.log(payLoad.userName, payLoad.repoName, payLoad.dateRange);
+    console.log(payLoad.dateRange);
 
     const graphDataValue = useMemo(
       () => ({ graphDataState, graphDataDispatch }),

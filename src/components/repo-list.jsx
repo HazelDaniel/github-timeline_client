@@ -29,6 +29,15 @@ import {
 import { isEqual } from "../utils/comparison";
 
 const handleListHover = ({ repoHighlight, repoList }) => {
+  if (window.innerWidth < 600 ) {
+  repoList.addEventListener("click", (e) => {
+    if (!e.target.dataset.pos && !e.target.closest("li")) return;
+    repoHighlight.classList.remove("defunct");
+    let position = +e.target.dataset.pos;
+    repoHighlight.style.top = `${4 * position}rem`;
+  });
+    return;
+  }
   repoList.addEventListener("mouseover", (e) => {
     if (!e.target.dataset.pos) return;
     repoHighlight.classList.remove("defunct");
@@ -40,7 +49,6 @@ const handleListHover = ({ repoHighlight, repoList }) => {
     repoHighlight.classList.add("defunct");
   });
 };
-
 
 const GET_FULL_REPOSITORIES = gql`
   query GetFullRepositories(
@@ -268,7 +276,14 @@ export const RepoList = memo(
           <RepoListStyled className="repositories" ref={repoList}>
             <div className="repo-highlight" ref={repoHighlight}></div>
             {listState.repoLinkData.map((el, i) => {
-              return <RepoLink key={i} position={i} data={el} listState={listState}/>;
+              return (
+                <RepoLink
+                  key={i}
+                  position={i}
+                  data={el}
+                  listState={listState}
+                />
+              );
             })}
           </RepoListStyled>
 

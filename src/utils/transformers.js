@@ -1,96 +1,17 @@
 import { ASC, DESC, GLOBAL_PLACEHOLDER_URL } from "../data";
 import { inObjectArray } from "./comparison";
 import { getLastGraphDateRange } from "./storage";
-//   "data": {
-//     "repository": {
-//       "ref": {
-//         "target": {
-//           "history": {
-//             "pageInfo": {
-//               "hasNextPage": false,
-//               "endCursor": "6318dd85976d8c57dc0493eb2976f8f5624e89d7 7"
-//             },
-//             "edges": [
-//               {
-//                 "node": {
-//                   "author": {
-//                     "name": "HazelDaniel",
-//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
-//                   },
-//                   "committedDate": "2024-01-11T16:01:19Z"
-//                 }
-//               },
-//               {
-//                 "node": {
-//                   "author": {
-//                     "name": "HazelDaniel",
-//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
-//                   },
-//                   "committedDate": "2024-01-11T15:58:01Z"
-//                 }
-//               },
-//               {
-//                 "node": {
-//                   "author": {
-//                     "name": "HazelDaniel",
-//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
-//                   },
-//                   "committedDate": "2024-01-11T15:54:54Z"
-//                 }
-//               },
-//               {
-//                 "node": {
-//                   "author": {
-//                     "name": "HazelDaniel",
-//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
-//                   },
-//                   "committedDate": "2024-01-10T05:35:12Z"
-//                 }
-//               },
-//               {
-//                 "node": {
-//                   "author": {
-//                     "name": "HazelDaniel",
-//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
-//                   },
-//                   "committedDate": "2024-01-10T05:08:58Z"
-//                 }
-//               },
-//               {
-//                 "node": {
-//                   "author": {
-//                     "name": "HazelDaniel",
-//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
-//                   },
-//                   "committedDate": "2024-01-07T07:08:50Z"
-//                 }
-//               },
-//               {
-//                 "node": {
-//                   "author": {
-//                     "name": "HazelDaniel",
-//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
-//                   },
-//                   "committedDate": "2024-01-06T22:22:09Z"
-//                 }
-//               },
-//               {
-//                 "node": {
-//                   "author": {
-//                     "name": "HazelDaniel",
-//                     "avatarUrl": "https://avatars.githubusercontent.com/u/77337868?s=100&v=4"
-//                   },
-//                   "committedDate": "2024-01-01T23:32:07Z"
-//                 }
-//               }
-//             ]
-//           }
-//         }
-//       }
-//     }
-//   }
 
 export const days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
+export const daysLong = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 export const months = [
   "January",
   "February",
@@ -105,6 +26,28 @@ export const months = [
   "November",
   "December",
 ];
+
+export const generateDays = (rangeState) => {
+  const startDate = new Date(rangeState.range[0]);
+  const endDate = new Date(rangeState.range[1]);
+  const direction = rangeState.direction;
+  let index;
+
+  if (direction === "forward") index = endDate.getDay();
+  else index = startDate.getDay();
+
+  const resArray = new Array(7);
+  let i = 0,
+    j = index;
+
+  while (i < 7) {
+    resArray[i] = daysLong[j];
+    j = (j + 1) % 7;
+    i++;
+  }
+
+  return resArray;
+};
 
 function isLeapYear(year) {
   if (!(year % 4)) {
@@ -136,9 +79,11 @@ export const genDateRange = (rangeType = "week") => {
 
 export const extractGraphPayload = (userName, data) => {
   const payLoad = {};
-  payLoad.dateRange = getLastGraphDateRange().lastDateRange || genDateRange();
+  const lastDateRange = getLastGraphDateRange();
+  payLoad.dateRange = lastDateRange.lastDateRange || genDateRange();
   payLoad.userName = userName;
   payLoad.repoName = data?.name || null;
+  payLoad.direction = lastDateRange.direction;
 
   return payLoad;
 };
@@ -223,17 +168,17 @@ export const extractCommitCountInIntervalDays = (
     return acc;
   }, {});
 
-  // let tmp = {};
-  // console.log(commitCountHash);
-  // for (let i = 0; i < days.length; i++) {
-  //   if (commitCountHash[i]) {
-  //     tmp[days[i]] = commitCountHash[i];
-  //   } else {
-  //     tmp[days[i]] = 0;
-  //   }
-  // }
-  // console.log(getDaysForCommitsObjs(edges));
-  // console.log(tmp);
+  let tmp = {};
+  console.log(commitCountHash);
+  for (let i = 0; i < days.length; i++) {
+    if (commitCountHash[i]) {
+      tmp[days[i]] = commitCountHash[i];
+    } else {
+      tmp[days[i]] = 0;
+    }
+  }
+  console.log(getDaysForCommitsObjs(edges));
+  console.log(tmp);
 
   for (let key of Object.keys(commitCountHash)) {
     commitCountList[key] = commitCountHash[key];

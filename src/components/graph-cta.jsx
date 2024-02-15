@@ -23,12 +23,12 @@ export const GraphCta = () => {
   const payLoad = extractGraphPayload(userName, data);
 
   const dateSequencePrev = generateGitDateRangePrev(
-    graphNavState[0],
+    graphNavState.range[0],
     LowerBoundDate.toISOString()
   );
 
   const dateSequenceNext = generateGitDateRangeNext(
-    graphNavState[1],
+    graphNavState.range[1],
     today.toISOString()
   );
 
@@ -48,10 +48,12 @@ export const GraphCta = () => {
               }
               const { startDateString, endDateString } = value;
               setLastGraphDateRange(startDateString, endDateString);
-              // console.log("<---", startDateString, "    ", endDateString);
-              graphNavDispatch(
-                __setDateInterval([startDateString, endDateString])
-              );
+              console.log("<---", startDateString, "    ", endDateString);
+              const dispatchPayload = {
+                range: [startDateString, endDateString],
+                direction: "backward",
+              };
+              graphNavDispatch(__setDateInterval(dispatchPayload));
             }}
           >
             previous week<span>{"\u2190"}</span>
@@ -63,15 +65,17 @@ export const GraphCta = () => {
             onClick={() => {
               let { done, value } = dateSequenceNext.next();
               if (done || !value) {
-                // console.log(done, value);
+                console.log(done, value);
                 return;
               }
               const { startDateString, endDateString } = value;
               setLastGraphDateRange(startDateString, endDateString);
-              // console.log("--->", startDateString, "    ", endDateString);
-              graphNavDispatch(
-                __setDateInterval([startDateString, endDateString])
-              );
+              console.log("--->", startDateString, "    ", endDateString);
+              const dispatchPayload = {
+                range: [startDateString, endDateString],
+                direction: "forward",
+              };
+              graphNavDispatch(__setDateInterval(dispatchPayload));
             }}
           >
             <span>{"\u2192"}</span>next week

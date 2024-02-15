@@ -160,69 +160,7 @@ export const graphData = {
 };
 // console.log("wcc ", graphData.weekCommitCount);
 
-export const getChartConfig = ({ horizontal, chartType, doc, dataset }) => {
-  const accentColor = getComputedStyle(doc.documentElement)
-    .getPropertyValue("--accent-color")
-    .trim();
-  const accentColorTrans = getComputedStyle(doc.documentElement)
-    .getPropertyValue("--accent-color_trans")
-    .trim();
 
-  return {
-    type: chartType,
-    data: {
-      labels: [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ],
-      datasets: [
-        {
-          label: "Contributions today",
-          data: dataset,
-          borderColor: `${accentColor}` || "#45c3ad",
-          tension: 0.1,
-          fill: false,
-          lineTension: 0.1,
-          backgroundColor: `${accentColorTrans}` || "#45c3ae98",
-          borderCapStyle: "butt",
-          borderDash: [],
-          borderDashOffset: 0.0,
-          borderJoinStyle: "miter",
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      aspectRatio: !horizontal ? 9 / 16 : 2,
-      plugins: {
-        tooltip: {
-          enabled: true,
-        },
-      },
-      scales: {
-        x: {
-          type: "category",
-          grid: {
-            display: true,
-            color: `${accentColorTrans}` || "#45c3ae98",
-          },
-        },
-        y: {
-          grid: {
-            display: true,
-            color: `${accentColorTrans}` || "#45c3ae98",
-          },
-        },
-      },
-    },
-  };
-};
 
 export const storeGitHubUsername = (username) => {
   return new Promise((resolve, reject) => {
@@ -249,6 +187,7 @@ export const getGitHubUsername = () => {
 export const userInfo = {};
 
 export const days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
+
 export const months = [
   "January",
   "February",

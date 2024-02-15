@@ -37,10 +37,15 @@ export const RepoListStyled = styled.ul`
     box-shadow: 0.1rem 0.1rem 0.3rem #85b51d33;
     align-items: center;
     cursor: pointer;
+    * {
+      -webkit-tap-highlight-color: transparent;
+      tap-highlight-color: transparent;
+    }
     &:hover {
       p,
       .repo-time {
         color: var(--bg-color);
+        cursor: pointer;
       }
       .repo-line {
         background: linear-gradient(to bottom, var(--bg-color) 5%, transparent);

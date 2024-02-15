@@ -98,7 +98,7 @@ export const setGraphRepoHash = (name, data) => {
 export const getGraphState = (repoName) => {
   let repoHash = JSON.parse(localStorage.getItem("glt_graphRepoHash"));
   if (!repoHash) {
-    return {storedGraphState: null};
+    return { storedGraphState: null };
   }
   const storedGraphState = repoHash[repoName];
 
@@ -107,10 +107,22 @@ export const getGraphState = (repoName) => {
 
 export const getLastGraphDateRange = () => {
   const lastDateRange = localStorage.getItem("glt_lastGraphDateRange");
+  let direction = "forward";
   if (lastDateRange) {
-    return { lastDateRange: [...JSON.parse(lastDateRange).split("|")] };
+    let dates = [...JSON.parse(lastDateRange).split("|")];
+    let [dateStart, dateEnd] = dates;
+    if (new Date(dateStart).getTime() > new Date(dateEnd).getTime()) {
+      direction = "backward";
+      console.log("direction was backward");
+    } else {
+      console.log("direction was forward")
+    }
+    return {
+      lastDateRange: [...JSON.parse(lastDateRange).split("|")],
+      direction,
+    };
   } else {
-    return { lastDateRange: null };
+    return { lastDateRange: null, direction };
   }
 };
 

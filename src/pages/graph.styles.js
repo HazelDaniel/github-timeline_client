@@ -14,6 +14,7 @@ import {
   makeRowFlexCenter,
   makeRowFlexEnd,
   makeRowFlexStart,
+  makeUnSelectableTextDiv,
 } from "../styles/functions";
 
 export const GraphStyled = styled.section`
@@ -144,7 +145,13 @@ export const GraphStyled = styled.section`
         gap: 8rem;
         & > div {
           width: 10rem;
+          ${makeUnSelectableTextDiv};
+          * {
+            -webkit-tap-highlight-color: transparent;
+            tap-highlight-color: transparent;
+          }
           button {
+            ${makeUnSelectableTextDiv};
             ${makeFullWidthBlock};
             font-size: 1.2rem;
             ${makeRowFlexCenter};
@@ -175,6 +182,7 @@ export const GraphStyled = styled.section`
               line-height: 0;
               ${makeFullHeightBlock};
               ${makeAbsoluteTopRightDiv};
+              ${makeUnSelectableTextDiv};
               top: 1.5rem;
               align-items: center;
               transform: scale(1.8);

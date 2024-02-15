@@ -39,6 +39,7 @@ export const graphDataReducer = (
     return state;
   }
   // setGraphRepoHash(newState.name, newState);
+  console.log("updated state : ", state, " to : ", newState);
   return newState;
 };
 
