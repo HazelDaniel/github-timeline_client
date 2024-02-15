@@ -1,4 +1,3 @@
-write a detailed readme file
 clear the localstorage for site-specific items and test the app when there is no auth user
 try testing the app on multiple tabs by setting different states to persist
 if the result is not great, just switch to sessionstorage and test
@@ -13,3 +12,14 @@ remove all the array.from calls where unnecesary
 what if the user has 5000 repositories? localStorage explodes lol. fix this issue
 what if a repositories also has 20k commits, persisting all commits won't be ideal.
 you might check these cases adopt memory management
+
+
+//immediate (for MVP)
+write a detailed readme file
+add a link to the logo image for users to navigate to the home page
+disable the sign-up button
+use default placeholder images for commit contributors
+make sure the repo (on the graph page) description is dynamic
+
+[not urgent] add a welcome modal when a user visits the app page for the first
+and is signed in
