@@ -22,6 +22,7 @@ import {
   RepoBottomProvider,
 } from "../contexts/repo-data.context";
 import { getAccessToken, setAccessToken } from "../utils/storage";
+import { PROXY_URL } from "../utils/auth";
 
 export const AppPage = () => {
   const [repoBoardState, repoBoardDispatch] = useReducer(
@@ -106,9 +107,8 @@ export const appLoader = async () => {
     let codeRes;
     try {
       codeRes = await fetch(
-        "http://127.0.0.1:4000/get_token?code=" + codeParam
+        `${PROXY_URL}get_token?code=` + codeParam
       );
-
       let data = await codeRes.json();
       if (data.access_token) {
         userInfo.token = data.access_token;
@@ -130,3 +130,4 @@ export const appLoader = async () => {
   userInfo.token = getAccessToken().token;
   return json(userInfo);
 };
+

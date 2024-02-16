@@ -17,8 +17,9 @@ export const fetchAccessToken = async (code) => {
   }
   if (res.access_token) {
     setAccessToken(res.access_token);
+    // return 
   }
-  console.log("token response from the server: ", res);
+  // console.log("token response from the server: ", res);
 };
 
 export const fetchUserData = async () => {
