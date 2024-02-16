@@ -64,7 +64,7 @@ export const AppPage = () => {
     [repoBottomState]
   );
 
-  console.log("app page rendering");
+  // console.log("app page rendering");
 
   return (
     <AppPageStyled className="repo-page-body">

@@ -24,7 +24,7 @@ export const RepoBoard = () => {
   const linkCopyElement = useRef(null);
   const { repoBoardState } = useContext(repoBoardContext);
 
-  console.log("repo board rendering");
+  // console.log("repo board rendering");
 
   return (
     <RepoBoardStyled className="repo-board">

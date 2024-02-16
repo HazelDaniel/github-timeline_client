@@ -4,7 +4,7 @@ import { cleanUp, cleanUpAuth } from "../utils/storage";
 import { memo, useEffect } from "react";
 
 export const Main = memo(function Main() {
-  console.log("main cleaning up on render");
+  // console.log("main cleaning up on render");
 
   useEffect(() => {
     cleanUp();

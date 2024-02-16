@@ -51,8 +51,8 @@ const handleSignUp = (target, btn) => {
   // const fields = ["password", "username", "remember_credentials"];
   const formData = new FormData(target);
   password = formData.get("password");
-  console.log(formData.get("username"));
-  console.log(formData.get("remember_credentials"));
+  // console.log(formData.get("username"));
+  // console.log(formData.get("remember_credentials"));
   btn.disabled = false;
 };
 

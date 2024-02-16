@@ -75,8 +75,8 @@ export const GraphWrapper = memo(
       getInitialGraphDataState()
     );
 
-    console.log("repo to fetch : ", repoToFetch);
-    console.log(payLoad.repoName);
+    // console.log("repo to fetch : ", repoToFetch);
+    // console.log(payLoad.repoName);
 
     const { loading, data, error, fetchMore } = useQuery(
       GET_REPO_COMMIT_HISTORY,
@@ -94,15 +94,15 @@ export const GraphWrapper = memo(
           let transformedData = transformRepoGraph(data);
           setGraphRepoHash(transformedData.name, transformedData);
           graphDataDispatch(__updateGraphData(transformedData));
-          console.log("transformed data is ", transformedData);
+          // console.log("transformed data is ", transformedData);
           return;
         },
       }
     );
 
-    console.log("rendering wrapper ..");
+    // console.log("rendering wrapper ..");
     // console.log(payLoad.userName, payLoad.repoName, payLoad.dateRange);
-    console.log(payLoad.dateRange);
+    // console.log(payLoad.dateRange);
 
     const graphDataValue = useMemo(
       () => ({ graphDataState, graphDataDispatch }),

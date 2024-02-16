@@ -110,10 +110,10 @@ export const repoListReducer = (state = getInitialRepoListState(), action) => {
       return newState;
     default:
       if (isEqual(state, newState)) {
-        console.log("same state");
+        // console.log("same state");
         return state;
       }
-      console.log("updating state");
+      // console.log("updating state");
       persistRepoListState(newState);
       return { ...newState };
   }
@@ -126,7 +126,7 @@ export const repoBoardReducer = (
   const newState = { ...state, ...(action.payload && action.payload) };
 
   if (isEqual(state, newState)) {
-    console.log("same state");
+    // console.log("same state");
     return state;
   }
   return { ...newState };
@@ -139,7 +139,7 @@ export const repoOwnerAndStatReducer = (
   const newState = { ...state, ...(action.payload && action.payload) };
 
   if (isEqual(state, newState)) {
-    console.log("same state");
+    // console.log("same state");
     return state;
   }
   return { ...newState };
@@ -152,7 +152,7 @@ export const repoBottomStateReducer = (
   const newState = { ...state, ...(action.payload && action.payload) };
 
   if (isEqual(state, newState)) {
-    console.log("same state");
+    // console.log("same state");
     return state;
   }
   return { ...newState };

@@ -7,7 +7,7 @@ import { graphDataContext } from "../contexts/graph-data.context";
 export const GraphBottom = memo(function GraphBottom() {
   const { graphDataState } = useContext(graphDataContext);
   const { graphNavState } = useContext(graphNavContext);
-  console.log(graphNavState);
+  // console.log(graphNavState);
 
   const weeklyContribCommits = extractContribInInterval(
     graphDataState.commits,

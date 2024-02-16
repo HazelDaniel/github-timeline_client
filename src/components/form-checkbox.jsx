@@ -13,7 +13,7 @@ const handleCheckState = (checkBox, fn) => {
 export const FormCheckbox = () => {
   const [isActive, setActive] = useState(false);
   const checkBox = useRef(null);
-  console.log(isActive);
+  // console.log(isActive);
 
   useEffect(() => {
     if (checkBox) {

@@ -113,9 +113,9 @@ export const getLastGraphDateRange = () => {
     let [dateStart, dateEnd] = dates;
     if (new Date(dateStart).getTime() > new Date(dateEnd).getTime()) {
       direction = "backward";
-      console.log("direction was backward");
+      // console.log("direction was backward");
     } else {
-      console.log("direction was forward");
+      // console.log("direction was forward");
     }
     return {
       lastDateRange: [...JSON.parse(lastDateRange).split("|")],

@@ -9,9 +9,9 @@ export const RepoBottom = memo(function RepoBottom() {
   const { repoBottomState } = useContext(repoBottomContext);
 
   const { data: graphInfo } = getRepoListStateForGraph();
-  console.log("repo bottom rendering");
-  console.log(repoBottomState);
-  console.log("graph info is : ", graphInfo);
+  // console.log("repo bottom rendering");
+  // console.log(repoBottomState);
+  // console.log("graph info is : ", graphInfo);
 
 
 

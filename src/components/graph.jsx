@@ -112,8 +112,8 @@ export const GraphCanvas = () => {
       graphDataState.commits
     );
   }
-  console.log("rendering graph");
-  console.log(graphNavState.range);
+  // console.log("rendering graph");
+  // console.log(graphNavState.range);
 
   const configData = getChartConfig({
     chartType: graphTypeState.graphType,

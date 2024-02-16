@@ -169,7 +169,7 @@ export const extractCommitCountInIntervalDays = (
   }, {});
 
   let tmp = {};
-  console.log(commitCountHash);
+  // console.log(commitCountHash);
   for (let i = 0; i < days.length; i++) {
     if (commitCountHash[i]) {
       tmp[days[i]] = commitCountHash[i];
@@ -177,8 +177,8 @@ export const extractCommitCountInIntervalDays = (
       tmp[days[i]] = 0;
     }
   }
-  console.log(getDaysForCommitsObjs(edges));
-  console.log(tmp);
+  // console.log(getDaysForCommitsObjs(edges));
+  // console.log(tmp);
 
   for (let key of Object.keys(commitCountHash)) {
     commitCountList[key] = commitCountHash[key];

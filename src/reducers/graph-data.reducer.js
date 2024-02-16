@@ -35,11 +35,11 @@ export const graphDataReducer = (
   let newState = { ...state, ...(action.payload && action.payload) };
 
   if (isEqual(state, newState)) {
-    console.log("same state");
+    // console.log("same state");
     return state;
   }
   // setGraphRepoHash(newState.name, newState);
-  console.log("updated state : ", state, " to : ", newState);
+  // console.log("updated state : ", state, " to : ", newState);
   return newState;
 };
 

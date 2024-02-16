@@ -125,7 +125,7 @@ export const RepoList = ({ closed, toggleClosed, userData }) => {
     },
     skip: !userData.token || listState.pageInfo || !userData.username,
     onCompleted: (data) => {
-      console.log("we got the data");
+      // console.log("we got the data");
       //this should run only once. fix it
       if (listState.pageInfo) return;
       const { pageHash, listHash } = getRepoListAndPageIndex();
@@ -145,16 +145,16 @@ export const RepoList = ({ closed, toggleClosed, userData }) => {
     },
   });
 
-  console.log(
-    " skipped? ",
-    !userData.token || listState.pageInfo || !userData.username
-  );
-  console.log(
-    "credentials : =====",
-    userData.token,
-    listState.pageInfo,
-    userData.username
-  );
+  // console.log(
+  //   " skipped? ",
+  //   !userData.token || listState.pageInfo || !userData.username
+  // );
+  // console.log(
+  //   "credentials : =====",
+  //   userData.token,
+  //   listState.pageInfo,
+  //   userData.username
+  // );
 
   const handleNextPage = useCallback(() => {
     if (!(listState.pageInfo && listState.pageInfo.hasNextPage)) return;
@@ -271,7 +271,7 @@ export const RepoList = ({ closed, toggleClosed, userData }) => {
     initRepoListAndPageIndexPersist();
   }, []);
 
-  console.log("list rendering");
+  // console.log("list rendering");
 
   return (
     <>

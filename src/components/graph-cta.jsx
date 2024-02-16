@@ -48,7 +48,7 @@ export const GraphCta = () => {
               }
               const { startDateString, endDateString } = value;
               setLastGraphDateRange(startDateString, endDateString);
-              console.log("<---", startDateString, "    ", endDateString);
+              // console.log("<---", startDateString, "    ", endDateString);
               const dispatchPayload = {
                 range: [startDateString, endDateString],
                 direction: "backward",
@@ -65,12 +65,12 @@ export const GraphCta = () => {
             onClick={() => {
               let { done, value } = dateSequenceNext.next();
               if (done || !value) {
-                console.log(done, value);
+                // console.log(done, value);
                 return;
               }
               const { startDateString, endDateString } = value;
               setLastGraphDateRange(startDateString, endDateString);
-              console.log("--->", startDateString, "    ", endDateString);
+              // console.log("--->", startDateString, "    ", endDateString);
               const dispatchPayload = {
                 range: [startDateString, endDateString],
                 direction: "forward",

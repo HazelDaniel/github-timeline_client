@@ -77,7 +77,7 @@ export const graphNavReducer = (state = getInitialGraphNavState(), action) => {
   const newState = { ...state, ...(action.payload && action.payload) };
 
   if (isEqual(state, newState)) {
-    console.log("same state");
+    // console.log("same state");
     return state;
   }
   return newState;

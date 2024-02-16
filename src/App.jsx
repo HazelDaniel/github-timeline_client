@@ -62,7 +62,7 @@ const App = () => {
     [userState]
   );
 
-  console.log("app rendering");
+  // console.log("app rendering");
 
   return (
     <ApolloProvider client={client}>

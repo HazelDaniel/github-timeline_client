@@ -30,5 +30,5 @@ export const fetchUserData = async () => {
     },
   });
   res = await res.json();
-  console.log("data response from the server: ", res);
+  // console.log("data response from the server: ", res);
 };
