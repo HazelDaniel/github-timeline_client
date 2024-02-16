@@ -234,6 +234,8 @@ export const transformRepoList = (data) => {
   nodes = Array.from(nodes).map((node) => {
     return {
       name: node.name,
+      // contributors: node.collaborators?.length || node.author,
+      description: node.description,
       ...transformRepoBoard(node),
       ...transformOwnerAndStat(node),
       ...transformRepoBottom(node),
@@ -264,10 +266,15 @@ export const transformOwnerAndStat = (data) => {
     owner: { name: ownerName, avatarUrl: ownerAvatarUrl, bio: ownerBio },
     forks: { totalCount: forks },
     defaultBranchRef,
-    collaborators: {
-      nodes: { length: contributorCount },
-    },
   } = data;
+  let { collaborators } = data;
+  let contributorCount;
+  if (!collaborators) {
+    contributorCount = 0;
+  }
+  // collaborators: {
+  //   nodes: { length: contributorCount },
+  // },
   let commits = defaultBranchRef?.target?.history?.totalCount || 0;
   return {
     ownerName,
@@ -284,8 +291,15 @@ export const transformRepoBottom = (data) => {
     createdAt: dateCreated,
     updatedAt: dateUpdated,
     licenseInfo: license,
-    collaborators: { nodes: contributors },
   } = data;
+  let { collaborators } = data;
+  if (!collaborators) {
+    // let tmp = { ...data.author };
+    // console.log("author data, ", data.author);
+    // tmp.bio = data.author?.user?.bio || "no bio available";
+    // contributors = [tmp];
+    collaborators = [];
+  }
 
   if (license) license = license.name;
   else license = "NO LICENSE";
@@ -294,6 +308,6 @@ export const transformRepoBottom = (data) => {
     dateCreated: new Date(dateCreated),
     dateUpdated: new Date(dateUpdated),
     license,
-    contributors,
+    contributors: collaborators,
   };
 };

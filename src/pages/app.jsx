@@ -103,19 +103,26 @@ export const appLoader = async () => {
   const { username } = await getGitHubUsername();
 
   if (!token) {
-    let codeRes = await fetch(
-      "http://127.0.0.1:4000/get_token?code=" + codeParam
-    );
-    let data = await codeRes.json();
-    if (data.access_token) {
-      userInfo.token = data.access_token;
-      userInfo.username = username;
-      setAccessToken(data.access_token);
-      return json(userInfo);
-    } else {
-      console.error(
-        "something wrong with the connection or credentials expired, please try again!"
+    let codeRes;
+    try {
+      codeRes = await fetch(
+        "http://127.0.0.1:4000/get_token?code=" + codeParam
       );
+
+      let data = await codeRes.json();
+      if (data.access_token) {
+        userInfo.token = data.access_token;
+        userInfo.username = username;
+        setAccessToken(data.access_token);
+        return json(userInfo);
+      } else {
+        console.error(
+          "something wrong with the connection or credentials expired, please try again!"
+        );
+        return json(userInfo);
+      }
+    } catch (err) {
+      console.error("error making connection to the server");
       return json(userInfo);
     }
   }

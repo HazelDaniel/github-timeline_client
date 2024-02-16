@@ -23,10 +23,8 @@ import {
 import {
   getRepoListAndPageIndex,
   initRepoListAndPageIndexPersist,
-  persistRepoListState,
   setRepoListAndPageIndex,
 } from "../utils/storage";
-import { isEqual } from "../utils/comparison";
 
 const handleListHover = ({ repoHighlight, repoList }) => {
   if (window.innerWidth < 600) {
@@ -65,6 +63,7 @@ const GET_FULL_REPOSITORIES = gql`
           updatedAt
           sshUrl
           url
+          description
           languages(first: 5) {
             nodes {
               name
@@ -91,15 +90,6 @@ const GET_FULL_REPOSITORIES = gql`
           }
           licenseInfo {
             name
-          }
-          collaborators(first: 2) {
-            nodes {
-              avatarUrl
-              ... on User {
-                name
-                bio
-              }
-            }
           }
         }
         pageInfo {
