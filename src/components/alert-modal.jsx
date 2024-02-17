@@ -10,11 +10,13 @@ export const AlertModal = () => {
   const hash = location.hash;
   const alert = location.state;
 
-  console.log("hash is ", hash);
-  console.log("state is ", alert);
+  // console.log("hash is ", hash);
+  // console.log("state is ", alert);
 
   return (
-    <AlertModalStyled className={`alert${isHidden ? " hidden" : ""}`}>
+    <AlertModalStyled
+      className={`alert${isHidden ? " hidden" : ""}`}
+    >
       <div className="alert-frame">
         <div className="alert-body">
           <div className="alert-floater left">
@@ -33,18 +35,14 @@ export const AlertModal = () => {
             </svg>
           </span>
 
-          <p className="alert-state">
-            {alertStates[alert?.state] || "SUCCESS"}!!
-          </p>
-          <p className="alert-text">
-            {alert?.text ||
-              "your form has been successfully delivered. you can now login to your dashboard"}
-          </p>
+          <p className="alert-state">{alertStates[alert?.state] || "INFO"}!!</p>
+          <p className="alert-text">{alert?.text || "no alert message"}</p>
           <div className="alert-cta-div">
             <div className="alert-cta">
               <button
                 onClick={() => {
-                  alert?.action(...(alert.args && alert.args));
+                  if (alert?.action)
+                    alert.action(...(alert.args && alert.args));
                   setHidden(true);
                 }}
               >

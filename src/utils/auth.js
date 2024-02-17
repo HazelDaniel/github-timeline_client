@@ -1,8 +1,8 @@
-import { CLIENT_ID, GITHUB_AUTH_LINK } from "../data";
+import { CLIENT_ID, DEV_ENV, GITHUB_AUTH_LINK } from "../data";
 import { getAccessToken, setAccessToken } from "./storage";
 
-export const PROXY_URL =
-  import.meta.env.VITE_PROXY_ENDPOINT || "http://localhost:4000/";
+export const PROXY_URL = DEV_ENV === "test" ?
+   import.meta.env.VITE_PROXY_ENDPOINT_TEST : import.meta.env.VITE_PROXY_ENDPOINT;
 
 export const loginWithGithub = () => {
   window.location.assign(GITHUB_AUTH_LINK + "?client_id=" + CLIENT_ID);

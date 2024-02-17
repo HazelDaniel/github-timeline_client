@@ -25,6 +25,7 @@ import {
   initRepoListAndPageIndexPersist,
   setRepoListAndPageIndex,
 } from "../utils/storage";
+import { useNavigate } from "react-router-dom";
 
 const handleListHover = ({ repoHighlight, repoList }) => {
   if (window.innerWidth < 600) {
@@ -103,7 +104,11 @@ const GET_FULL_REPOSITORIES = gql`
   }
 `;
 
-export const RepoList = ({ closed, toggleClosed, userData }) => {
+export const RepoList = memo(function RepoList({
+  closed,
+  toggleClosed,
+  userData,
+}) {
   const repoList = useRef(null);
   const repoHighlight = useRef(null);
 
@@ -123,7 +128,7 @@ export const RepoList = ({ closed, toggleClosed, userData }) => {
       first: REPO_LIST_PAGINATE_SIZE,
       key: listState.currentPageIndex,
     },
-    skip: !userData.token || listState.pageInfo || !userData.username || DEV_ENV === "test",
+    skip: !userData.token || listState.pageInfo || !userData.username,
     onCompleted: (data) => {
       // console.log("we got the data");
       //this should run only once. fix it
@@ -271,7 +276,7 @@ export const RepoList = ({ closed, toggleClosed, userData }) => {
     initRepoListAndPageIndexPersist();
   }, []);
 
-  // console.log("list rendering");
+  console.log("list rendering");
 
   return (
     <>
@@ -335,7 +340,7 @@ export const RepoList = ({ closed, toggleClosed, userData }) => {
       </div>
     </>
   );
-};
+});
 //   (prev, next) => {
 //     return isEqual(prev, next);
 //   }

@@ -38,7 +38,6 @@ const handleSignin = (target, btn, navigate) => {
       // cconsole.log("New username stored:", newUsername);
     } catch (err) {
       console.error(err);
-      alert(err.message);
     } finally {
       btn.disabled = false;
     }

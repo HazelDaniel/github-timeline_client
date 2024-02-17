@@ -64,7 +64,7 @@ export const AppPage = () => {
     [repoBottomState]
   );
 
-  // console.log("app page rendering");
+  console.log("app page rendering");
 
   return (
     <AppPageStyled className="repo-page-body">
@@ -100,7 +100,9 @@ export const appLoader = async () => {
   let codeParam = urlParam.get("code");
   let res = {};
   let { token } = getAccessToken();
-  if (!codeParam && !token) return res;
+  userInfo.error = null;
+  userInfo.message = "no request was made";
+  if (!codeParam && !token) return json(res);
   const { username } = await getGitHubUsername();
 
   if (DEV_ENV === "test") {
@@ -110,23 +112,25 @@ export const appLoader = async () => {
   if (!token) {
     let codeRes;
     try {
-      codeRes = await fetch(
-        `${PROXY_URL}get_token?code=` + codeParam
-      );
+      codeRes = await fetch(`${PROXY_URL}get_token?code=` + codeParam);
       let data = await codeRes.json();
       if (data.access_token) {
         userInfo.token = data.access_token;
         userInfo.username = username;
         setAccessToken(data.access_token);
+        userInfo.message = "user authenticated succesfully";
         return json(userInfo);
       } else {
-        console.error(
+        // console.error(
+        //   "something wrong with the connection or credentials expired, please try again!"
+        // );
+        userInfo.error = new Error(
           "something wrong with the connection or credentials expired, please try again!"
         );
         return json(userInfo);
       }
     } catch (err) {
-      console.error("error making connection to the server");
+      userInfo.error = new Error("error making connection to the server");
       return json(userInfo);
     }
   }
@@ -134,4 +138,3 @@ export const appLoader = async () => {
   userInfo.token = getAccessToken().token;
   return json(userInfo);
 };
-

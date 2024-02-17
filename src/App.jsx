@@ -72,11 +72,11 @@ const App = () => {
         {location.pathname === "/signup" || location.pathname === "/signin" ? (
           <FormModal />
         ) : null}
-        <AlertModal />
         <CustomMouse />
         <Nav />
         <Header />
 
+        <AlertModal />
         <Outlet />
       </UserProvider>
 
