@@ -24,6 +24,7 @@ import {
 import { UserProvider } from "./contexts/user.context";
 import { isEqual } from "./utils/comparison";
 import { API_TOKEN } from "./data";
+import { AlertModal } from "./components/alert-modal";
 
 const httpLink = createHttpLink({
   uri: "https://api.github.com/graphql",
@@ -71,6 +72,7 @@ const App = () => {
         {location.pathname === "/signup" || location.pathname === "/signin" ? (
           <FormModal />
         ) : null}
+        <AlertModal />
         <CustomMouse />
         <Nav />
         <Header />

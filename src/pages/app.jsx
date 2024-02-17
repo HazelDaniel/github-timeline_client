@@ -1,7 +1,7 @@
 import { RepoBoard } from "../components/repo-board";
 import { AppPageStyled } from "./app.styles";
 
-import { repoLinkTypeData, userInfo } from "../data";
+import { DEV_ENV, repoLinkTypeData, userInfo } from "../data";
 import { getGitHubUsername } from "../utils/storage";
 import { json } from "react-router-dom";
 import { RepoTab } from "../components/repo-tab";
@@ -102,6 +102,10 @@ export const appLoader = async () => {
   let { token } = getAccessToken();
   if (!codeParam && !token) return res;
   const { username } = await getGitHubUsername();
+
+  if (DEV_ENV === "test") {
+    return json(res);
+  }
 
   if (!token) {
     let codeRes;

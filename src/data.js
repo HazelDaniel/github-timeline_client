@@ -8,7 +8,11 @@ export const ASC = "asc";
 export const DESC = "desc";
 export const CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID;
 export const API_TOKEN = import.meta.env.VITE_GITHUB_API_TOKEN;
+export const DEV_ENV = import.meta.env.VITE_DEV_ENV;
 export const GITHUB_AUTH_LINK = "https://github.com/login/oauth/authorize";
+export const ALERT_SUCCESS = 0;
+export const ALERT_FAILURE = 1;
+export const ALERT_ERROR = 2;
 
 export const repoLinkTypeData = {
   SSHLink: "----",

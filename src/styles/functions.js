@@ -19,6 +19,15 @@ export const makeUnSelectableTextDiv = () => css`
     }
   }
 `;
+
+export const removeTapHighlight = css`
+	-webkit-tap-highlight-color: transparent;
+	tap-highlight-color: transparent;
+	* {
+		-webkit-tap-highlight-color: transparent;
+		tap-highlight-color: transparent;
+	}
+`;
 export const debug = css`
   border: 0.1rem solid red;
   background-color: #0000ff44;

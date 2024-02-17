@@ -25,4 +25,7 @@ make sure the repo (on the graph page) description is dynamic
 and is signed in
 graph still not including today's commit count in recent repos (or allrepos) fix it
 
-deploy
+[urgent] when different user logs in on different tabs,
+their data leaks to the other tabs making the data for newly
+authed users to be used for all tabs (due to the behaviour)
+of localstorage. fix it

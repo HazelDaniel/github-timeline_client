@@ -6,7 +6,7 @@ import { RepoLink } from "./repo-link";
 import { gql, useQuery } from "@apollo/client";
 
 //DATA AND DATA TRANSFORMATION
-import { REPO_LIST_PAGINATE_SIZE } from "../data";
+import { DEV_ENV, REPO_LIST_PAGINATE_SIZE } from "../data";
 import { transformRepoList } from "../utils/transformers";
 
 //STATE
@@ -123,7 +123,7 @@ export const RepoList = ({ closed, toggleClosed, userData }) => {
       first: REPO_LIST_PAGINATE_SIZE,
       key: listState.currentPageIndex,
     },
-    skip: !userData.token || listState.pageInfo || !userData.username,
+    skip: !userData.token || listState.pageInfo || !userData.username || DEV_ENV === "test",
     onCompleted: (data) => {
       // console.log("we got the data");
       //this should run only once. fix it

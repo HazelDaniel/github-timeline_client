@@ -6,46 +6,46 @@ export const initRepoListAndPageIndexPersist = () => {
   const listHash = {};
 
   if (
-    localStorage.getItem("glt_pageHash") &&
-    localStorage.getItem("glt_listHash")
+    localStorage.getItem("gtl_pageHash") &&
+    localStorage.getItem("gtl_listHash")
   )
     return;
-  localStorage.setItem("glt_pageHash", JSON.stringify(pageHash));
-  localStorage.setItem("glt_listHash", JSON.stringify(listHash));
+  localStorage.setItem("gtl_pageHash", JSON.stringify(pageHash));
+  localStorage.setItem("gtl_listHash", JSON.stringify(listHash));
 };
 
 export const persistRepoListState = (state) => {
-  localStorage.setItem("glt_repoListState", JSON.stringify(state));
+  localStorage.setItem("gtl_repoListState", JSON.stringify(state));
 };
 
 export const getRepoListState = () => {
-  const storedListState = JSON.parse(localStorage.getItem("glt_repoListState"));
+  const storedListState = JSON.parse(localStorage.getItem("gtl_repoListState"));
 
   return { storedListState };
 };
 
 export const getRepoListAndPageIndex = () => {
-  const pageHash = JSON.parse(localStorage.getItem("glt_pageHash"));
-  const listHash = JSON.parse(localStorage.getItem("glt_listHash"));
+  const pageHash = JSON.parse(localStorage.getItem("gtl_pageHash"));
+  const listHash = JSON.parse(localStorage.getItem("gtl_listHash"));
 
   return { pageHash, listHash };
 };
 
 export const setRepoListAndPageIndex = ({ pageHash, listHash }) => {
-  localStorage.setItem("glt_pageHash", JSON.stringify(pageHash));
-  localStorage.setItem("glt_listHash", JSON.stringify(listHash));
+  localStorage.setItem("gtl_pageHash", JSON.stringify(pageHash));
+  localStorage.setItem("gtl_listHash", JSON.stringify(listHash));
 };
 
 // REPO BOARD STORAGE
 //REPO OWNER AND STAT STORAGE
 //REPO BOTTOM STORAGE
 export const initRepoLinkPersist = (pos) => {
-  if (localStorage.getItem("glt_lastRepoLinkClickPos")) return;
-  localStorage.setItem("glt_lastRepoLinkClickPos", JSON.stringify(pos));
+  if (localStorage.getItem("gtl_lastRepoLinkClickPos")) return;
+  localStorage.setItem("gtl_lastRepoLinkClickPos", JSON.stringify(pos));
 };
 
 export const getRepoLinkLastPos = () => {
-  const lastPos = localStorage.getItem("glt_lastRepoLinkClickPos");
+  const lastPos = localStorage.getItem("gtl_lastRepoLinkClickPos");
   if (lastPos) {
     return { lastPos: JSON.parse(lastPos) };
   } else {
@@ -54,7 +54,7 @@ export const getRepoLinkLastPos = () => {
 };
 
 export const setRepoLinkLastPos = ({ lastPos }) => {
-  localStorage.setItem("glt_lastRepoLinkClickPos", JSON.stringify(lastPos));
+  localStorage.setItem("gtl_lastRepoLinkClickPos", JSON.stringify(lastPos));
 };
 
 // GRAPH STORAGE
@@ -70,7 +70,7 @@ export const getRepoListStateForGraph = () => {
 export const setGraphRepoHash = (name, data) => {
   let repoHash;
 
-  repoHash = JSON.parse(localStorage.getItem("glt_graphRepoHash"));
+  repoHash = JSON.parse(localStorage.getItem("gtl_graphRepoHash"));
   if (repoHash) {
     if (repoHash[name]) {
       let old = repoHash[name];
@@ -92,11 +92,11 @@ export const setGraphRepoHash = (name, data) => {
     repoHash[name] = data;
   }
 
-  localStorage.setItem("glt_graphRepoHash", JSON.stringify(repoHash));
+  localStorage.setItem("gtl_graphRepoHash", JSON.stringify(repoHash));
 };
 
 export const getGraphState = (repoName) => {
-  let repoHash = JSON.parse(localStorage.getItem("glt_graphRepoHash"));
+  let repoHash = JSON.parse(localStorage.getItem("gtl_graphRepoHash"));
   if (!repoHash) {
     return { storedGraphState: null };
   }
@@ -106,7 +106,7 @@ export const getGraphState = (repoName) => {
 };
 
 export const getLastGraphDateRange = () => {
-  const lastDateRange = localStorage.getItem("glt_lastGraphDateRange");
+  const lastDateRange = localStorage.getItem("gtl_lastGraphDateRange");
   let direction = "forward";
   if (lastDateRange) {
     let dates = [...JSON.parse(lastDateRange).split("|")];
@@ -128,7 +128,7 @@ export const getLastGraphDateRange = () => {
 
 export const setLastGraphDateRange = (startDateString, endDateString) => {
   localStorage.setItem(
-    "glt_lastGraphDateRange",
+    "gtl_lastGraphDateRange",
     JSON.stringify(startDateString + "|" + endDateString)
   );
 };
@@ -137,7 +137,7 @@ export const setLastGraphDateRange = (startDateString, endDateString) => {
 export const storeGitHubUsername = (username) => {
   return new Promise((resolve, reject) => {
     try {
-      localStorage.setItem("glt_username", JSON.stringify(username));
+      localStorage.setItem("gtl_username", JSON.stringify(username));
       resolve(username);
     } catch (err) {
       reject(new Error("username could't be stored"));
@@ -148,7 +148,7 @@ export const storeGitHubUsername = (username) => {
 export const getGitHubUsername = () => {
   return new Promise((resolve, reject) => {
     try {
-      const username = JSON.parse(localStorage.getItem("glt_username"));
+      const username = JSON.parse(localStorage.getItem("gtl_username"));
       resolve ({ username })
     } catch (err) {
       reject(new Error("no username"));
@@ -156,37 +156,37 @@ export const getGitHubUsername = () => {
   });
 };
 export const setRememberCredentials = () => {
-  localStorage.setItem("glt_rememberAuthCred", JSON.stringify(true));
+  localStorage.setItem("gtl_rememberAuthCred", JSON.stringify(true));
 };
 
 export const getRememberCredentials = () => {
-  const cred = JSON.parse(localStorage.getitem("glt_rememberAuthCred"));
+  const cred = JSON.parse(localStorage.getitem("gtl_rememberAuthCred"));
   let res = { rememberCredentials: cred };
   return res;
 };
 
 export const setAccessToken = (token) => {
-  localStorage.setItem("glt_accessToken", JSON.stringify(token));
+  localStorage.setItem("gtl_accessToken", JSON.stringify(token));
 };
 
 export const getAccessToken = () => {
-  let token = JSON.parse(localStorage.getItem("glt_accessToken"));
+  let token = JSON.parse(localStorage.getItem("gtl_accessToken"));
   return { token };
 };
 
 // CLEANUP (INVALIDATION ON REFRESH)
 export const cleanUp = () => {
-  localStorage.removeItem("glt_repoListState");
-  localStorage.removeItem("glt_pageHash");
-  localStorage.removeItem("glt_listHash");
-  localStorage.removeItem("glt_lastRepoLinkClickPos");
-  localStorage.removeItem("glt_lastGraphDateRange");
-  localStorage.removeItem("glt_graphRepoHash");
+  localStorage.removeItem("gtl_repoListState");
+  localStorage.removeItem("gtl_pageHash");
+  localStorage.removeItem("gtl_listHash");
+  localStorage.removeItem("gtl_lastRepoLinkClickPos");
+  localStorage.removeItem("gtl_lastGraphDateRange");
+  localStorage.removeItem("gtl_graphRepoHash");
 };
 
 //LOGOUT LOGIC
 export const cleanUpAuth = () => {
-  localStorage.removeItem("glt_username");
-  localStorage.removeItem("glt_accessToken");
-  localStorage.removeItem("glt_rememberAuthCred");
+  localStorage.removeItem("gtl_username");
+  localStorage.removeItem("gtl_accessToken");
+  localStorage.removeItem("gtl_rememberAuthCred");
 };

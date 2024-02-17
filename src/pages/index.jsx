@@ -4,7 +4,6 @@ import { Hero } from "../components/hero";
 import { Motto } from "../components/motto";
 
 export const Index = () => {
-
   return (
     <>
       <Hero />
