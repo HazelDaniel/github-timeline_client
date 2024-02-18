@@ -149,7 +149,7 @@ export const getGitHubUsername = () => {
   return new Promise((resolve, reject) => {
     try {
       const username = JSON.parse(localStorage.getItem("gtl_username"));
-      resolve ({ username })
+      resolve({ username });
     } catch (err) {
       reject(new Error("no username"));
     }
@@ -172,6 +172,22 @@ export const setAccessToken = (token) => {
 export const getAccessToken = () => {
   let token = JSON.parse(localStorage.getItem("gtl_accessToken"));
   return { token };
+};
+
+//PREFERENCES
+export const getSeenWarningOn = (page) => {
+  let seenWarning = JSON.parse(
+    localStorage.getItem(`gtl_seenWarningOn${page}`)
+  );
+  return { seenWarning };
+};
+
+export const setSeenWarningOn = (page, times) => {
+  localStorage.setItem(`gtl_seenWarningOn${page}`, JSON.stringify(times));
+};
+
+export const unsetSeenWarningOn = (page) => {
+  localStorage.removeItem(`gtl_seenWarningOn${page}`);
 };
 
 // CLEANUP (INVALIDATION ON REFRESH)

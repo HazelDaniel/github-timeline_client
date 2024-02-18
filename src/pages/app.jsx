@@ -2,7 +2,11 @@ import { RepoBoard } from "../components/repo-board";
 import { AppPageStyled } from "./app.styles";
 
 import { userInfo } from "../data";
-import { getGitHubUsername } from "../utils/storage";
+import {
+  getGitHubUsername,
+  getSeenWarningOn,
+  setSeenWarningOn,
+} from "../utils/storage";
 import { json } from "react-router-dom";
 import { RepoTab } from "../components/repo-tab";
 import { RepoOwnerAndStat } from "../components/repo-owner-and-stat";
@@ -98,18 +102,18 @@ export const appLoader = async () => {
   const queryString = window.location.search;
   const urlParam = new URLSearchParams(queryString);
   let codeParam = urlParam.get("code")?.trim();
-  let res = {};
   let { token } = getAccessToken();
   userInfo.error = null;
   userInfo.message = null;
-  console.log("loader runnning");
-  if (!codeParam && !token) return json(res);
+  if (!codeParam && !token) {
+    userInfo.warning = { message: "you need to sign in to use feature" };
+    let { seenWarning } = getSeenWarningOn("App");
+    if (!seenWarning) setSeenWarningOn("App", 1);
+    else if (seenWarning >= 1) userInfo.warning = null;
+    setSeenWarningOn("App", (seenWarning || 0) + 1);
+    return json(userInfo);
+  }
   const { username } = await getGitHubUsername();
-
-  // if (DEV_ENV === "test") {
-  //   return json(res);
-  // }
-  console.log("code param is,  :", codeParam, ":");
 
   if (!token) {
     let codeRes;

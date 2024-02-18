@@ -1,4 +1,11 @@
-import { memo, useCallback, useEffect, useReducer, useRef } from "react";
+import {
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+} from "react";
 import { RepoListStyled } from "./repo-list.styles";
 
 import { RepoLink } from "./repo-link";
@@ -25,14 +32,20 @@ import {
   initRepoListAndPageIndexPersist,
   setRepoListAndPageIndex,
 } from "../utils/storage";
-import { useNavigate } from "react-router-dom";
+import { alertModalContext } from "../contexts/alert-modal.context";
+import {
+  __setModalText,
+  __setModalType,
+  __showAlertModal,
+} from "../reducers/alert-modal.reducer";
 
 const handleListHover = ({ repoHighlight, repoList }) => {
   if (window.innerWidth < 600) {
     repoList.addEventListener("click", (e) => {
-      if (!e.target.dataset.pos && !e.target.closest("li")) return;
+      let pos = e.target.closest("li")?.dataset.pos;
+      if (!pos) return;
       repoHighlight.classList.remove("defunct");
-      let position = +e.target.dataset.pos;
+      let position = +pos;
       repoHighlight.style.top = `${4 * position}rem`;
     });
     return;
@@ -116,7 +129,6 @@ export const RepoList = memo(function RepoList({
     repoListReducer,
     getInitialRepoListState()
   );
-
   const { data, loading, error, fetchMore } = useQuery(GET_FULL_REPOSITORIES, {
     context: {
       Headers: {
@@ -150,16 +162,7 @@ export const RepoList = memo(function RepoList({
     },
   });
 
-  // console.log(
-  //   " skipped? ",
-  //   !userData.token || listState.pageInfo || !userData.username
-  // );
-  // console.log(
-  //   "credentials : =====",
-  //   userData.token,
-  //   listState.pageInfo,
-  //   userData.username
-  // );
+  const { alertModalDispatch } = useContext(alertModalContext);
 
   const handleNextPage = useCallback(() => {
     if (!(listState.pageInfo && listState.pageInfo.hasNextPage)) return;
@@ -266,17 +269,36 @@ export const RepoList = memo(function RepoList({
       });
   }, [repoList, repoHighlight]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     console.log("persisting state", listState);
-  //   };
-  // }, [listState]);
+  useEffect(() => {
+    if (error) {
+      alertModalDispatch(__setModalType(2));
+      alertModalDispatch(__setModalText(error.message));
+      alertModalDispatch(__showAlertModal());
+    }
+  }, [error]);
 
   useEffect(() => {
     initRepoListAndPageIndexPersist();
   }, []);
 
-  console.log("list rendering");
+  useEffect(() => {
+    if (userData.error) {
+      alertModalDispatch(__setModalType(2));
+      alertModalDispatch(__setModalText(userData.error.message));
+      alertModalDispatch(__showAlertModal());
+    } else if (userData.message) {
+      alertModalDispatch(__setModalType(0));
+      alertModalDispatch(__setModalText(userData.message));
+      alertModalDispatch(__showAlertModal());
+    } else if (userData.warning) {
+      alertModalDispatch(__setModalType(1));
+      alertModalDispatch(__setModalText(userData.warning.message));
+      alertModalDispatch(__showAlertModal());
+    }
+  }, [userData]);
+
+  // console.log("list rendering");
+  // console.log(userData);
 
   return (
     <>

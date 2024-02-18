@@ -10,20 +10,7 @@ import {
 
 export const RepoListWrapper = (props) => {
   const userData = useLoaderData();
-  const { alertModalState, alertModalDispatch } = useContext(alertModalContext);
 
-  console.log(userData);
-  useEffect(() => {
-    if (userData.error) {
-      alertModalDispatch(__setModalType(2));
-      alertModalDispatch(__setModalText(userData.error.message));
-      alertModalDispatch(__showAlertModal());
-    } else if (userData.message) {
-      alertModalDispatch(__setModalType(0));
-      alertModalDispatch(__setModalText(userData.message));
-      alertModalDispatch(__showAlertModal());
-    }
-  }, [userData]);
 
   return (
     <>

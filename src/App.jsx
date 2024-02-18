@@ -23,7 +23,7 @@ import {
 } from "./reducers/user.reducer";
 import { UserProvider } from "./contexts/user.context";
 import { isEqual } from "./utils/comparison";
-import { API_TOKEN } from "./data";
+import { API_TOKEN, userInfo } from "./data";
 import { AlertModal } from "./components/alert-modal";
 import {
   alertModalReducer,
@@ -36,7 +36,7 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = API_TOKEN;
+  const token = userInfo.token;
 
   return {
     headers: {
