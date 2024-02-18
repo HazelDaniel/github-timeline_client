@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FormCheckbox } from "./form-checkbox";
 import { FormModalStyled } from "./form-modal.styles";
 
-import { userInfo } from "../data";
+import { DEV_ENV, userInfo } from "../data";
 import {
   cleanUp,
   cleanUpAuth,

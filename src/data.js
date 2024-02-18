@@ -13,6 +13,7 @@ export const GITHUB_AUTH_LINK = "https://github.com/login/oauth/authorize";
 export const ALERT_SUCCESS = 0;
 export const ALERT_FAILURE = 1;
 export const ALERT_ERROR = 2;
+export const ALERT_INFO = 3;
 
 export const repoLinkTypeData = {
   SSHLink: "----",

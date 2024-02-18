@@ -1,7 +1,7 @@
 import { RepoBoard } from "../components/repo-board";
 import { AppPageStyled } from "./app.styles";
 
-import { DEV_ENV, repoLinkTypeData, userInfo } from "../data";
+import { userInfo } from "../data";
 import { getGitHubUsername } from "../utils/storage";
 import { json } from "react-router-dom";
 import { RepoTab } from "../components/repo-tab";
@@ -102,12 +102,13 @@ export const appLoader = async () => {
   let { token } = getAccessToken();
   userInfo.error = null;
   userInfo.message = "no request was made";
+  console.log("loader runnning");
   if (!codeParam && !token) return json(res);
   const { username } = await getGitHubUsername();
 
-  if (DEV_ENV === "test") {
-    return json(res);
-  }
+  // if (DEV_ENV === "test") {
+  //   return json(res);
+  // }
 
   if (!token) {
     let codeRes;
@@ -121,16 +122,18 @@ export const appLoader = async () => {
         userInfo.message = "user authenticated succesfully";
         return json(userInfo);
       } else {
-        // console.error(
-        //   "something wrong with the connection or credentials expired, please try again!"
-        // );
-        userInfo.error = new Error(
-          "something wrong with the connection or credentials expired, please try again!"
-        );
+        userInfo.error = {
+          message:
+            "something wrong with the connection or credentials expired, please try again!",
+        };
+        userInfo.message = null;
         return json(userInfo);
       }
     } catch (err) {
-      userInfo.error = new Error("error making connection to the server");
+      userInfo.message = null;
+      console.log("connection issues");
+      let error = { message: "error making connection to the server" };
+      userInfo.error = error;
       return json(userInfo);
     }
   }
