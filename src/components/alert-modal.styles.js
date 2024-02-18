@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import {
+  debug,
   makeAbsoluteTopDiv,
   makeAbsoluteTopLeftDiv,
   makeAbsoluteTopRightDiv,
@@ -45,12 +46,15 @@ export const AlertModalStyled = styled.div`
   border-radius: 5rem;
   border-top-left-radius: unset;
   border-bottom-right-radius: unset;
-  .alert-frame {
+  .alert-frame,
+  .alert-frame_fail {
+    /* ${debug}; */
     ${makeFullWidthBlock};
     position: relative;
     height: max-content;
     transition-property: opacity;
     ${makeUnSelectableTextDiv};
+    /* ${debug}; */
     &:active {
       opacity: 0.7;
     }
@@ -81,20 +85,17 @@ export const AlertModalStyled = styled.div`
         }
       }
     }
-    &::before {
+    .frame {
       ${makeFullSizeBlock};
       ${makeAbsoluteTopLeftDiv};
       left: 3%;
+      svg {
+        ${makeFullSizeBlock};
+      }
       /* z-index: -1; */
       /* border-radius: 70%; */
-      background-image: url("icons/alert-frame.svg");
-      /* -webkit-mask-image: url("icons/alert-frame.svg"); */
-      background-size: 100% contain;
-      background-repeat: no-repeat;
-      @media screen and (max-width: 480px) {
-        background-size: 100% contain;
-      }
-      transform: scale(1.3, 1.5);
+      /* background-image: url("icons/alert-frame.svg"); */
+      transform: scale(1.25, 1.5) translate(-1.4rem, 1.6rem);
     }
     &::after {
       height: 1.5rem;
@@ -134,6 +135,16 @@ export const AlertModalStyled = styled.div`
               transform: translateX(-48%);
             }
           }
+          &_fail:nth-of-type(1) {
+            top: 3rem;
+            right: 4.5rem;
+          }
+          &_fail:nth-of-type(2) {
+            top: unset;
+            right: unset;
+            bottom: 4rem;
+            left: 3rem;
+          }
         }
         .alert-floater.left {
           left: -2.5rem;
@@ -142,7 +153,8 @@ export const AlertModalStyled = styled.div`
           right: -2rem;
         }
       }
-      .alert-frame-edge {
+      .alert-frame-edge,
+      .alert-frame-edge_fail {
         transition: all 0.2s linear;
         height: 40%;
         ${makeAbsoluteTopRightDiv};
@@ -156,6 +168,7 @@ export const AlertModalStyled = styled.div`
             transform: translateX(50%) scale(-1);
           }
         }
+
         &:nth-of-type(2) {
           top: unset;
           right: unset;
@@ -164,6 +177,16 @@ export const AlertModalStyled = styled.div`
           ${makeRowFlexStart};
           svg {
             transform: translateX(-48%);
+          }
+        }
+        &_fail:nth-of-type(1) {
+          svg {
+            transform: translateX(50%) scale(1);
+          }
+        }
+        &_fail:nth-of-type(2) {
+          svg {
+            transform: translateX(-48%) scale(-1);
           }
         }
       }
@@ -214,15 +237,12 @@ export const AlertModalStyled = styled.div`
               border: 0.1rem solid var(--accent-color);
             } */
           }
-          &::before {
+          .frame {
             ${makeFullSizeBlock};
             ${makeAbsoluteTopLeftDiv};
 
-            background-image: url("icons/alert-frame.svg");
-            background-size: 100%;
-            background-repeat: no-repeat;
-            @media screen and (max-width: 480px) {
-              background-size: 100% contain;
+            svg {
+              ${makeFullWidthBlock};
             }
 
             transform: scale(1.5, 2) translateY(-30%);
@@ -232,6 +252,18 @@ export const AlertModalStyled = styled.div`
           }
         }
       }
+    }
+  }
+  .alert-frame_fail::after {
+    background-color: var(--fail-color) !important;
+  }
+  .alert-frame_fail {
+    * {
+      color: var(--fail-color) !important;
+      
+    }
+    .alert-state {
+      text-shadow: .1rem .1rem .2rem var(--fail-color);
     }
   }
 `;

@@ -25,6 +25,11 @@ import { UserProvider } from "./contexts/user.context";
 import { isEqual } from "./utils/comparison";
 import { API_TOKEN } from "./data";
 import { AlertModal } from "./components/alert-modal";
+import {
+  alertModalReducer,
+  initialModalState,
+} from "./reducers/alert-modal.reducer";
+import { AlertModalProvider } from "./contexts/alert-modal.context";
 
 const httpLink = createHttpLink({
   uri: "https://api.github.com/graphql",
@@ -54,6 +59,10 @@ const App = () => {
     userReducer,
     initialUserState
   );
+  const [alertModalState, alertModalDispatch] = useReducer(
+    alertModalReducer,
+    initialModalState
+  );
 
   const userValue = useMemo(
     () => ({
@@ -61,6 +70,14 @@ const App = () => {
       userStateDispatch,
     }),
     [userState]
+  );
+
+  const modalValue = useMemo(
+    () => ({
+      alertModalState,
+      alertModalDispatch,
+    }),
+    [alertModalState]
   );
 
   // console.log("app rendering");
@@ -76,8 +93,10 @@ const App = () => {
         <Nav />
         <Header />
 
-        <AlertModal />
-        <Outlet />
+        <AlertModalProvider value={modalValue}>
+          <AlertModal />
+          <Outlet />
+        </AlertModalProvider>
       </UserProvider>
 
       <Footer />

@@ -1,50 +1,96 @@
-import { useLocation } from "react-router-dom";
+import { alertModalContext } from "../contexts/alert-modal.context";
+import { __hideAlertModal } from "../reducers/alert-modal.reducer";
 import { AlertModalStyled } from "./alert-modal.styles";
-import { useState } from "react";
+import { useContext } from "react";
 
 const alertStates = ["SUCESS", "FAILURE", "ERROR", "INFO"];
 
 export const AlertModal = () => {
-  const [isHidden, setHidden] = useState(false);
-  const location = useLocation();
-  const alert = location.state;
+  const { alertModalState, alertModalDispatch } = useContext(alertModalContext);
+  const { visible, ctaText, modalText, modalType } = alertModalState;
 
   return (
-    <AlertModalStyled className={`alert${isHidden ? " hidden" : ""}`}>
-      <div className="alert-frame">
+    <AlertModalStyled className={`alert${!visible ? " hidden" : ""}`}>
+      <div
+        className={`alert-frame${
+          modalType === 1 || modalType === 2 ? "_fail" : ""
+        }`}
+      >
+        <div className="frame">
+          <svg>
+            <use
+              xlinkHref={`#alert-frame${
+                modalType === 1 || modalType === 2 ? "_fail" : ""
+              }`}
+            ></use>
+          </svg>
+        </div>
         <div className="alert-body">
           <div className="alert-floater left">
             <svg>
-              <use xlinkHref="#alert-floater"></use>
+              <use
+                xlinkHref={`#alert-floater${
+                  modalType === 1 || modalType === 2 ? "_fail" : ""
+                }`}
+              ></use>
             </svg>
           </div>
-          <span className="alert-frame-edge">
+          <span
+            className={`alert-frame-edge${
+              modalType === 1 || modalType === 2 ? "_fail" : ""
+            }`}
+          >
             <svg>
-              <use xlinkHref="#alert-frame-edge"></use>
+              <use
+                xlinkHref={`#alert-frame-edge${
+                  modalType === 1 || modalType === 2 ? "_fail" : ""
+                }`}
+              ></use>
             </svg>
           </span>
-          <span className="alert-frame-edge">
+          <span
+            className={`alert-frame-edge${
+              modalType === 1 || modalType === 2 ? "_fail" : ""
+            }`}
+          >
             <svg>
-              <use xlinkHref="#alert-frame-edge"></use>
+              <use
+                xlinkHref={`#alert-frame-edge${
+                  modalType === 1 || modalType === 2 ? "_fail" : ""
+                }`}
+              ></use>
             </svg>
           </span>
 
-          <p className="alert-state">{alertStates[alert?.state] || "INFO"}!!</p>
-          <p className="alert-text">{alert?.text || "no alert message"}</p>
+          <p className="alert-state">{alertStates[modalType] || "INFO"}!!</p>
+          <p className="alert-text">{modalText}</p>
           <div className="alert-cta-div">
             <div className="alert-cta">
+              <div className="frame">
+                <svg>
+                  <use
+                    xlinkHref={`#alert-frame${
+                      modalType === 1 || modalType === 2 ? "_fail" : ""
+                    }`}
+                  ></use>
+                </svg>
+              </div>
               <button
                 onClick={() => {
-                  setHidden(true);
+                  alertModalDispatch(__hideAlertModal());
                 }}
               >
-                QUIT
+                {ctaText}
               </button>
             </div>
           </div>
           <div className="alert-floater right">
             <svg>
-              <use xlinkHref="#alert-floater"></use>
+              <use
+                xlinkHref={`#alert-floater${
+                  modalType === 1 || modalType === 2 ? "_fail" : ""
+                }`}
+              ></use>
             </svg>
           </div>
         </div>

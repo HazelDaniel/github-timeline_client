@@ -97,11 +97,11 @@ export const AppPage = () => {
 export const appLoader = async () => {
   const queryString = window.location.search;
   const urlParam = new URLSearchParams(queryString);
-  let codeParam = urlParam.get("code");
+  let codeParam = urlParam.get("code")?.trim();
   let res = {};
   let { token } = getAccessToken();
   userInfo.error = null;
-  userInfo.message = "no request was made";
+  userInfo.message = null;
   console.log("loader runnning");
   if (!codeParam && !token) return json(res);
   const { username } = await getGitHubUsername();
@@ -109,6 +109,7 @@ export const appLoader = async () => {
   // if (DEV_ENV === "test") {
   //   return json(res);
   // }
+  console.log("code param is,  :", codeParam, ":");
 
   if (!token) {
     let codeRes;

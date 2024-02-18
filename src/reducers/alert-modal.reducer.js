@@ -5,12 +5,13 @@ const AlertActionTypes = {
   showModal: "SHOW_MODAL",
   hideModal: "HIDE_MODAL",
   setModalType: "SET_MODAL_TYPE",
+  setModalText: "SET_ALERT_TEXT",
   setCtaText: "SET_CTA_TEXT",
 };
 
 export const initialModalState = {
   modalType: ALERT_INFO,
-  text: "no alert message",
+  modalText: "no alert message",
   ctaText: "QUIT",
   visible: false,
 };
@@ -23,32 +24,41 @@ export const alertModalReducer = (state = initialModalState, action) => {
     case AlertActionTypes.hideModal:
       return { ...newState, visible: false };
     default:
+      console.log("some else");
       if (isEqual(newState, state)) return state;
       return newState;
   }
 };
 
-// export const __changeGraphType = () => {
-//   return {
-//     type: GraphActionTypes.setGraphType,
-//   };
-// };
+export const __showAlertModal = () => {
+  return {
+    type: AlertActionTypes.showModal,
+  };
+};
 
-// export const __setBarType = () => {
-//   return {
-//     type: GraphActionTypes.setBarType,
-//   };
-// };
+export const __hideAlertModal = () => {
+  return {
+    type: AlertActionTypes.hideModal,
+  };
+};
 
-// export const __setLineType = () => {
-//   return {
-//     type: GraphActionTypes.setLineType,
-//   };
-// };
+export const __setModalType = (type) => {
+  return {
+    type: AlertActionTypes.setModalType,
+    payload: { modalType: type },
+  };
+};
 
-// export const __setDateInterval = (dateInterval) => {
-//   return {
-//     type: GraphActionTypes.setDateInterval,
-//     payload: dateInterval,
-//   };
-// };
+export const __setModalText = (text) => {
+  return {
+    type: AlertActionTypes.setModalText,
+    payload: { modalText: text },
+  };
+};
+
+export const __setCtaText = (text) => {
+  return {
+    type: AlertActionTypes.setCtaText,
+    payload: { ctaText: text },
+  };
+};

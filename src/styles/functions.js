@@ -21,12 +21,12 @@ export const makeUnSelectableTextDiv = () => css`
 `;
 
 export const removeTapHighlight = css`
-	-webkit-tap-highlight-color: transparent;
-	tap-highlight-color: transparent;
-	* {
-		-webkit-tap-highlight-color: transparent;
-		tap-highlight-color: transparent;
-	}
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  * {
+    -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+  }
 `;
 export const debug = css`
   border: 0.1rem solid red;
@@ -321,6 +321,7 @@ export const GlobalStyle = createGlobalStyle`
   --repo-link-border-color: #8385895d;
   --dark-bg-color: #121219;
   --ash-color_trans: rgba(21, 21, 21, 20%);
+  --fail-color: #ED6243;
   --author: "H.a.z.e.l.D.a.n.i.e.l";
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
