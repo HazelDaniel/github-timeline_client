@@ -1,7 +1,7 @@
 import { RepoBoard } from "../components/repo-board";
 import { AppPageStyled } from "./app.styles";
 
-import { userInfo } from "../data";
+import { DEV_ENV, userInfo } from "../data";
 import {
   getGitHubUsername,
   getSeenWarningOn,
@@ -68,6 +68,7 @@ export const AppPage = () => {
     [repoBottomState]
   );
 
+	if (DEV_ENV === "test")
   console.log("app page rendering");
 
   return (
@@ -136,7 +137,6 @@ export const appLoader = async () => {
       }
     } catch (err) {
       userInfo.message = null;
-      console.log("connection issues");
       let error = { message: "error making connection to the server" };
       userInfo.error = error;
       return json(userInfo);

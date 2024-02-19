@@ -24,7 +24,6 @@ export const alertModalReducer = (state = initialModalState, action) => {
     case AlertActionTypes.hideModal:
       return { ...newState, visible: false };
     default:
-      console.log("some else");
       if (isEqual(newState, state)) return state;
       return newState;
   }

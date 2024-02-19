@@ -181,6 +181,7 @@ export const RepoList = memo(function RepoList({
       listStateDispatch(
         __updateLinkData({ repoLinkData: transformRepoList(data) })
       );
+
     },
   });
 

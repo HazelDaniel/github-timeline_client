@@ -21,6 +21,13 @@ export const RepoLink = memo(function RepoLink({ position, data, listState }) {
   }
 
   // console.log("link rendering");
+  useEffect(() => {
+    if (position === 0 && data.ownerName) {
+      repoBoardDispatch(__updateRepoBoardData(data));
+      repoOwnerAndStatDispatch(__updateRepoOwnerAndStatData(data));
+      repoBottomDispatch(__updateRepoBottomData(data));
+    }
+  }, [position, data]);
 
   return (
     <li
