@@ -43,10 +43,17 @@ const handleListHover = ({ repoHighlight, repoList }) => {
   if (window.innerWidth < 600) {
     repoList.addEventListener("click", (e) => {
       let pos = e.target.closest("li")?.dataset.pos;
+      let height;
+      try {
+        height = getComputedStyle(e.target.closest("li")).height;
+      } catch (err) {
+        return;
+      }
+      height = Number.parseInt(height);
       if (!pos) return;
       repoHighlight.classList.remove("defunct");
       let position = +pos;
-      repoHighlight.style.top = `${4 * position}rem`;
+      repoHighlight.style.top = `${height * position}px`;
     });
     return;
   }
@@ -54,8 +61,17 @@ const handleListHover = ({ repoHighlight, repoList }) => {
     let pos = e.target.closest("li")?.dataset.pos;
     if (!pos) return;
     repoHighlight.classList.remove("defunct");
-    let position = +e.target.dataset.pos;
-    repoHighlight.style.top = `${4 * position}rem`;
+    let height;
+    try {
+      height = getComputedStyle(e.target.closest("li")).height;
+    } catch (err) {
+      return;
+    }
+    height = Number.parseInt(height);
+    let position = +pos;
+    let res = height * position;
+    if (Number.isNaN(res)) return;
+    repoHighlight.style.top = `${height * position}px`;
   });
 
   repoList.addEventListener("mouseleave", () => {
