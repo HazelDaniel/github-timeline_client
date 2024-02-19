@@ -70,7 +70,7 @@ const GET_FULL_REPOSITORIES = gql`
     $before: String
   ) {
     user(login: $username) {
-      repositories(first: $first, after: $after, before: $before) {
+      repositories(first: $first, after: $after, before: $before, orderBy: { field: CREATED_AT, direction: DESC}) {
         nodes {
           name
           createdAt

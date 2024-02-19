@@ -19,6 +19,9 @@ export const RepoListStyled = styled.ul`
     ${makeFullWidthBlock};
     background-color: #dfffbe;
     height: 4rem;
+    @media screen and (min-height: 650px) {
+      height: 6rem;
+    }
     top: 8rem;
     transition: all 0.2s ease-in-out;
     transition-delay: 0.1s;
@@ -29,6 +32,9 @@ export const RepoListStyled = styled.ul`
   li {
     ${makeFullWidthBlock};
     height: 4rem;
+    @media screen and (min-height: 650px) {
+      height: 6rem;
+    }
     ${makeRowFlexStart};
     position: relative;
     gap: auto;

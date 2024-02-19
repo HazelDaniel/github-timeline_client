@@ -98,6 +98,7 @@ export const getInitialRepoBottomState = () => {
 
 export const repoListReducer = (state = getInitialRepoListState(), action) => {
   let newState = { ...state, ...(action.payload && action.payload) };
+  // console.log("new state is, ", newState);
 
   switch (action.type) {
     case repoListActionTypes.incrementPageIndex:
