@@ -22,7 +22,10 @@ export const RepoListStyled = styled.ul`
     @media screen and (min-height: 650px) {
       height: 6rem;
     }
-    top: 8rem;
+    /* top: 8rem;
+    @media screen and (min-height: 650px) {
+      height: 8rem;
+    } */
     transition: all 0.2s ease-in-out;
     transition-delay: 0.1s;
     &.defunct {

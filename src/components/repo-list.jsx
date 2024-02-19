@@ -51,7 +51,8 @@ const handleListHover = ({ repoHighlight, repoList }) => {
     return;
   }
   repoList.addEventListener("mouseover", (e) => {
-    if (!e.target.dataset.pos) return;
+    let pos = e.target.closest("li")?.dataset.pos;
+    if (!pos) return;
     repoHighlight.classList.remove("defunct");
     let position = +e.target.dataset.pos;
     repoHighlight.style.top = `${4 * position}rem`;
@@ -70,7 +71,12 @@ const GET_FULL_REPOSITORIES = gql`
     $before: String
   ) {
     user(login: $username) {
-      repositories(first: $first, after: $after, before: $before, orderBy: { field: CREATED_AT, direction: DESC}) {
+      repositories(
+        first: $first
+        after: $after
+        before: $before
+        orderBy: { field: CREATED_AT, direction: DESC }
+      ) {
         nodes {
           name
           createdAt
