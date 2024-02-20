@@ -1,5 +1,61 @@
+import { DBinfo, DEV_ENV } from "../data";
 import { inObjectArray } from "./comparison";
+import { deleteDB, openDB } from "idb";
 
+export const TXN_READ = "readonly";
+export const TXN_RWRITE = "readwrite";
+export let DB_NAME = "gtl_PERSIST";
+export const COMMITS_STORENAME = "commits";
+export const REPO_STORENAME = "repositories";
+const DB_VERSION = 1;
+
+export class DBPersist {
+  static open() {
+    return openDB(DB_NAME, DB_VERSION, {
+      blocked() {
+        if (DEV_ENV === "test")
+          alert(
+            "unable to proceed indexedDB operation, please close all other tabs accessing this site"
+          );
+        DBinfo.blocked = true;
+      },
+      upgrade(db) {
+        const commitsStore = db.createObjectStore(COMMITS_STORENAME, {
+          keyPath: "oid",
+        });
+        const repositoriesStore = db.createObjectStore(REPO_STORENAME, {
+          keyPath: "name",
+        });
+        commitsStore.createIndex("cmp_idx_repo_date", [
+          "repoName",
+          "idb_commitTime",
+        ]);
+        repositoriesStore.createIndex("idx_user", "ownerName");
+        commitsStore.transaction.oncomplete = () => {
+          if (DEV_ENV === "test") {
+            console.log("commits store successfully created for user");
+          }
+        };
+        repositoriesStore.transaction.oncomplete = () => {
+          if (DEV_ENV === "test") {
+            console.log("repositories store successfully created for user");
+          }
+        };
+      },
+    });
+  }
+
+  static delete() {
+    return deleteDB(DB_NAME, {
+      blocked() {
+        if (DEV_ENV === "test")
+          alert(
+            "unable to modify database [DELETE], please close all other tabs accessing this site"
+          );
+      },
+    });
+  }
+}
 //REPO LINK STORAGE
 export const initRepoListAndPageIndexPersist = () => {
   const pageHash = {};

@@ -1,6 +1,4 @@
-import {
-  extractCommitCountInIntervalDays,
-} from "./utils/transformers";
+import { extractCommitCountInIntervalDays } from "./utils/transformers";
 
 export const REPO_LIST_PAGINATE_SIZE = 10;
 export const GLOBAL_PLACEHOLDER_URL = "images/placeholder.svg";
@@ -8,7 +6,10 @@ export const ASC = "asc";
 export const DESC = "desc";
 export const DEV_ENV = import.meta.env.VITE_DEV_ENV;
 export const API_TOKEN = import.meta.env.VITE_GITHUB_API_TOKEN;
-export const CLIENT_ID = DEV_ENV === "test" ? import.meta.env.VITE_GITHUB_CLIENT_ID_TEST : import.meta.env.VITE_GITHUB_CLIENT_ID;
+export const CLIENT_ID =
+  DEV_ENV === "test"
+    ? import.meta.env.VITE_GITHUB_CLIENT_ID_TEST
+    : import.meta.env.VITE_GITHUB_CLIENT_ID;
 export const GITHUB_AUTH_LINK = "https://github.com/login/oauth/authorize";
 export const ALERT_SUCCESS = 0;
 export const ALERT_FAILURE = 1;
@@ -166,9 +167,8 @@ export const graphData = {
 };
 // console.log("wcc ", graphData.weekCommitCount);
 
-
-
 export const userInfo = {};
+export const DBinfo = { blocked: false, name: `${"gtl_PERSIST" + (userInfo.username ||  "")}` };
 
 export const days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
 

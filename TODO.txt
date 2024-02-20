@@ -3,7 +3,6 @@ try testing the app on multiple tabs by setting different states to persist
 if the result is not great, just switch to sessionstorage and test
 custom mouse is still calculating on app page . fix iT
 add a custom 404
-create the alert modals
 login as another user and test all the features
 
 remove all the array.from calls where unnecesary
@@ -15,14 +14,7 @@ you might check these cases adopt memory management
 
 
 //immediate (for MVP)
-write a detailed readme file
-add a link to the logo image for users to navigate to the home page
-disable the sign-up button
-use default placeholder images for commit contributors
-make sure the repo (on the graph page) description is dynamic
 
-[not urgent] add a welcome modal when a user visits the app page for the first
-and is signed in
 graph still not including today's commit count in recent repos (or allrepos) fix it
 
 [urgent] when different user logs in on different tabs,
