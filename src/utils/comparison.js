@@ -95,6 +95,24 @@ export const inObjectArray = (obj, arr, fn, ...args) => {
   return false;
 }
 
+export const inArrayArray = (arrEntry, arr, fn, ...args) => {
+  if (fn) {
+    for (const el of arr) {
+      if (fn(el, arrEntry, ...args)) return true;
+    }
+    return false;
+  }
+
+  for (const el of arr) {
+    if (el.length === arrEntry.length) {
+      for (const [index, item] of el.entries()) {
+        if (arrEntry[index] === item) return true;
+      }
+    }
+  }
+  return false;
+}
+
 const MAX_SAFE_INTEGER = 9007199254740991;
 
 function getMapData({ __data__ }, key) {

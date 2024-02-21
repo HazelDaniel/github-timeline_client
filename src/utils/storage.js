@@ -5,9 +5,15 @@ import { deleteDB, openDB } from "idb";
 export const TXN_READ = "readonly";
 export const TXN_RWRITE = "readwrite";
 export let DB_NAME = "gtl_PERSIST";
+export const GLOBAL_DB_NAME = "gtl_PERSIST_GLOBAL";
 export const COMMITS_STORENAME = "commits";
+export const USERS_STORENAME = "users";
 export const REPO_STORENAME = "repositories";
 const DB_VERSION = 1;
+
+export const getLastDBVersion = () => {
+  return JSON.parse(localStorage.getItem("gtl_LAST_GLOBAL_DB_VERSION")) || 1;
+}
 
 export class DBPersist {
   static open() {
@@ -26,11 +32,10 @@ export class DBPersist {
         const repositoriesStore = db.createObjectStore(REPO_STORENAME, {
           keyPath: "name",
         });
-        commitsStore.createIndex("cmp_idx_repo_date", [
-          "repoName",
+        commitsStore.createIndex("cmp_idx_repo_time", [
+          "idb_repoName",
           "idb_commitTime",
         ]);
-        repositoriesStore.createIndex("idx_user", "ownerName");
         commitsStore.transaction.oncomplete = () => {
           if (DEV_ENV === "test") {
             console.log("commits store successfully created for user");
@@ -47,6 +52,40 @@ export class DBPersist {
 
   static delete() {
     return deleteDB(DB_NAME, {
+      blocked() {
+        if (DEV_ENV === "test")
+          alert(
+            "unable to modify database [DELETE], please close all other tabs accessing this site"
+          );
+      },
+    });
+  }
+}
+export class DBPersistGlobal {
+  static open() {
+    return openDB(GLOBAL_DB_NAME, getLastDBVersion(), {
+      blocked() {
+        if (DEV_ENV === "test")
+          alert(
+            "unable to proceed indexedDB operation, please close all other tabs accessing this site"
+          );
+        DBinfo.blocked = true;
+      },
+      upgrade(db) {
+        const usersStore = db.createObjectStore(USERS_STORENAME, {
+          keyPath: "username",
+        });
+        usersStore.transaction.oncomplete = () => {
+          if (DEV_ENV === "test") {
+            console.log("users store successfully created");
+          }
+        };
+      },
+    });
+  }
+
+  static delete() {
+    return deleteDB(GLOBAL_DB_NAME, {
       blocked() {
         if (DEV_ENV === "test")
           alert(
