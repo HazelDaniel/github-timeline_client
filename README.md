@@ -1,21 +1,30 @@
 # Github Timeline
+
 Github Timeline is a project aimed at providing users with insights into their GitHub repositories through visualization and easy access to repository links. This project utilizes React JS, indexedDB, and React Apollo Client (GraphQL) to deliver a seamless experience for users.
 <br>
 <br>
 
+<i>So, i thought to replicate something similar , i said to myself “even if this doesn’t turn out great, it would still be a nice to have on my portfolio because not a lot portfolio projects out there incorporate data visualization”<br> while i was figuring out how replicate a similar experience, i was already learning the basics of chartJS - a javascript library that lets you build infographics like charts (mainly charts) and other interactive interfaces for data visualization.
+After that, I went to the official ReactJS documentation to refresh my knowledge of React and the rest became history …</i>
+
+<br>
+<br>
+
 ## Key Features
+
 - <b>Weekly Commit Activity Visualization</b> <br>
-The Weekly Commit Activity Visualization feature allows users to visualize their commit activity over time. This visualization helps users track their progress and identify trends in their development workflow. Chart.js is used to create interactive and visually appealing charts that display commit activity on a weekly basis.<br>
+  The Weekly Commit Activity Visualization feature allows users to visualize their commit activity over time. This visualization helps users track their progress and identify trends in their development workflow. Chart.js is used to create interactive and visually appealing charts that display commit activity on a weekly basis.<br>
 
 - <b>Quick Access to Repository Links</b> <br>
-Github Timeline enables users to quickly access both SSH and HTTPS links for their repositories without navigating elsewhere. This feature provides convenience for users who frequently need to access their repository links for various purposes.
-<br>
-<br>
+  Github Timeline enables users to quickly access both SSH and HTTPS links for their repositories without navigating elsewhere. This feature provides convenience for users who frequently need to access their repository links for various purposes.
+  <br>
+  <br>
 
 ## Additional Features
+
 - <b>Total Contributions</b>: Display the total number of contributions made by the user across all repositories.
-Collaborators: Show a list of collaborators for each repository, including their avatars and profiles.
-Recent Commits: Provide a list of recent commits for each repository, highlighting the commit message, author, and timestamp.
+  Collaborators: Show a list of collaborators for each repository, including their avatars and profiles.
+  Recent Commits: Provide a list of recent commits for each repository, highlighting the commit message, author, and timestamp.
 
 - <b>Collaborators</b>: Show a list of collaborators for each repository, including their avatars and profiles.
 - <b>Recent Commits</b>: Provide a list of recent commits for each repository, highlighting the commit message, author, and timestamp.
@@ -24,6 +33,7 @@ Recent Commits: Provide a list of recent commits for each repository, highlighti
 <br>
 
 ## Technologies Used
+
 <b>React JS</b>: Frontend framework for building interactive user interfaces.<br>
 <b>indexedDB</b>: A low-level API for client-side storage of significant amounts of structured data.<br>
 <b>React Apollo Client (GraphQL)</b>: A powerful state management library for managing application data and interacting with GraphQL APIs.
@@ -31,9 +41,11 @@ Recent Commits: Provide a list of recent commits for each repository, highlighti
 <br>
 
 ## Live Demo
-Check out the live demo of Github Timeline  [Here](https://github-timeline-client.vercel.app). Explore the features and visualize your GitHub repository activity with ease.
+
+Check out the live demo of Github Timeline [Here](https://github-timeline-client.vercel.app). Explore the features and visualize your GitHub repository activity with ease.
 <br>
 <br>
 
 ## Feedback
+
 If you have any feedback or suggestions for Github Timeline, feel free to reach out to us. We value your input and are always looking for ways to improve the project.
