@@ -13,7 +13,7 @@ const DB_VERSION = 1;
 
 export const getLastDBVersion = () => {
   return JSON.parse(localStorage.getItem("gtl_LAST_GLOBAL_DB_VERSION")) || 1;
-}
+};
 
 export class DBPersist {
   static open() {
@@ -163,29 +163,25 @@ export const getRepoListStateForGraph = () => {
 };
 
 export const setGraphRepoHash = (name, data) => {
-  let repoHash;
-
-  repoHash = JSON.parse(localStorage.getItem("gtl_graphRepoHash"));
-  if (repoHash) {
-    if (repoHash[name]) {
-      let old = repoHash[name];
-      let { commits } = old;
-      let newCommits = [...data.commits];
-      for (const commit of commits) {
-        if (
-          !inObjectArray(
-            commit,
-            data.commits,
-            (obj1, obj2) => obj1.oid === obj2.oid
-          )
-        ) {
-          newCommits.push(commit);
-        }
+  let repoHash = JSON.parse(localStorage.getItem("gtl_graphRepoHash")) || {};
+  if (repoHash[name]) {
+    let old = repoHash[name];
+    let { commits } = old;
+    let newCommits = [...data.commits];
+    for (const commit of commits) {
+      if (
+        !inObjectArray(
+          commit,
+          data.commits,
+          (obj1, obj2) => obj1.oid === obj2.oid
+        )
+      ) {
+        newCommits.push(commit);
       }
-      repoHash[name].commits = newCommits;
     }
-    repoHash[name] = data;
+    repoHash[name].commits = newCommits;
   }
+  repoHash[name] = data;
 
   localStorage.setItem("gtl_graphRepoHash", JSON.stringify(repoHash));
 };
@@ -194,6 +190,9 @@ export const getGraphState = (repoName) => {
   let repoHash = JSON.parse(localStorage.getItem("gtl_graphRepoHash"));
   if (!repoHash) {
     return { storedGraphState: null };
+  }
+  if (DEV_ENV === "test") {
+    console.log("repo hash was ", repoHash);
   }
   const storedGraphState = repoHash[repoName];
 
@@ -285,6 +284,27 @@ export const unsetSeenWarningOn = (page) => {
   localStorage.removeItem(`gtl_seenWarningOn${page}`);
 };
 
+// TRIGGERS FOR REVALIDATION
+export const getLastContribCount = (username) => {
+  const lastContribHash = JSON.parse(
+    localStorage.getItem("gtl_lastContribHash")
+  );
+  let lastContribCount = 0;
+  if (!lastContribHash) {
+    return {lastContribCount};
+  }
+  return lastContribHash[username] ? {lastContribCount: lastContribHash[username]} : {lastContribCount};
+};
+
+export const setLastContribCount = (username, count) => {
+  const lastContribHash = JSON.parse(
+    localStorage.getItem("gtl_lastContribHash")
+  ) || {};
+
+  lastContribHash[username] = count;
+  localStorage.setItem("gtl_lastContribHash", lastContribHash);
+}
+
 // CLEANUP (INVALIDATION ON REFRESH)
 export const cleanUp = () => {
   localStorage.removeItem("gtl_repoListState");
@@ -293,6 +313,7 @@ export const cleanUp = () => {
   localStorage.removeItem("gtl_lastRepoLinkClickPos");
   localStorage.removeItem("gtl_lastGraphDateRange");
   localStorage.removeItem("gtl_graphRepoHash");
+  localStorage.removeItem("gtl_lastContribHash");
 };
 
 //LOGOUT LOGIC

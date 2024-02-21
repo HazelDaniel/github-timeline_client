@@ -20,12 +20,7 @@ export const initialGraphDataState = {
 };
 
 export const getInitialGraphDataState = () => {
-  const { data } = getRepoListStateForGraph();
-  const userName = userInfo.username;
-  let payLoad = extractGraphPayload(userName, data);
-  const { storedGraphState } = getGraphState(payLoad.userName);
-
-  return storedGraphState ? storedGraphState : initialGraphDataState;
+  return initialGraphDataState;
 };
 
 export const graphDataReducer = (

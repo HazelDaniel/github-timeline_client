@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter } from "react-router-dom";
 
 import App from "./App";
-import { appLoader } from "./pages/app";
+import { appLoader, graphLoader } from "./loaders";
 import { Index } from "./pages";
 import { Main } from "./components/main";
 
@@ -24,6 +24,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "graph",
+        loader: graphLoader,
         lazy() {
           return (async () => {
             let { GraphWrapper } = await import("./components/graph-wrapper");
@@ -37,7 +38,7 @@ export const router = createBrowserRouter([
           return (async () => {
             let { Index } = await import("./pages/index");
             return { Component: Index };
-          })()
+          })();
         },
       },
       {

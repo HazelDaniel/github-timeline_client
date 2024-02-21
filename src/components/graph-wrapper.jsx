@@ -1,10 +1,11 @@
 import { memo, useEffect, useMemo, useReducer, useState } from "react";
 import {
   getGraphState,
+  getLastContribCount,
   getRepoListStateForGraph,
   setGraphRepoHash,
 } from "../utils/storage";
-import { userInfo } from "../data";
+import { DEV_ENV, userInfo } from "../data";
 import { Graph } from "../pages/graph";
 import {
   __updateGraphData,
@@ -72,11 +73,10 @@ export const GraphWrapper = memo(
 
     const [graphDataState, graphDataDispatch] = useReducer(
       graphDataReducer,
-      getInitialGraphDataState()
+      repoToFetch || getInitialGraphDataState()
     );
 
     const [activityChange, setActivityChange] = useState(false);
-    // console.log("repo to fetch : ", repoToFetch);
     // console.log(payLoad.repoName);
 
     const { loading, data, error, fetchMore } = useQuery(
@@ -95,12 +95,23 @@ export const GraphWrapper = memo(
           let transformedData = transformRepoGraph(data);
           setGraphRepoHash(transformedData.name, transformedData);
           graphDataDispatch(__updateGraphData(transformedData));
-          // console.log("transformed data is ", transformedData);
+          if (DEV_ENV === "test") {
+            console.log("raw data is ", data);
+            console.log("transformed data is ", transformedData);
+          }
+
           return;
         },
       }
     );
 
+    useEffect(() => {
+      const { lastContribCount } = getLastContribCount(payLoad.userName);
+      console.log(lastContribCount);
+    }, []);
+
+    // if (DEV_ENV === "test")
+    // console.log("repo to fetch : ", repoToFetch, graphDataState);
     // console.log("rendering wrapper ..");
     // console.log(payLoad.userName, payLoad.repoName, payLoad.dateRange);
     // console.log(payLoad.dateRange);
