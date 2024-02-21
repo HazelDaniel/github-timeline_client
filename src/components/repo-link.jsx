@@ -9,7 +9,7 @@ import {
   __updateRepoBottomData,
   __updateRepoOwnerAndStatData,
 } from "../reducers/repo-data.reducer";
-import { setRepoLinkLastPos } from "../utils/storage";
+import { getRepoLinkLastPos, setRepoLinkLastPos } from "../utils/storage";
 
 export const RepoLink = memo(function RepoLink({ position, data, listState }) {
   const { repoBoardDispatch } = useContext(repoBoardContext);
@@ -23,9 +23,13 @@ export const RepoLink = memo(function RepoLink({ position, data, listState }) {
   // console.log("link rendering");
   useEffect(() => {
     if (position === 0 && data.ownerName) {
-      repoBoardDispatch(__updateRepoBoardData(data));
-      repoOwnerAndStatDispatch(__updateRepoOwnerAndStatData(data));
-      repoBottomDispatch(__updateRepoBottomData(data));
+      if (!getRepoLinkLastPos()?.lastPos) {
+        repoBoardDispatch(__updateRepoBoardData(data));
+        repoOwnerAndStatDispatch(__updateRepoOwnerAndStatData(data));
+        repoBottomDispatch(__updateRepoBottomData(data));
+        setRepoLinkLastPos({ lastPos: position });
+
+      }
     }
   }, [position, data]);
 

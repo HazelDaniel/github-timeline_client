@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useReducer } from "react";
+import { memo, useEffect, useMemo, useReducer, useState } from "react";
 import {
   getGraphState,
   getRepoListStateForGraph,
@@ -75,6 +75,7 @@ export const GraphWrapper = memo(
       getInitialGraphDataState()
     );
 
+    const [activityChange, setActivityChange] = useState(false);
     // console.log("repo to fetch : ", repoToFetch);
     // console.log(payLoad.repoName);
 
