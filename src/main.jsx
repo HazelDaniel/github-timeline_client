@@ -1,13 +1,10 @@
 import ReactDOM from "react-dom/client";
-// import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 import App from "./App";
-import { AppPage, appLoader } from "./pages/app";
+import { appLoader } from "./pages/app";
 import { Index } from "./pages";
 import { Main } from "./components/main";
-import { GraphWrapper } from "./components/graph-wrapper";
-// import F04 from "./components/F04/F04.component";
 
 // ROUTING
 export const router = createBrowserRouter([
@@ -17,20 +14,40 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "app",
-        element: <AppPage />,
         loader: appLoader,
+        lazy() {
+          return (async () => {
+            let { AppPage } = await import("./pages/app");
+            return { Component: AppPage };
+          })();
+        },
       },
       {
         path: "graph",
-        element: <GraphWrapper />,
+        lazy() {
+          return (async () => {
+            let { GraphWrapper } = await import("./components/graph-wrapper");
+            return { Component: GraphWrapper };
+          })();
+        },
       },
       {
         path: "signin",
-        element: <Index />,
+        lazy() {
+          return (async () => {
+            let { Index } = await import("./pages/index");
+            return { Component: Index };
+          })()
+        },
       },
       {
         path: "signup",
-        element: <Index />,
+        lazy() {
+          return (async () => {
+            let { Index } = await import("./pages/index");
+            return { Component: Index };
+          })();
+        },
       },
       {
         index: true,
