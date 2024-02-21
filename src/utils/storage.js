@@ -285,25 +285,44 @@ export const unsetSeenWarningOn = (page) => {
 };
 
 // TRIGGERS FOR REVALIDATION
+export const getLastRepoUpdate = (repoName) => {
+  const lastRepoUpdateHash =
+    JSON.parse(localStorage.getItem("gtl_lastRepoUpdateHash")) || {};
+
+  return { lastUpdated: lastRepoUpdateHash[repoName] || new Date(0).getTime() };
+};
+
+export const setLastRepoUpdate = (repoName, dateString) => {
+  const lastUpdateHash =
+    JSON.parse(localStorage.getItem("gtl_lastRepoUpdateHash")) || {};
+
+  lastUpdateHash[repoName] = new Date(dateString).getTime();
+  localStorage.setItem(
+    "gtl_lastRepoUpdateHash",
+    JSON.stringify(lastUpdateHash)
+  );
+};
+
 export const getLastContribCount = (username) => {
   const lastContribHash = JSON.parse(
     localStorage.getItem("gtl_lastContribHash")
   );
   let lastContribCount = 0;
   if (!lastContribHash) {
-    return {lastContribCount};
+    return { lastContribCount };
   }
-  return lastContribHash[username] ? {lastContribCount: lastContribHash[username]} : {lastContribCount};
+  return lastContribHash[username]
+    ? { lastContribCount: lastContribHash[username] }
+    : { lastContribCount };
 };
 
 export const setLastContribCount = (username, count) => {
-  const lastContribHash = JSON.parse(
-    localStorage.getItem("gtl_lastContribHash")
-  ) || {};
+  const lastContribHash =
+    JSON.parse(localStorage.getItem("gtl_lastContribHash")) || {};
 
   lastContribHash[username] = count;
-  localStorage.setItem("gtl_lastContribHash", lastContribHash);
-}
+  localStorage.setItem("gtl_lastContribHash", JSON.stringify(lastContribHash));
+};
 
 // CLEANUP (INVALIDATION ON REFRESH)
 export const cleanUp = () => {
@@ -314,6 +333,7 @@ export const cleanUp = () => {
   localStorage.removeItem("gtl_lastGraphDateRange");
   localStorage.removeItem("gtl_graphRepoHash");
   localStorage.removeItem("gtl_lastContribHash");
+  localStorage.removeItem("gtl_lastRepoUpdateHash");
 };
 
 //LOGOUT LOGIC

@@ -48,7 +48,7 @@ const authLink = setContext((_, { headers }) => {
 
 const cache = new InMemoryCache();
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   cache,
   link: authLink.concat(httpLink),
 });

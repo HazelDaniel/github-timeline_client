@@ -91,6 +91,7 @@ export const transformRepoGraph = (data) => {
   if (!data) return null;
 
   let edges = data?.repository?.ref?.target?.history?.edges;
+  let hasNext = data?.repository?.ref?.target?.history?.pageInfo ? !data.repository.ref.target.history.pageInfo.hasNextPage : true;
   if (!edges) edges = [];
 
   const description = data.repository.description;
@@ -109,7 +110,7 @@ export const transformRepoGraph = (data) => {
     return tmp;
   });
 
-  return { commits: edges, description, name, done: edges.length < 100 };
+  return { commits: edges, description, name, done: hasNext };
 };
 
 export const extractCommitsInInterval = (

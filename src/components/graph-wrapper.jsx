@@ -19,6 +19,7 @@ import {
   transformRepoGraph,
 } from "../utils/transformers";
 import { gql, useQuery } from "@apollo/client";
+import { useLoaderData } from "react-router-dom";
 
 const GET_REPO_COMMIT_HISTORY = gql`
   query GetCommits(
@@ -70,14 +71,11 @@ export const GraphWrapper = memo(
       return extractGraphPayload(userName, graphInfo);
     }, []);
     const { storedGraphState: repoToFetch } = getGraphState(payLoad.repoName);
-
+    const { activityChange } = useLoaderData();
     const [graphDataState, graphDataDispatch] = useReducer(
       graphDataReducer,
       repoToFetch || getInitialGraphDataState()
     );
-
-    const [activityChange, setActivityChange] = useState(false);
-    // console.log(payLoad.repoName);
 
     const { loading, data, error, fetchMore } = useQuery(
       GET_REPO_COMMIT_HISTORY,
@@ -89,7 +87,7 @@ export const GraphWrapper = memo(
           since: REPO_DATE_RANGE[0],
           until: REPO_DATE_RANGE[1],
         },
-        skip: !payLoad.repoName || repoToFetch,
+        skip: !payLoad.repoName || (repoToFetch && !activityChange),
         fetchPolicy: "cache-first",
         onCompleted: (data) => {
           let transformedData = transformRepoGraph(data);
@@ -106,15 +104,28 @@ export const GraphWrapper = memo(
     );
 
     useEffect(() => {
-      const { lastContribCount } = getLastContribCount(payLoad.userName);
-      console.log(lastContribCount);
-    }, []);
+      if (!payLoad.repoName || (repoToFetch && !activityChange)) return;
+      let done = data?.repository?.ref?.target?.history?.pageInfo
+        ? !data.repository.ref.target.history.pageInfo.hasNextPage
+        : true;
+      if (DEV_ENV === "test") {
+        console.log("are we done with the commits?", done);
+      }
+      if (!done) {
+        // so, this is where we run a while loop (while !done) and populate the database without interferring with the state
+        // users would be okay with stale data but not flickering UI.
+        if (DEV_ENV === "test")
+          console.log("we don't have the commits and we will be fetching now");
+      }
+    }, [payLoad, repoToFetch, activityChange]);
 
-    // if (DEV_ENV === "test")
-    // console.log("repo to fetch : ", repoToFetch, graphDataState);
-    // console.log("rendering wrapper ..");
-    // console.log(payLoad.userName, payLoad.repoName, payLoad.dateRange);
-    // console.log(payLoad.dateRange);
+    if (DEV_ENV === "test") {
+      console.log("activity changed? ", activityChange);
+      // console.log("repo to fetch : ", repoToFetch, graphDataState);
+      // console.log("rendering wrapper ..");
+      // console.log(payLoad.userName, payLoad.repoName, payLoad.dateRange);
+      // console.log(payLoad.dateRange);
+    }
 
     const graphDataValue = useMemo(
       () => ({ graphDataState, graphDataDispatch }),
@@ -126,6 +137,5 @@ export const GraphWrapper = memo(
         <Graph />
       </GraphDataProvider>
     );
-  },
-  () => {}
+  }
 );

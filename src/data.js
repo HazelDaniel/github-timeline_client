@@ -168,7 +168,10 @@ export const graphData = {
 // console.log("wcc ", graphData.weekCommitCount);
 
 export const userInfo = {};
-export const DBinfo = { blocked: false, name: `${"gtl_PERSIST" + (userInfo.username ||  "")}` };
+export const DBinfo = {
+  blocked: false,
+  name: `${"gtl_PERSIST" + (userInfo.username || "")}`,
+};
 
 export const days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
 

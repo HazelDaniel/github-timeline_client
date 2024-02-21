@@ -27,7 +27,7 @@ export const RepoOwnerAndStat = () => {
 
       <div className="repo-icon-stat-div">
         <div className="stat-cta-div">
-          <AppNavButton to={"/"} data={{}} text={"view on github"} />
+          <AppNavButton to={"/"} data={{type: "dynamic"}} text={"view on github"} />
 
           <AppNavButton
             to={"/graph"}

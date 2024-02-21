@@ -9,7 +9,13 @@ import {
   __updateRepoBottomData,
   __updateRepoOwnerAndStatData,
 } from "../reducers/repo-data.reducer";
-import { getRepoLinkLastPos, setRepoLinkLastPos } from "../utils/storage";
+import {
+  getLastRepoUpdate,
+  getRepoLinkLastPos,
+  setLastRepoUpdate,
+  setRepoLinkLastPos,
+} from "../utils/storage";
+import { DEV_ENV } from "../data";
 
 export const RepoLink = memo(function RepoLink({ position, data, listState }) {
   const { repoBoardDispatch } = useContext(repoBoardContext);
@@ -28,10 +34,10 @@ export const RepoLink = memo(function RepoLink({ position, data, listState }) {
         repoOwnerAndStatDispatch(__updateRepoOwnerAndStatData(data));
         repoBottomDispatch(__updateRepoBottomData(data));
         setRepoLinkLastPos({ lastPos: position });
-
       }
     }
   }, [position, data]);
+
 
   return (
     <li
@@ -41,6 +47,7 @@ export const RepoLink = memo(function RepoLink({ position, data, listState }) {
         repoOwnerAndStatDispatch(__updateRepoOwnerAndStatData(data));
         repoBottomDispatch(__updateRepoBottomData(data));
         setRepoLinkLastPos({ lastPos: position });
+        // console.lg
       }}
     >
       <span className="repo-line"></span>

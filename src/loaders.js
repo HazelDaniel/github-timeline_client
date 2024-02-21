@@ -1,7 +1,19 @@
 import { json } from "react-router-dom";
-import { userInfo } from "./data";
-import { getAccessToken, getGitHubUsername, getSeenWarningOn, setAccessToken, setSeenWarningOn } from "./utils/storage";
+import { DEV_ENV, userInfo } from "./data";
+import {
+  getAccessToken,
+  getGitHubUsername,
+  getLastRepoUpdate,
+  getRepoListStateForGraph,
+  getSeenWarningOn,
+  setAccessToken,
+  setLastRepoUpdate,
+  setSeenWarningOn,
+} from "./utils/storage";
 import { PROXY_URL } from "./utils/auth";
+import { client } from "./App";
+import { gql } from "@apollo/client";
+import { extractGraphPayload } from "./utils/transformers";
 
 export const appLoader = async () => {
   const queryString = window.location.search;
@@ -50,7 +62,68 @@ export const appLoader = async () => {
   userInfo.token = getAccessToken().token;
   return json(userInfo);
 };
+export const GET_ACTIVITY = gql`
+  query GetRepoLastUpdatedDate($owner: String!, $name: String!) {
+    repository(owner: $owner, name: $name) {
+      updatedAt
+    }
+  }
+`;
 
 export const graphLoader = async () => {
-  return json({});
-}
+  const { data: graphInfo } = getRepoListStateForGraph();
+  const userName = userInfo.username;
+  const payLoad = extractGraphPayload(userName, graphInfo);
+	if (DEV_ENV === "test")
+  console.log(payLoad);
+
+  const { username } = await getGitHubUsername();
+  let res = { activityChange: false };
+  if (!userInfo.token) {
+    if (DEV_ENV === "test") {
+      console.log("quitting early");
+    }
+    return json(res);
+  }
+
+  try {
+    const result = await client.query({
+      query: GET_ACTIVITY,
+      variables: {
+        owner: username,
+        name: payLoad.repoName,
+      },
+      context: {
+        Headers: {
+          Authorization: `Bearer: ${userInfo.token}`,
+        },
+      },
+    });
+
+    // return json(res);
+    let dateUpdated = result.data?.repository?.updatedAt
+      ? new Date(result.data.repository.updatedAt).getTime()
+      : new Date(0);
+
+    // const { lastContribCount } = getLastContribCount(userInfo.username);
+    const { lastUpdated } = getLastRepoUpdate(payLoad.repoName);
+
+    if (lastUpdated !== dateUpdated) {
+      if (DEV_ENV === "test") {
+        console.log(
+          "activity changed from loader with : ",
+          lastUpdated,
+          dateUpdated
+        );
+      }
+      // setLastContribCount(userInfo.username, totalContrib);
+      setLastRepoUpdate(payLoad.repoName, dateUpdated);
+      res.activityChange = true;
+      return json(res);
+    }
+    return json(res);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return json(res);
+  }
+};
