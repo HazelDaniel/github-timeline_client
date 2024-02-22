@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {
   debug,
+  dropShake,
   makeAbsoluteBottomLeftDiv,
   makeAbsoluteTopLeftDiv,
   makeColFlexCenter,
@@ -9,6 +10,7 @@ import {
   makeFullWidthBlock,
   makeRowFlexStart,
   makeUnSelectableTextDiv,
+  slideInLeft,
 } from "../styles/functions";
 
 export const AboutStyled = styled.section`
@@ -41,6 +43,10 @@ export const AboutStyled = styled.section`
         width: 60%;
       }
       margin-left: 8%;
+      transform: translateX(-25vw);
+      animation-duration: 0.2s;
+      animation-timing-function: linear;
+      ${slideInLeft};
       .scroll-handle-div {
         ${makeAbsoluteTopLeftDiv};
         top: -10%;
@@ -85,6 +91,11 @@ export const AboutStyled = styled.section`
         ${makeColFlexCenter};
         align-items: flex-start;
         justify-content: space-evenly;
+        transform: translateY(-30%);
+        ${dropShake};
+        animation-iteration-count: 1 !important;
+        animation-fill-mode: forwards;
+        transform-origin: top;
         svg {
           ${makeAbsoluteTopLeftDiv};
           width: 2rem;

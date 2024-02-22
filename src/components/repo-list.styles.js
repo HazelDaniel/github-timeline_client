@@ -14,6 +14,15 @@ export const RepoListStyled = styled.ul`
   height: 100%;
   overflow: auto;
   position: relative;
+  /* &::-webkit-scrollbar {
+    width: 4rem;
+    track-color: red;
+    thumb-color: blue;
+  } */
+
+  /* scrollbar-color: red black;
+  -webkit-scrollbar-color: red black; */
+
   .repo-highlight {
     ${makeAbsoluteTopLeftDiv};
     ${makeFullWidthBlock};

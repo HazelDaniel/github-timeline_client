@@ -89,7 +89,9 @@ const App = () => {
         {location.pathname === "/signup" || location.pathname === "/signin" ? (
           <FormModal />
         ) : null}
-        <CustomMouse />
+        {
+          location.pathname === "/app" ? null : <CustomMouse />
+        }
         <Nav />
         <Header />
 

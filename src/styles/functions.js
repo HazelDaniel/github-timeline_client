@@ -191,6 +191,35 @@ const slideInHardFrame = keyframes`
   }
 `;
 
+const slideInLeftFrame = keyframes`
+from {
+  transform: translateX(-20vw);
+} to {
+  transform: translateX(0);
+}
+`;
+
+const dropShakeFrame = keyframes`
+from {
+  transform: scaleY(1) translateY(-30%);
+}
+25% {
+  transform: scaleY(.8) translateY(-25%);
+}
+50% {
+  transform: scaleY(.9) translateY(-20%);
+}
+75% {
+  transform: scaleY(1) translateY(-20%);
+}
+90% {
+  transform: scaleY(1.2) translateY(-10%);
+}
+to {
+  transform: scaleY(1) translateY(0%);
+}
+`;
+
 export const slideUpMedium = css`
   transform: translateY(0%);
 
@@ -232,6 +261,28 @@ export const slideInHard = css`
     animation-duration: 0.3s;
     animation-iteration-count: 1;
     animation-timing-function: ease-out;
+  }
+`;
+
+export const slideInLeft = css`
+  &.slide_in_left {
+    transform: translateX(0);
+    animation-name: ${slideInLeftFrame};
+    animation-iteration-count: 1;
+    /* animation-timing-function: var(--ease); */
+  }
+`;
+
+export const dropShake = css`
+  height: max-content;
+  min-height: 30rem;
+
+  &.drop_shake {
+    animation-name: ${dropShakeFrame};
+    animation-duration: 0.2s;
+    /* animation-delay: 0.2s; */
+    animation-iteration-count: 1;
+    animation-timing-function: var(--ease);
   }
 `;
 
@@ -323,6 +374,16 @@ export const GlobalStyle = createGlobalStyle`
   --ash-color_trans: rgba(21, 21, 21, 20%);
   --fail-color: #ED6243;
   --author: "H.a.z.e.l.D.a.n.i.e.l";
+  --ease: linear(
+    0, 0.0039, 0.0157, 0.0352, 0.0625 9.09%,
+    0.1407, 0.25, 0.3908, 0.5625, 0.7654, 1,
+    0.8907, 0.8125 45.45%, 0.7852, 0.7657,
+    0.7539, 0.75, 0.7539, 0.7657, 0.7852,
+    0.8125 63.64%, 0.8905, 1 72.73%, 0.9727,
+    0.9532, 0.9414, 0.9375, 0.9414, 0.9531,
+    0.9726, 1, 0.9883, 0.9844, 0.9883, 1
+  );
+  --speed: 0.4s;
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
@@ -340,9 +401,10 @@ export const GlobalStyle = createGlobalStyle`
   max-width: 100vw;
   position: relative;
   cursor: ${({ $page }) => {
-    if ($page != "/app") return "none";
+    if ($page !== "/app") return "none";
     return `url("icons/mouse.svg") 30 30, auto`;
   }};
+  animation-timing-function: ease;
 }
 a {
   cursor: pointer;
@@ -416,6 +478,24 @@ body,#root {
     }
   }
 }
+  ::-webkit-scrollbar {
+    width: 1.3rem;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--dull-trans-color);
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--accent-color), transparent);
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 
 .floating {
   border-radius: 50%;
@@ -434,10 +514,12 @@ header {
     cursor: pointer;
     align-items: center;
     background: linear-gradient(to bottom, #000008ea 80%, transparent 100%);
+		cursor: pointer;
     img {
       height: 5rem;
       object-fit: cover;
       transform: scale(0.8);
+      cursor: pointer;
     }
   }
   .search-icon-div {

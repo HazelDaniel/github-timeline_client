@@ -1,5 +1,5 @@
 import {
-    debug,
+  debug,
   makeAbsoluteBottomDiv,
   makeAbsoluteBottomRightDiv,
   makeAbsoluteTopDiv,
@@ -19,20 +19,21 @@ import styled from "styled-components";
 export const RepoTabStyled = styled.aside`
   ${makeAbsoluteTopLeftDiv};
   ${makeColFlexStart};
+  height: 850px;
   height: 600px;
   @media screen and (max-width: 480px) {
     height: 80vh;
   }
   overflow: visible;
   box-shadow: 0.2rem 0.3rem 0.8rem var(--dark-bg-color);
-  float: left;
+  /* float: leftg */
   top: 10rem;
   backdrop-filter: blur(8px);
   position: sticky;
   width: 33rem;
   @media screen and (max-width: 800px) {
     position: fixed;
-		width: 80vw;
+    width: 80vw;
 
     // ====== a hiding class
     &.closed {
@@ -135,18 +136,18 @@ export const RepoTabStyled = styled.aside`
     margin-bottom: 20%;
     ${makeRowFlexStart};
     gap: 30%;
-		${removeTapHighlight};
+    ${removeTapHighlight};
     & > div {
-			width: 12rem;
+      width: 12rem;
       button {
         ${makeFullWidthBlock};
         ${makeRowFlexCenter};
         align-items: center;
         gap: 1rem;
         height: 3rem;
-				/* font-size: 2rem; */
-					/*leave me  here*/
-				font-size: 20px;
+        /* font-size: 2rem; */
+        /*leave me  here*/
+        font-size: 20px;
         position: relative;
         cursor: pointer;
         font-family: manjari_regular;
@@ -154,14 +155,14 @@ export const RepoTabStyled = styled.aside`
         background-color: unset;
         outline: unset;
         border: unset;
-				transition: all .2s linear;
-				transition-property: border;
-				&:active {
-					border: .1rem solid var(--bright-color);
-				}
+        transition: all 0.2s linear;
+        transition-property: border;
+        &:active {
+          border: 0.1rem solid var(--bright-color);
+        }
         &.blurred {
           filter: blur(2rem);
-					opacity: .8;
+          opacity: 0.8;
           background-color: var(--accent-color_trans);
         }
         &::before {
@@ -189,19 +190,19 @@ export const RepoTabStyled = styled.aside`
         }
       }
     }
-		.left {
-			&> button {
-				&>span {
+    .left {
+      & > button {
+        & > span {
           top: 2.3rem;
-					right: -40%;
-				}
-			}
-			&:hover {
-				&>button > span {
-					right: -30%;
-				}
-			}
-		}
+          right: -40%;
+        }
+      }
+      &:hover {
+        & > button > span {
+          right: -30%;
+        }
+      }
+    }
     .right {
       & > button {
         & > span {
@@ -220,6 +221,5 @@ export const RepoTabStyled = styled.aside`
         }
       }
     }
-		
   }
 `;
