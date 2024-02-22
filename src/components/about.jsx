@@ -1,7 +1,6 @@
 import { useInView } from "react-intersection-observer";
 import { AboutStyled } from "./about.styles";
 import { useMemo } from "react";
-import { DEV_ENV } from "../data";
 import { useParallax } from "react-scroll-parallax";
 
 export const About = () => {
@@ -10,13 +9,9 @@ export const About = () => {
     []
   );
   const [bullet, bulletInView] = useInView(viewOptions);
-  // const [sideText, _] = useInView(viewOptions);
   const parallaxText = useParallax({
     scale: [0.8, 1],
   });
-  // const parallaxbloc = useParallax({
-  //   scale: [0.8, 1],
-  // });
   return (
     <AboutStyled className="about-section">
       <div className="about-top">
