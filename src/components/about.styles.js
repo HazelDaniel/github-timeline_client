@@ -57,7 +57,8 @@ export const AboutStyled = styled.section`
       p {
         font-size: 1.8rem;
         @media screen and (max-width: 480px) {
-          font-size: 2rem;
+          font-size: 2.2rem;
+          line-height: 2.5rem;
         }
         font-family: manjari_regular;
         color: var(--bright-color);
