@@ -1,8 +1,15 @@
 import { NavStyled } from "./nav.styles";
 import { Link } from "react-router-dom";
-import { memo } from "react";
+import { memo, useContext } from "react";
+import { alertModalContext } from "../contexts/alert-modal.context";
+import {
+  __setModalText,
+  __setModalType,
+  __showAlertModal,
+} from "../reducers/alert-modal.reducer";
 
 export const Nav = memo(function Nav() {
+  const { alertModalDispatch } = useContext(alertModalContext);
   return (
     <NavStyled>
       <div className="control-stick"></div>
@@ -12,9 +19,17 @@ export const Nav = memo(function Nav() {
         </span>
         <div className="nav-label-div">
           <div className="nav-label">
-            <Link to="/signup" onClick={(e)=>{
-              e.preventDefault();
-            }}>SIGN UP</Link>
+            <Link
+              to="/signup"
+              onClick={(e) => {
+                e.preventDefault();
+                alertModalDispatch(__setModalType(3));
+                alertModalDispatch(__setModalText("Feature coming soon !"));
+                alertModalDispatch(__showAlertModal());
+              }}
+            >
+              SIGN UP
+            </Link>
             <svg>
               <use xlinkHref="#label-style"></use>
             </svg>

@@ -92,10 +92,10 @@ const App = () => {
         {
           location.pathname === "/app" ? null : <CustomMouse />
         }
-        <Nav />
         <Header />
-
         <AlertModalProvider value={modalValue}>
+					<Nav />
+
           <AlertModal />
           <Outlet />
         </AlertModalProvider>

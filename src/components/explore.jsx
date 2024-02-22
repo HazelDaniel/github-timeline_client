@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ExploreStyled } from "./explore.styles";
 
 
@@ -22,7 +23,7 @@ export const Explore = () => {
               </span>
               <div className="nav-label-div">
                 <div className="nav-label">
-                  <a href="#">EXPLORE</a>
+                  <Link to="/signin">EXPLORE</Link>
                   <svg>
                     <use xlinkHref="#label-style"></use>
                   </svg>
