@@ -3,9 +3,11 @@ import { AboutStyled } from "./about.styles";
 import { useMemo } from "react";
 import { useParallax } from "react-scroll-parallax";
 
+const threshold = window.innerHeight < 500 ? 0.6 : 0;
+
 export const About = () => {
   const viewOptions = useMemo(
-    () => ({ triggerOnce: true, threshold: 0.5 }),
+    () => ({ triggerOnce: true, threshold }),
     []
   );
   const [bullet, bulletInView] = useInView(viewOptions);
