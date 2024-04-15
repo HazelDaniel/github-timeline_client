@@ -48,4 +48,4 @@ Check out the live demo of Github Timeline [Here](https://github-timeline-client
 
 ## Feedback
 
-If you have any feedback or suggestions for Github Timeline, feel free to reach out to us. We value your input and are always looking for ways to improve the project.
+If you have any feedback or suggestions for Github Timeline, feel free to reach out to us. We value your input and are always looking for ways to improve the project. Thanks!
